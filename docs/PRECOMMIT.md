@@ -111,15 +111,6 @@ SKIP=markdownlint git commit -m "message"
 
 ## Hook Details
 
-### TDD Compliance Check
-
-This custom hook enforces the project's strict TDD methodology:
-
-```bash
-# Checks if production code changes have corresponding test changes
-# Fails if src/main/java/ files are modified without src/test/java/ changes
-```
-
 ### Maven Compilation Check
 
 Ensures that all changes compile successfully:
@@ -133,7 +124,7 @@ Ensures that all changes compile successfully:
 
 Enforces consistent Markdown formatting:
 
-- Line length: 120 characters
+- No line length limit (MD013 disabled)
 - Fenced code blocks with language specifiers
 - Proper heading structure
 - No trailing spaces

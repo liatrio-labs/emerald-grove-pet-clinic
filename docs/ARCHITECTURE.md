@@ -10,7 +10,7 @@ Spring PetClinic is a classic three-tier web application demonstrating Spring Bo
 
 ### Core Framework
 
-- **Spring Boot 4.0.0** - Application framework and auto-configuration
+- **Spring Boot (3.x)** - Application framework and auto-configuration
 - **Spring MVC** - Web layer with RESTful controllers
 - **Spring Data JPA** - Data access layer with repository pattern
 - **Hibernate** - Object-Relational Mapping (ORM)
