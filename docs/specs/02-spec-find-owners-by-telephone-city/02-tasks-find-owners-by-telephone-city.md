@@ -104,7 +104,7 @@
 - [x] 3.12 Take screenshots of form with new fields for proof artifacts
 - [x] 3.13 Verify form maintains existing lastName functionality and doesn't break backward compatibility
 
-### [ ] 4.0 E2E Testing - Comprehensive Search Workflow Validation
+### [x] 4.0 E2E Testing - Comprehensive Search Workflow Validation
 
 #### 4.0 Proof Artifact(s)
 
@@ -119,19 +119,19 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Create new file `e2e-tests/tests/features/owner-search.spec.ts` with proper imports and test structure
-- [ ] 4.2 Write test "should search owners by telephone only" that fills telephone field, submits, and verifies results contain expected owner
-- [ ] 4.3 Write test "should search owners by city only" that fills city field, submits, and verifies results contain expected owners from that city
-- [ ] 4.4 Write test "should search owners by lastName and city" that fills both fields and verifies results match both criteria (AND logic)
-- [ ] 4.5 Write test "should search owners by lastName and telephone" that fills both fields and verifies results
-- [ ] 4.6 Write test "should search owners by all three fields" that fills lastName, telephone, and city, then verifies results match all criteria
-- [ ] 4.7 Write test "should handle formatted telephone input" that enters "(608) 555-1023" and verifies same results as "6085551023"
-- [ ] 4.8 Write test "should redirect when single result found" that searches for unique owner and verifies automatic redirect to owner details page
-- [ ] 4.9 Write test "should show empty results with criteria message" that searches for non-existent data and verifies message shows searched criteria
-- [ ] 4.10 Add page object methods to `owner-page.ts` if needed to support telephone and city search (e.g., `searchByTelephone()`, `searchByCity()`)
-- [ ] 4.11 Run `cd e2e-tests && npm test -- owner-search.spec.ts` to execute all tests
-- [ ] 4.12 Verify all 7+ tests pass and take screenshot of Playwright HTML report
-- [ ] 4.13 Review test output for any flaky tests or timing issues, add explicit waits if needed
+- [x] 4.1 Create new file `e2e-tests/tests/features/owner-search.spec.ts` with proper imports and test structure
+- [x] 4.2 Write test "should search owners by telephone only" that fills telephone field, submits, and verifies results contain expected owner
+- [x] 4.3 Write test "should search owners by city only" that fills city field, submits, and verifies results contain expected owners from that city
+- [x] 4.4 Write test "should search owners by lastName and city" that fills both fields and verifies results match both criteria (AND logic)
+- [x] 4.5 Write test "should search owners by lastName and telephone" that fills both fields and verifies results
+- [x] 4.6 Write test "should search owners by all three fields" that fills lastName, telephone, and city, then verifies results match all criteria
+- [x] 4.7 Write test "should handle formatted telephone input" that enters "(608) 555-1023" and verifies same results as "6085551023"
+- [x] 4.8 Write test "should redirect when single result found" that searches for unique owner and verifies automatic redirect to owner details page
+- [x] 4.9 Write test "should show empty results with criteria message" that searches for non-existent data and verifies message shows searched criteria
+- [x] 4.10 Add page object methods to `owner-page.ts` if needed to support telephone and city search (e.g., `searchByTelephone()`, `searchByCity()`)
+- [x] 4.11 Run `cd e2e-tests && npm test -- owner-search.spec.ts` to execute all tests
+- [x] 4.12 Verify all 7+ tests pass and take screenshot of Playwright HTML report
+- [x] 4.13 Review test output for any flaky tests or timing issues, add explicit waits if needed
 
 ### [ ] 5.0 Integration Verification and Documentation
 
