@@ -31,7 +31,7 @@
 
 ## Tasks
 
-### [~] 1.0 Setup: Add Filter Message Keys and Create Git Branch
+### [x] 1.0 Setup: Add Filter Message Keys and Create Git Branch
 
 #### 1.0 Proof Artifact(s)
 
