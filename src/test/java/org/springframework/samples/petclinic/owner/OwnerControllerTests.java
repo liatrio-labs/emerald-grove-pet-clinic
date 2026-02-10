@@ -248,4 +248,83 @@ class OwnerControllerTests {
 			.andExpect(flash().attributeExists("error"));
 	}
 
+	@Test
+	void testSearchByTelephoneOnly() throws Exception {
+		Owner george = george();
+		Owner other = new Owner();
+		other.setId(2);
+		other.setFirstName("Betty");
+		other.setLastName("Davis");
+		Page<Owner> owners = new PageImpl<>(List.of(george, other));
+		given(this.owners.findByTelephoneStartingWith(eq("608555"), any(Pageable.class))).willReturn(owners);
+
+		mockMvc.perform(get("/owners").param("telephone", "608555"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
+	}
+
+	@Test
+	void testSearchByCityOnly() throws Exception {
+		Owner george = george();
+		Owner other = new Owner();
+		other.setId(2);
+		other.setFirstName("Peter");
+		other.setLastName("McTavish");
+		Page<Owner> owners = new PageImpl<>(List.of(george, other));
+		given(this.owners.findByCityStartingWithIgnoreCase(eq("Madison"), any(Pageable.class))).willReturn(owners);
+
+		mockMvc.perform(get("/owners").param("city", "Madison"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
+	}
+
+	@Test
+	void testSearchByLastNameAndCity() throws Exception {
+		Owner george = george();
+		Owner other = new Owner();
+		other.setId(2);
+		other.setFirstName("George");
+		other.setLastName("Franklin");
+		Page<Owner> owners = new PageImpl<>(List.of(george, other));
+		given(this.owners.findByLastNameStartingWithAndCityStartingWithIgnoreCase(eq("Franklin"), eq("Madison"),
+				any(Pageable.class)))
+			.willReturn(owners);
+
+		mockMvc.perform(get("/owners").param("lastName", "Franklin").param("city", "Madison"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
+	}
+
+	@Test
+	void testTelephoneValidationFailsWithLessThan3Digits() throws Exception {
+		mockMvc.perform(get("/owners").param("telephone", "12"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
+			.andExpect(view().name("owners/findOwners"));
+	}
+
+	@Test
+	void testCityValidationFailsWithLessThan2Characters() throws Exception {
+		mockMvc.perform(get("/owners").param("city", "M"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasFieldErrors("owner", "city"))
+			.andExpect(view().name("owners/findOwners"));
+	}
+
+	@Test
+	void testTelephoneFormattingIsStripped() throws Exception {
+		Owner george = george();
+		Owner other = new Owner();
+		other.setId(2);
+		other.setFirstName("Betty");
+		other.setLastName("Davis");
+		Page<Owner> owners = new PageImpl<>(List.of(george, other));
+		// Should strip formatting from "(608) 555-1023" to "6085551023"
+		given(this.owners.findByTelephoneStartingWith(eq("6085551023"), any(Pageable.class))).willReturn(owners);
+
+		mockMvc.perform(get("/owners").param("telephone", "(608) 555-1023"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
+	}
+
 }

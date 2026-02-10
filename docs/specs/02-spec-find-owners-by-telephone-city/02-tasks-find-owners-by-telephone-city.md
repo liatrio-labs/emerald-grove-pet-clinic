@@ -47,7 +47,7 @@
 - [x] 1.10 Verify all existing repository tests still pass (backward compatibility check)
 - [x] 1.11 Run `./mvnw test -Dtest=ClinicServiceTests` and confirm all tests pass
 
-### [ ] 2.0 TDD: Controller Layer - Update Search Handler with Multi-Field Support
+### [x] 2.0 TDD: Controller Layer - Update Search Handler with Multi-Field Support
 
 #### 2.0 Proof Artifact(s)
 
@@ -62,21 +62,21 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 RED: Write failing test `testSearchByTelephoneOnly()` in `OwnerControllerTests.java` using MockMvc to submit form with only telephone field filled
-- [ ] 2.2 RED: Write failing test `testSearchByCityOnly()` using MockMvc to submit form with only city field filled
-- [ ] 2.3 RED: Write failing test `testSearchByLastNameAndCity()` for combined search
-- [ ] 2.4 RED: Write failing test `testTelephoneValidationFailsWithLessThan3Digits()` that expects validation error when telephone has <3 digits
-- [ ] 2.5 RED: Write failing test `testCityValidationFailsWithLessThan2Characters()` that expects validation error when city has <2 characters
-- [ ] 2.6 RED: Write failing test `testTelephoneFormattingIsStripped()` that submits "(608) 555-1023" and verifies it's converted to "6085551023" for search
-- [ ] 2.7 GREEN: Update `processFindForm()` method in `OwnerController.java` to accept telephone and city parameters from Owner object
-- [ ] 2.8 GREEN: Add input sanitization logic to strip non-numeric characters from telephone input
-- [ ] 2.9 GREEN: Add validation logic for telephone (min 3 digits) and city (min 2 characters), use `BindingResult` to add errors
-- [ ] 2.10 GREEN: Update search logic to call appropriate repository method based on which fields are filled (lastName, telephone, city, or combinations)
-- [ ] 2.11 GREEN: Update empty results handling to build descriptive message showing which criteria were searched
-- [ ] 2.12 REFACTOR: Extract telephone sanitization to a helper method if appropriate
-- [ ] 2.13 REFACTOR: Review controller method for complexity, consider extracting search logic to private methods
-- [ ] 2.14 Verify all existing controller tests still pass (backward compatibility check)
-- [ ] 2.15 Run `./mvnw test -Dtest=OwnerControllerTests` and confirm all tests pass
+- [x] 2.1 RED: Write failing test `testSearchByTelephoneOnly()` in `OwnerControllerTests.java` using MockMvc to submit form with only telephone field filled
+- [x] 2.2 RED: Write failing test `testSearchByCityOnly()` using MockMvc to submit form with only city field filled
+- [x] 2.3 RED: Write failing test `testSearchByLastNameAndCity()` for combined search
+- [x] 2.4 RED: Write failing test `testTelephoneValidationFailsWithLessThan3Digits()` that expects validation error when telephone has <3 digits
+- [x] 2.5 RED: Write failing test `testCityValidationFailsWithLessThan2Characters()` that expects validation error when city has <2 characters
+- [x] 2.6 RED: Write failing test `testTelephoneFormattingIsStripped()` that submits "(608) 555-1023" and verifies it's converted to "6085551023" for search
+- [x] 2.7 GREEN: Update `processFindForm()` method in `OwnerController.java` to accept telephone and city parameters from Owner object
+- [x] 2.8 GREEN: Add input sanitization logic to strip non-numeric characters from telephone input
+- [x] 2.9 GREEN: Add validation logic for telephone (min 3 digits) and city (min 2 characters), use `BindingResult` to add errors
+- [x] 2.10 GREEN: Update search logic to call appropriate repository method based on which fields are filled (lastName, telephone, city, or combinations)
+- [x] 2.11 GREEN: Update empty results handling to build descriptive message showing which criteria were searched
+- [x] 2.12 REFACTOR: Extract telephone sanitization to a helper method if appropriate
+- [x] 2.13 REFACTOR: Review controller method for complexity, consider extracting search logic to private methods
+- [x] 2.14 Verify all existing controller tests still pass (backward compatibility check)
+- [x] 2.15 Run `./mvnw test -Dtest=OwnerControllerTests` and confirm all tests pass
 
 ### [ ] 3.0 View Layer - Add Telephone and City Input Fields with Validation
 

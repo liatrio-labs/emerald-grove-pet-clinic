@@ -94,28 +94,123 @@ class OwnerController {
 	@GetMapping("/owners")
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 			Model model) {
-		// allow parameterless GET request for /owners to return all records
+		// Extract search parameters
 		String lastName = owner.getLastName();
-		if (lastName == null) {
-			lastName = ""; // empty string signifies broadest possible search
+		String city = owner.getCity();
+		String telephone = owner.getTelephone();
+
+		// Sanitize telephone input (strip non-numeric characters)
+		if (telephone != null && !telephone.isEmpty()) {
+			telephone = sanitizeTelephone(telephone);
+			owner.setTelephone(telephone); // Update owner object with sanitized value
 		}
 
-		// find owners by last name
-		Page<Owner> ownersResults = findPaginatedForOwnersLastName(page, lastName);
+		// Validate telephone (minimum 3 digits if provided)
+		if (telephone != null && !telephone.isEmpty() && telephone.length() < 3) {
+			result.rejectValue("telephone", "tooShort", "must be at least 3 digits");
+			return "owners/findOwners";
+		}
+
+		// Validate city (minimum 2 characters if provided)
+		if (city != null && !city.isEmpty() && city.length() < 2) {
+			result.rejectValue("city", "tooShort", "must be at least 2 characters");
+			return "owners/findOwners";
+		}
+
+		// Normalize empty strings to null for cleaner logic
+		if (lastName != null && lastName.isEmpty()) {
+			lastName = null;
+		}
+		if (city != null && city.isEmpty()) {
+			city = null;
+		}
+		if (telephone != null && telephone.isEmpty()) {
+			telephone = null;
+		}
+
+		// Search based on which fields are provided
+		Page<Owner> ownersResults = findOwnersBySearchCriteria(page, lastName, city, telephone);
+
 		if (ownersResults.isEmpty()) {
-			// no owners found
-			result.rejectValue("lastName", "notFound", "not found");
+			// no owners found - build descriptive message
+			String searchCriteria = buildSearchCriteriaMessage(lastName, city, telephone);
+			result.rejectValue("lastName", "notFound", searchCriteria.isEmpty() ? "not found" : searchCriteria);
 			return "owners/findOwners";
 		}
 
 		if (ownersResults.getTotalElements() == 1) {
-			// 1 owner found
+			// 1 owner found - redirect to details
 			owner = ownersResults.iterator().next();
 			return "redirect:/owners/" + owner.getId();
 		}
 
 		// multiple owners found
 		return addPaginationModel(page, model, ownersResults);
+	}
+
+	private String sanitizeTelephone(String telephone) {
+		// Strip all non-numeric characters
+		return telephone.replaceAll("[^0-9]", "");
+	}
+
+	private String buildSearchCriteriaMessage(String lastName, String city, String telephone) {
+		StringBuilder message = new StringBuilder();
+		if (lastName != null || city != null || telephone != null) {
+			message.append("not found matching: ");
+			boolean first = true;
+			if (lastName != null) {
+				message.append("lastName='").append(lastName).append("'");
+				first = false;
+			}
+			if (city != null) {
+				if (!first)
+					message.append(", ");
+				message.append("city='").append(city).append("'");
+				first = false;
+			}
+			if (telephone != null) {
+				if (!first)
+					message.append(", ");
+				message.append("telephone='").append(telephone).append("'");
+			}
+		}
+		return message.toString();
+	}
+
+	private Page<Owner> findOwnersBySearchCriteria(int page, String lastName, String city, String telephone) {
+		int pageSize = 5;
+		Pageable pageable = PageRequest.of(page - 1, pageSize);
+
+		// Determine which repository method to call based on filled fields
+		if (lastName != null && city != null && telephone != null) {
+			// All three fields
+			return owners.findByLastNameStartingWithAndCityStartingWithIgnoreCaseAndTelephoneStartingWith(lastName,
+					city, telephone, pageable);
+		}
+		else if (lastName != null && city != null) {
+			// lastName + city
+			return owners.findByLastNameStartingWithAndCityStartingWithIgnoreCase(lastName, city, pageable);
+		}
+		else if (lastName != null && telephone != null) {
+			// lastName + telephone
+			return owners.findByLastNameStartingWithAndTelephoneStartingWith(lastName, telephone, pageable);
+		}
+		else if (lastName != null) {
+			// lastName only
+			return owners.findByLastNameStartingWith(lastName, pageable);
+		}
+		else if (city != null) {
+			// city only
+			return owners.findByCityStartingWithIgnoreCase(city, pageable);
+		}
+		else if (telephone != null) {
+			// telephone only
+			return owners.findByTelephoneStartingWith(telephone, pageable);
+		}
+		else {
+			// no criteria - return all (empty string search)
+			return owners.findByLastNameStartingWith("", pageable);
+		}
 	}
 
 	private String addPaginationModel(int page, Model model, Page<Owner> paginated) {
@@ -125,12 +220,6 @@ class OwnerController {
 		model.addAttribute("totalItems", paginated.getTotalElements());
 		model.addAttribute("listOwners", listOwners);
 		return "owners/ownersList";
-	}
-
-	private Page<Owner> findPaginatedForOwnersLastName(int page, String lastname) {
-		int pageSize = 5;
-		Pageable pageable = PageRequest.of(page - 1, pageSize);
-		return owners.findByLastNameStartingWith(lastname, pageable);
 	}
 
 	@GetMapping("/owners/{ownerId}/edit")
