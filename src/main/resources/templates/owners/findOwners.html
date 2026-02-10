@@ -27,7 +27,7 @@
         <div class="form-group">
           <div class="col-sm-2 control-label"></div>
           <div class="col-sm-5 control-group" id="telephoneGroup">
-            <label for="telephone" class="control-label">Telephone</label>
+            <label for="telephone" class="control-label" th:text="#{telephone}">Telephone</label>
             <input class="form-control" th:field="*{telephone}" size="20" maxlength="20"
               placeholder="e.g. (608) 555-1023" />
             <div class="help-inline">
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="col-sm-5 control-group" id="cityGroup">
-            <label for="city" class="control-label">City</label>
+            <label for="city" class="control-label" th:text="#{city}">City</label>
             <input class="form-control" th:field="*{city}" size="20" maxlength="80" placeholder="e.g. Madison" />
             <div class="help-inline">
               <div th:if="${#fields.hasErrors('city')}">
