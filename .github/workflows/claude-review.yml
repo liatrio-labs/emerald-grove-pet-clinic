@@ -40,5 +40,4 @@ jobs:
             Review this pull request and provide feedback.
 
             Focus on code quality, testing, and Spring Boot best practices.
-            Post your review as a PR comment using gh pr comment.
-            
+            Post your review as a PR comment using gh pr comment.    
