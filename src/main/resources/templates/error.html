@@ -16,6 +16,12 @@
       </p>
 
       <p class="liatrio-muted" th:text="${message}">Exception message</p>
+
+      <!-- Navigation links for 404 errors -->
+      <div th:if="${status == 404}" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+        <a th:href="@{/owners/find}" class="btn btn-outline-primary" th:text="#{findOwners}">Find Owners</a>
+        <a th:href="@{/}" class="btn btn-outline-secondary" th:text="#{home}">Home</a>
+      </div>
     </div>
   </section>
 </body>
