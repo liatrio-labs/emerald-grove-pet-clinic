@@ -93,7 +93,7 @@
 - [x] 3.13 Click "Deutsch" and capture screenshot of home page in German
 - [x] 3.14 Run full test suite `./mvnw test` to ensure no regressions
 
-### [ ] 4.0 RED: Write Failing E2E Tests for Language Persistence
+### [x] 4.0 RED: Write Failing E2E Tests for Language Persistence
 
 #### 4.0 Proof Artifact(s)
 
@@ -103,15 +103,15 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Create `e2e-tests/tests/language-selector.spec.ts` following existing Playwright test patterns
-- [ ] 4.2 Import necessary Playwright test utilities and set up test suite with `test.describe('Language Selector', ...)`
-- [ ] 4.3 Write test "should display language selector on home page" - verify selector is visible
-- [ ] 4.4 Write test "should change page language when clicking Spanish" - click Español, verify page title/content changes to Spanish
-- [ ] 4.5 Write test "should persist language when navigating to Find Owners" - stay in Spanish, navigate to /owners/find, verify still in Spanish
-- [ ] 4.6 Write test "should persist language when navigating to Veterinarians" - navigate to /vets.html, verify still in Spanish
-- [ ] 4.7 Write test "should switch to German and persist across pages" - switch to Deutsch, navigate between pages, verify German text
-- [ ] 4.8 Write test "should display language names in their native language" - verify dropdown shows "English", "Español", "Deutsch"
-- [ ] 4.9 Run `cd e2e-tests && npm test -- language-selector.spec.ts` and verify tests run (may pass or fail depending on implementation state)
+- [x] 4.1 Create `e2e-tests/tests/language-selector.spec.ts` following existing Playwright test patterns
+- [x] 4.2 Import necessary Playwright test utilities and set up test suite with `test.describe('Language Selector', ...)`
+- [x] 4.3 Write test "should display language selector on home page" - verify selector is visible
+- [x] 4.4 Write test "should change page language when clicking Spanish" - click Español, verify page title/content changes to Spanish
+- [x] 4.5 Write test "should persist language when navigating to Find Owners" - stay in Spanish, navigate to /owners/find, verify still in Spanish
+- [x] 4.6 Write test "should persist language when navigating to Veterinarians" - navigate to /vets.html, verify still in Spanish
+- [x] 4.7 Write test "should switch to German and persist across pages" - switch to Deutsch, navigate between pages, verify German text
+- [x] 4.8 Write test "should display language names in their native language" - verify dropdown shows "English", "Español", "Deutsch"
+- [x] 4.9 Run `cd e2e-tests && npm test -- language-selector.spec.ts` and verify tests run (may pass or fail depending on implementation state)
 
 ### [ ] 5.0 GREEN: Verify and Validate Language Persistence
 
