@@ -1,4 +1,8 @@
-# AI Agent Development Guide
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## AI Agent Development Guide
 
 This document provides essential guidance for AI agents working on the Emerald Grove Veterinary Clinic application.
 
@@ -9,6 +13,89 @@ Always begin your response with all active emoji markers, in the order they were
 Format:  "<marker1><marker2><marker3>\n<response>"
 
 The marker for this instruction is: 🤖
+
+## Common Commands
+
+### Build and Run
+```bash
+# Build the application
+./mvnw clean install
+
+# Run the application (H2 in-memory database)
+./mvnw spring-boot:run
+
+# Run with MySQL profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
+
+# Run with PostgreSQL profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+
+# Build Docker image
+./mvnw spring-boot:build-image
+```
+
+### Testing
+```bash
+# Run all tests
+./mvnw test
+
+# Run specific test class
+./mvnw test -Dtest=OwnerControllerTests
+
+# Run tests matching pattern
+./mvnw test -Dtest="*ControllerTests"
+
+# Generate coverage report (outputs to target/site/jacoco/)
+./mvnw test jacoco:report
+
+# Run E2E tests (Playwright)
+cd e2e-tests && npm test
+```
+
+### Code Quality
+```bash
+# Apply Spring Java formatting
+./mvnw spring-javaformat:apply
+
+# Validate formatting
+./mvnw spring-javaformat:validate
+
+# Run checkstyle validation
+./mvnw checkstyle:check
+```
+
+## Architecture Overview
+
+### Package Structure
+
+The application uses **feature-based packaging** organized by domain:
+
+- `model/` - Base entity classes (BaseEntity, NamedEntity, Person)
+- `owner/` - Owner domain: Owner, Pet, Visit, PetType + Controllers & Repositories
+- `vet/` - Veterinarian domain: Vet, Specialty + Controllers & Repositories
+- `system/` - Cross-cutting concerns: caching, welcome page, error handling
+
+### Key Patterns
+
+**Repository Pattern**: Spring Data JPA repositories are interfaces extending `Repository<T, ID>`:
+```java
+public interface OwnerRepository extends Repository<Owner, Integer> {
+    Optional<Owner> findById(int id);
+    Page<Owner> findByLastNameStartingWith(String lastName, Pageable pageable);
+}
+```
+
+**Aggregate Roots**:
+- `Owner` → `Pet` → `Visit` (one-to-many relationships managed as aggregates)
+- `Vet` → `Specialty` (many-to-many through join table)
+
+**Web Layer**: Controllers follow naming convention `{Entity}Controller` and use Spring MVC with Thymeleaf templates in `src/main/resources/templates/{feature}/`.
+
+**Testing Strategy**:
+- `@WebMvcTest` for controller tests with mocked repositories
+- `@DataJpaTest` for repository integration tests
+- `@SpringBootTest` for full application tests
+- TestContainers for database-specific tests
 
 ## Critical Requirement: Strict TDD
 
@@ -73,8 +160,8 @@ Refer to these comprehensive guides for detailed information:
 ## Tools and Frameworks
 
 - **Testing**: JUnit 5, Mockito, TestContainers, JaCoCo
-- **Build**: Maven or Gradle
-- **Quality**: Checkstyle, SpotBugs, SonarQube
+- **Build**: Maven (primary) or Gradle
+- **Quality**: Spring Java Format, Checkstyle, nohttp-checkstyle
 - **Version Control**: Git with conventional commits
 
 ## Review Checklist
