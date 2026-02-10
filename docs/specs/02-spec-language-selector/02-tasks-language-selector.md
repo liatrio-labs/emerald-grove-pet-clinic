@@ -65,7 +65,7 @@
 - [x] 2.7 Run `./mvnw test -Dtest=LanguageSelectorTests` and verify all tests fail (component doesn't exist yet)
 - [x] 2.8 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods
 
-### [ ] 3.0 GREEN: Implement Language Selector in Header
+### [x] 3.0 GREEN: Implement Language Selector in Header
 
 #### 3.0 Proof Artifact(s)
 
@@ -78,20 +78,20 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Open `src/main/resources/templates/fragments/layout.html` for editing
-- [ ] 3.2 Add language selector dropdown after the existing navigation items (after line 67, before closing `</ul>` tag on line 68)
-- [ ] 3.3 Create Bootstrap 5 dropdown with button showing current language code using `th:text="${#locale.language.toUpperCase()}"`
-- [ ] 3.4 Add dropdown menu with three items: English, Spanish (Español), German (Deutsch) using `th:text="#{language.english}"` etc.
-- [ ] 3.5 Set each dropdown item href to current URL with `?lang=xx` parameter using `th:href="@{''(lang='en')}"` pattern
-- [ ] 3.6 Add appropriate ARIA labels and accessibility attributes to dropdown button and menu
-- [ ] 3.7 Ensure dropdown styling matches existing navbar items (use same nav-item, nav-link classes)
-- [ ] 3.8 Run `./mvnw test -Dtest=LanguageSelectorTests` and verify all tests now pass
-- [ ] 3.9 Run `./mvnw spring-boot:run` to start application and manually test language selector
-- [ ] 3.10 Capture screenshot of home page in English showing language selector
-- [ ] 3.11 Capture screenshot of dropdown menu expanded
-- [ ] 3.12 Click "Español" and capture screenshot of home page in Spanish
-- [ ] 3.13 Click "Deutsch" and capture screenshot of home page in German
-- [ ] 3.14 Run full test suite `./mvnw test` to ensure no regressions
+- [x] 3.1 Open `src/main/resources/templates/fragments/layout.html` for editing
+- [x] 3.2 Add language selector dropdown after the existing navigation items (after line 67, before closing `</ul>` tag on line 68)
+- [x] 3.3 Create Bootstrap 5 dropdown with button showing current language code using `th:text="${#locale.language.toUpperCase()}"`
+- [x] 3.4 Add dropdown menu with three items: English, Spanish (Español), German (Deutsch) using `th:text="#{language.english}"` etc.
+- [x] 3.5 Set each dropdown item href to current URL with `?lang=xx` parameter using `th:href="@{''(lang='en')}"` pattern
+- [x] 3.6 Add appropriate ARIA labels and accessibility attributes to dropdown button and menu
+- [x] 3.7 Ensure dropdown styling matches existing navbar items (use same nav-item, nav-link classes)
+- [x] 3.8 Run `./mvnw test -Dtest=LanguageSelectorTests` and verify all tests now pass
+- [x] 3.9 Run `./mvnw spring-boot:run` to start application and manually test language selector
+- [x] 3.10 Capture screenshot of home page in English showing language selector
+- [x] 3.11 Capture screenshot of dropdown menu expanded
+- [x] 3.12 Click "Español" and capture screenshot of home page in Spanish
+- [x] 3.13 Click "Deutsch" and capture screenshot of home page in German
+- [x] 3.14 Run full test suite `./mvnw test` to ensure no regressions
 
 ### [ ] 4.0 RED: Write Failing E2E Tests for Language Persistence
 
