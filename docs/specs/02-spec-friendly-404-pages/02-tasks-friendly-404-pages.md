@@ -97,7 +97,7 @@
 - [x] 3.10 **Manual Verification**: Verify page shows "Pet not found" message and returns 404 status
 - [x] 3.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
 
-### [ ] 4.0 End-to-End Validation - Playwright Tests
+### [x] 4.0 End-to-End Validation - Playwright Tests
 
 #### 4.0 Proof Artifact(s)
 
@@ -109,16 +109,16 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Create `e2e-tests/tests/owner-404.spec.ts` following existing Playwright test patterns
-- [ ] 4.2 In `owner-404.spec.ts`, write test that navigates to `/owners/99999` and asserts response status is 404
-- [ ] 4.3 In `owner-404.spec.ts`, assert page contains text "Owner not found" (or appropriate error message)
-- [ ] 4.4 In `owner-404.spec.ts`, assert page contains "Find Owners" link and verify it's clickable
-- [ ] 4.5 Create `e2e-tests/tests/pet-404.spec.ts` following existing Playwright test patterns
-- [ ] 4.6 In `pet-404.spec.ts`, write test that navigates to `/owners/1/pets/99999` and asserts response status is 404
-- [ ] 4.7 In `pet-404.spec.ts`, assert page contains text "Pet not found" (or appropriate error message)
-- [ ] 4.8 In `pet-404.spec.ts`, assert page contains "Find Owners" link and verify navigation
-- [ ] 4.9 Run Playwright tests locally with `cd e2e-tests && npm test -- --grep "404"` and verify all pass
-- [ ] 4.10 Generate Playwright HTML report with `cd e2e-tests && npm run report`
-- [ ] 4.11 Review Playwright screenshot artifacts captured during test runs
-- [ ] 4.12 Run full Playwright test suite with `cd e2e-tests && npm test` to ensure no regressions
-- [ ] 4.13 Verify test results and HTML report are available for proof artifacts
+- [x] 4.1 Create `e2e-tests/tests/owner-404.spec.ts` following existing Playwright test patterns
+- [x] 4.2 In `owner-404.spec.ts`, write test that navigates to `/owners/99999` and asserts response status is 404
+- [x] 4.3 In `owner-404.spec.ts`, assert page contains text "Owner not found" (or appropriate error message)
+- [x] 4.4 In `owner-404.spec.ts`, assert page contains "Find Owners" link and verify it's clickable
+- [x] 4.5 Create `e2e-tests/tests/pet-404.spec.ts` following existing Playwright test patterns
+- [x] 4.6 In `pet-404.spec.ts`, write test that navigates to `/owners/1/pets/99999` and asserts response status is 404
+- [x] 4.7 In `pet-404.spec.ts`, assert page contains text "Pet not found" (or appropriate error message)
+- [x] 4.8 In `pet-404.spec.ts`, assert page contains "Find Owners" link and verify navigation
+- [x] 4.9 Run Playwright tests locally with `cd e2e-tests && npm test -- --grep "404"` and verify all pass
+- [x] 4.10 Generate Playwright HTML report with `cd e2e-tests && npm run report`
+- [x] 4.11 Review Playwright screenshot artifacts captured during test runs
+- [x] 4.12 Run full Playwright test suite with `cd e2e-tests && npm test` to ensure no regressions
+- [x] 4.13 Verify test results and HTML report are available for proof artifacts
