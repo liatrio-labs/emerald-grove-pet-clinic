@@ -45,6 +45,54 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	Page<Owner> findByLastNameStartingWith(String lastName, Pageable pageable);
 
 	/**
+	 * Retrieve {@link Owner}s from the data store by telephone number, returning all
+	 * owners whose telephone number <i>starts</i> with the given digits.
+	 * @param telephone Value to search for
+	 * @return a Page of matching {@link Owner}s (or an empty Page if none found)
+	 */
+	Page<Owner> findByTelephoneStartingWith(String telephone, Pageable pageable);
+
+	/**
+	 * Retrieve {@link Owner}s from the data store by city, returning all owners whose
+	 * city name <i>starts</i> with the given value (case-insensitive).
+	 * @param city Value to search for
+	 * @return a Page of matching {@link Owner}s (or an empty Page if none found)
+	 */
+	Page<Owner> findByCityStartingWithIgnoreCase(String city, Pageable pageable);
+
+	/**
+	 * Retrieve {@link Owner}s from the data store by last name and city, returning all
+	 * owners whose last name and city both match (case-insensitive for city).
+	 * @param lastName Value to search for in last name
+	 * @param city Value to search for in city
+	 * @return a Page of matching {@link Owner}s (or an empty Page if none found)
+	 */
+	Page<Owner> findByLastNameStartingWithAndCityStartingWithIgnoreCase(String lastName, String city,
+			Pageable pageable);
+
+	/**
+	 * Retrieve {@link Owner}s from the data store by last name and telephone, returning
+	 * all owners whose last name and telephone both match.
+	 * @param lastName Value to search for in last name
+	 * @param telephone Value to search for in telephone
+	 * @return a Page of matching {@link Owner}s (or an empty Page if none found)
+	 */
+	Page<Owner> findByLastNameStartingWithAndTelephoneStartingWith(String lastName, String telephone,
+			Pageable pageable);
+
+	/**
+	 * Retrieve {@link Owner}s from the data store by last name, city, and telephone,
+	 * returning all owners whose values match all three fields (case-insensitive for
+	 * city).
+	 * @param lastName Value to search for in last name
+	 * @param city Value to search for in city
+	 * @param telephone Value to search for in telephone
+	 * @return a Page of matching {@link Owner}s (or an empty Page if none found)
+	 */
+	Page<Owner> findByLastNameStartingWithAndCityStartingWithIgnoreCaseAndTelephoneStartingWith(String lastName,
+			String city, String telephone, Pageable pageable);
+
+	/**
 	 * Retrieve an {@link Owner} from the data store by id.
 	 * <p>
 	 * This method returns an {@link Optional} containing the {@link Owner} if found. If

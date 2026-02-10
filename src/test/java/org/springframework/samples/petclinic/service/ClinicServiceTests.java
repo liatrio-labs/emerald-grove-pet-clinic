@@ -248,4 +248,74 @@ class ClinicServiceTests {
 			.isNotNull();
 	}
 
+	@Test
+	void shouldFindOwnersByTelephoneStartingWith() {
+		// Search for owners whose telephone starts with "6085551"
+		// Should find: George Franklin (6085551023), Betty Davis (6085551749)
+		Page<Owner> owners = this.owners.findByTelephoneStartingWith("6085551", pageable);
+		assertThat(owners).hasSize(2);
+
+		// Search for specific telephone prefix that matches one owner
+		owners = this.owners.findByTelephoneStartingWith("6085557", pageable);
+		assertThat(owners).hasSize(1); // Maria Escobito (6085557683)
+
+		// Search with prefix that matches no owners
+		owners = this.owners.findByTelephoneStartingWith("9999", pageable);
+		assertThat(owners).isEmpty();
+	}
+
+	@Test
+	void shouldFindOwnersByCityStartingWithIgnoreCase() {
+		// Search for owners whose city starts with "Mad"
+		// Should find: Madison (4 owners: George Franklin, Peter McTavish, Maria
+		// Escobito, David
+		// Schroeder)
+		Page<Owner> owners = this.owners.findByCityStartingWithIgnoreCase("Mad", pageable);
+		assertThat(owners).hasSize(4);
+
+		// Test case insensitivity - lowercase "mad" should still find Madison
+		owners = this.owners.findByCityStartingWithIgnoreCase("mad", pageable);
+		assertThat(owners).hasSize(4);
+
+		// Search for Monona (2 owners: Jean Coleman, Jeff Black)
+		owners = this.owners.findByCityStartingWithIgnoreCase("Monon", pageable);
+		assertThat(owners).hasSize(2);
+
+		// Search with prefix that matches no city
+		owners = this.owners.findByCityStartingWithIgnoreCase("Chicago", pageable);
+		assertThat(owners).isEmpty();
+	}
+
+	@Test
+	void shouldFindOwnersByMultipleFields() {
+		// Test lastName + city (AND logic)
+		// Should find: George Franklin from Madison
+		Page<Owner> owners = this.owners.findByLastNameStartingWithAndCityStartingWithIgnoreCase("Franklin", "Madison",
+				pageable);
+		assertThat(owners).hasSize(1);
+		assertThat(owners.getContent().get(0).getFirstName()).isEqualTo("George");
+
+		// Test lastName + city (should find Harold Davis from Windsor)
+		owners = this.owners.findByLastNameStartingWithAndCityStartingWithIgnoreCase("Davis", "Windsor", pageable);
+		assertThat(owners).hasSize(1);
+		assertThat(owners.getContent().get(0).getFirstName()).isEqualTo("Harold");
+
+		// Test lastName + telephone
+		// Should find: George Franklin with telephone 6085551023
+		owners = this.owners.findByLastNameStartingWithAndTelephoneStartingWith("Franklin", "608555102", pageable);
+		assertThat(owners).hasSize(1);
+		assertThat(owners.getContent().get(0).getFirstName()).isEqualTo("George");
+
+		// Test all three fields (lastName + city + telephone)
+		// Should find: George Franklin
+		owners = this.owners.findByLastNameStartingWithAndCityStartingWithIgnoreCaseAndTelephoneStartingWith("Franklin",
+				"Madison", "608555102", pageable);
+		assertThat(owners).hasSize(1);
+		assertThat(owners.getContent().get(0).getFirstName()).isEqualTo("George");
+
+		// Test multi-field search with no matches
+		owners = this.owners.findByLastNameStartingWithAndCityStartingWithIgnoreCase("Franklin", "Windsor", pageable);
+		assertThat(owners).isEmpty();
+	}
+
 }

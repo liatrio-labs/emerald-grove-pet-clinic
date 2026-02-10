@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue create:*)",
+      "Bash(./mvnw test:*)",
+      "Bash(xargs:*)",
+      "Bash(gh repo view:*)",
+      "Bash(./mvnw spring-javaformat:apply:*)"
+    ]
+  }
+}
