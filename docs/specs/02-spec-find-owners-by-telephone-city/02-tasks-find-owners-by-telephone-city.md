@@ -78,7 +78,7 @@
 - [x] 2.14 Verify all existing controller tests still pass (backward compatibility check)
 - [x] 2.15 Run `./mvnw test -Dtest=OwnerControllerTests` and confirm all tests pass
 
-### [ ] 3.0 View Layer - Add Telephone and City Input Fields with Validation
+### [x] 3.0 View Layer - Add Telephone and City Input Fields with Validation
 
 #### 3.0 Proof Artifact(s)
 
@@ -90,19 +90,19 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Update `findOwners.html` to add a new form group for telephone field below lastName field
-- [ ] 3.2 Add telephone input field with `th:field="*{telephone}"` binding, label "Telephone", and placeholder text
-- [ ] 3.3 Add city input field on same row as telephone with `th:field="*{city}"` binding, label "City"
-- [ ] 3.4 Apply proper CSS classes to maintain Liatrio styling: `.form-control`, `.liatrio-form`, `.control-group`
-- [ ] 3.5 Ensure telephone and city fields are side-by-side using appropriate column classes (e.g., `col-sm-5` for each)
-- [ ] 3.6 Add validation error display for telephone field using Thymeleaf `th:if="${#fields.hasErrors('telephone')}"` pattern
-- [ ] 3.7 Add validation error display for city field using same pattern as telephone
-- [ ] 3.8 Test form layout in browser to verify fields appear correctly and are responsive
-- [ ] 3.9 Manually test form submission with invalid telephone (e.g., "12") to verify validation error appears inline
-- [ ] 3.10 Manually test form submission with invalid city (e.g., "M") to verify validation error appears inline
-- [ ] 3.11 Test with formatted telephone input (e.g., "(608) 555-1023") to verify it works correctly
-- [ ] 3.12 Take screenshots of form with new fields for proof artifacts
-- [ ] 3.13 Verify form maintains existing lastName functionality and doesn't break backward compatibility
+- [x] 3.1 Update `findOwners.html` to add a new form group for telephone field below lastName field
+- [x] 3.2 Add telephone input field with `th:field="*{telephone}"` binding, label "Telephone", and placeholder text
+- [x] 3.3 Add city input field on same row as telephone with `th:field="*{city}"` binding, label "City"
+- [x] 3.4 Apply proper CSS classes to maintain Liatrio styling: `.form-control`, `.liatrio-form`, `.control-group`
+- [x] 3.5 Ensure telephone and city fields are side-by-side using appropriate column classes (e.g., `col-sm-5` for each)
+- [x] 3.6 Add validation error display for telephone field using Thymeleaf `th:if="${#fields.hasErrors('telephone')}"` pattern
+- [x] 3.7 Add validation error display for city field using same pattern as telephone
+- [x] 3.8 Test form layout in browser to verify fields appear correctly and are responsive
+- [x] 3.9 Manually test form submission with invalid telephone (e.g., "12") to verify validation error appears inline
+- [x] 3.10 Manually test form submission with invalid city (e.g., "M") to verify validation error appears inline
+- [x] 3.11 Test with formatted telephone input (e.g., "(608) 555-1023") to verify it works correctly
+- [x] 3.12 Take screenshots of form with new fields for proof artifacts
+- [x] 3.13 Verify form maintains existing lastName functionality and doesn't break backward compatibility
 
 ### [ ] 4.0 E2E Testing - Comprehensive Search Workflow Validation
 
