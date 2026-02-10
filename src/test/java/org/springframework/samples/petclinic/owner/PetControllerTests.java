@@ -208,4 +208,21 @@ class PetControllerTests {
 
 	}
 
+	@Test
+	void testFindPetNotFound() throws Exception {
+		int nonExistentPetId = 99999;
+		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, nonExistentPetId))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	void testEditPetNotFound() throws Exception {
+		int nonExistentPetId = 99999;
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, nonExistentPetId).param("name", "Betty")
+				.param("type", "hamster")
+				.param("birthDate", "2015-02-12"))
+			.andExpect(status().isNotFound());
+	}
+
 }

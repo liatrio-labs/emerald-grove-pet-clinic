@@ -73,7 +73,7 @@
 - [x] 2.10 **Manual Verification**: Verify page shows "Owner not found" message and returns 404 status (check browser dev tools Network tab)
 - [x] 2.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
 
-### [ ] 3.0 Pet 404 Handling - TDD Implementation
+### [x] 3.0 Pet 404 Handling - TDD Implementation
 
 #### 3.0 Proof Artifact(s)
 
@@ -85,17 +85,17 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 **RED Phase**: Open `PetControllerTests.java` and write failing test `testFindPetNotFound()` that mocks owner existing but `owner.getPet(petId)` returning null, expects 404 status
-- [ ] 3.2 **RED Phase**: Write failing test `testEditPetNotFound()` that tests pet edit endpoint with non-existent pet ID
-- [ ] 3.3 **RED Phase**: Run tests with `./mvnw test -Dtest=PetControllerTests` and verify new tests fail appropriately
-- [ ] 3.4 **GREEN Phase**: Open `PetController.java` and update `findOwner()` method (line ~69) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
-- [ ] 3.5 **GREEN Phase**: Update `findPet()` method (line ~83) - after `owner.getPet(petId)` call, add null check and throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found")` if pet is null
-- [ ] 3.6 **GREEN Phase**: Run tests with `./mvnw test -Dtest=PetControllerTests` and verify all tests pass (including new 404 tests)
-- [ ] 3.7 **REFACTOR Phase**: Apply Spring Java Format with `./mvnw spring-javaformat:apply`
-- [ ] 3.8 **REFACTOR Phase**: Run full test suite with `./mvnw test` to ensure no regressions
-- [ ] 3.9 **Manual Verification**: Start application and navigate to `/owners/1/pets/99999` (existing owner, non-existent pet)
-- [ ] 3.10 **Manual Verification**: Verify page shows "Pet not found" message and returns 404 status
-- [ ] 3.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
+- [x] 3.1 **RED Phase**: Open `PetControllerTests.java` and write failing test `testFindPetNotFound()` that mocks owner existing but `owner.getPet(petId)` returning null, expects 404 status
+- [x] 3.2 **RED Phase**: Write failing test `testEditPetNotFound()` that tests pet edit endpoint with non-existent pet ID
+- [x] 3.3 **RED Phase**: Run tests with `./mvnw test -Dtest=PetControllerTests` and verify new tests fail appropriately
+- [x] 3.4 **GREEN Phase**: Open `PetController.java` and update `findOwner()` method (line ~69) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
+- [x] 3.5 **GREEN Phase**: Update `findPet()` method (line ~83) - after `owner.getPet(petId)` call, add null check and throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found")` if pet is null
+- [x] 3.6 **GREEN Phase**: Run tests with `./mvnw test -Dtest=PetControllerTests` and verify all tests pass (including new 404 tests)
+- [x] 3.7 **REFACTOR Phase**: Apply Spring Java Format with `./mvnw spring-javaformat:apply`
+- [x] 3.8 **REFACTOR Phase**: Run full test suite with `./mvnw test` to ensure no regressions
+- [x] 3.9 **Manual Verification**: Start application and navigate to `/owners/1/pets/99999` (existing owner, non-existent pet)
+- [x] 3.10 **Manual Verification**: Verify page shows "Pet not found" message and returns 404 status
+- [x] 3.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
 
 ### [ ] 4.0 End-to-End Validation - Playwright Tests
 
