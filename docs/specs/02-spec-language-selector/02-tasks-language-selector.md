@@ -46,7 +46,7 @@
 - [x] 1.6 Run `./mvnw spring-boot:run` and verify application starts without errors
 - [x] 1.7 Capture git diff showing the added message keys
 
-### [ ] 2.0 RED: Write Failing Tests for Language Selector Component
+### [x] 2.0 RED: Write Failing Tests for Language Selector Component
 
 #### 2.0 Proof Artifact(s)
 
@@ -56,14 +56,14 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Create `src/test/java/org/springframework/samples/petclinic/system/LanguageSelectorTests.java` test class
-- [ ] 2.2 Set up test class with `@WebMvcTest` annotation and MockMvc configuration (use `WelcomeController` as the controller to test since it renders layout.html)
-- [ ] 2.3 Write test `testLanguageSelectorIsPresent()` - verify language selector dropdown exists in the navbar using MockMvc and CSS selectors
-- [ ] 2.4 Write test `testLanguageSelectorShowsCurrentLanguage()` - verify dropdown button displays current language code (EN, ES, or DE)
-- [ ] 2.5 Write test `testLanguageSelectorContainsAllLanguages()` - verify dropdown menu contains links for English, Spanish, and German
-- [ ] 2.6 Write test `testLanguageLinksHaveCorrectHref()` - verify each language link has correct `?lang=xx` parameter in href attribute
-- [ ] 2.7 Run `./mvnw test -Dtest=LanguageSelectorTests` and verify all tests fail (component doesn't exist yet)
-- [ ] 2.8 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods
+- [x] 2.1 Create `src/test/java/org/springframework/samples/petclinic/system/LanguageSelectorTests.java` test class
+- [x] 2.2 Set up test class with `@WebMvcTest` annotation and MockMvc configuration (use `WelcomeController` as the controller to test since it renders layout.html)
+- [x] 2.3 Write test `testLanguageSelectorIsPresent()` - verify language selector dropdown exists in the navbar using MockMvc and CSS selectors
+- [x] 2.4 Write test `testLanguageSelectorShowsCurrentLanguage()` - verify dropdown button displays current language code (EN, ES, or DE)
+- [x] 2.5 Write test `testLanguageSelectorContainsAllLanguages()` - verify dropdown menu contains links for English, Spanish, and German
+- [x] 2.6 Write test `testLanguageLinksHaveCorrectHref()` - verify each language link has correct `?lang=xx` parameter in href attribute
+- [x] 2.7 Run `./mvnw test -Dtest=LanguageSelectorTests` and verify all tests fail (component doesn't exist yet)
+- [x] 2.8 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods
 
 ### [ ] 3.0 GREEN: Implement Language Selector in Header
 
