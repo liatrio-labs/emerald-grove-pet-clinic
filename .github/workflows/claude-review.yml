@@ -27,7 +27,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1  # Shallow clone sufficient for reviews
+          fetch-depth: 0  # Full history needed for PR context
 
       - name: Run Claude Code Review
         uses: anthropics/claude-code-action@v1
@@ -37,10 +37,7 @@ jobs:
           include_fix_links: true
 
           prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
-
-            Review this pull request with focus on:
+            Review this pull request for the repository with focus on:
 
             **TDD Compliance:**
             - Are tests written before implementation? (Red-Green-Refactor cycle)
@@ -83,4 +80,4 @@ jobs:
             - Only post GitHub comments - don't submit review text as messages
 
           claude_args: |
-            --allowedTools "Read,Glob,Grep,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(git:*)"
+            --allowedTools "Read,Glob,Grep,Bash"
