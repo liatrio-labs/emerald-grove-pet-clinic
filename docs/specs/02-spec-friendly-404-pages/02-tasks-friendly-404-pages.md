@@ -49,7 +49,7 @@
 - [x] 1.8 Click "Home" link and verify it navigates to `/`
 - [x] 1.9 Take screenshots of error page showing navigation links for proof artifacts
 
-### [ ] 2.0 Owner 404 Handling - TDD Implementation
+### [x] 2.0 Owner 404 Handling - TDD Implementation
 
 #### 2.0 Proof Artifact(s)
 
@@ -61,17 +61,17 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 **RED Phase**: Open `OwnerControllerTests.java` and write failing test `testShowOwnerNotFound()` that mocks repository returning `Optional.empty()` and expects 404 status
-- [ ] 2.2 **RED Phase**: Write failing test `testFindOwnerNotFoundInModelAttribute()` that tests the `@ModelAttribute` method with non-existent owner ID
-- [ ] 2.3 **RED Phase**: Run tests with `./mvnw test -Dtest=OwnerControllerTests` and verify both new tests fail (currently throws IllegalArgumentException, not 404)
-- [ ] 2.4 **GREEN Phase**: Open `OwnerController.java` and update `showOwner()` method (line ~170) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
-- [ ] 2.5 **GREEN Phase**: Update `findOwner()` method (line ~67) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
-- [ ] 2.6 **GREEN Phase**: Run tests with `./mvnw test -Dtest=OwnerControllerTests` and verify all tests pass (including new 404 tests)
-- [ ] 2.7 **REFACTOR Phase**: Apply Spring Java Format with `./mvnw spring-javaformat:apply`
-- [ ] 2.8 **REFACTOR Phase**: Run full test suite with `./mvnw test` to ensure no regressions in other tests
-- [ ] 2.9 **Manual Verification**: Start application and navigate to `/owners/99999` (non-existent owner)
-- [ ] 2.10 **Manual Verification**: Verify page shows "Owner not found" message and returns 404 status (check browser dev tools Network tab)
-- [ ] 2.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
+- [x] 2.1 **RED Phase**: Open `OwnerControllerTests.java` and write failing test `testShowOwnerNotFound()` that mocks repository returning `Optional.empty()` and expects 404 status
+- [x] 2.2 **RED Phase**: Write failing test `testFindOwnerNotFoundInModelAttribute()` that tests the `@ModelAttribute` method with non-existent owner ID
+- [x] 2.3 **RED Phase**: Run tests with `./mvnw test -Dtest=OwnerControllerTests` and verify both new tests fail (currently throws IllegalArgumentException, not 404)
+- [x] 2.4 **GREEN Phase**: Open `OwnerController.java` and update `showOwner()` method (line ~170) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
+- [x] 2.5 **GREEN Phase**: Update `findOwner()` method (line ~67) to throw `ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found")` instead of IllegalArgumentException
+- [x] 2.6 **GREEN Phase**: Run tests with `./mvnw test -Dtest=OwnerControllerTests` and verify all tests pass (including new 404 tests)
+- [x] 2.7 **REFACTOR Phase**: Apply Spring Java Format with `./mvnw spring-javaformat:apply`
+- [x] 2.8 **REFACTOR Phase**: Run full test suite with `./mvnw test` to ensure no regressions in other tests
+- [x] 2.9 **Manual Verification**: Start application and navigate to `/owners/99999` (non-existent owner)
+- [x] 2.10 **Manual Verification**: Verify page shows "Owner not found" message and returns 404 status (check browser dev tools Network tab)
+- [x] 2.11 **Manual Verification**: Take screenshot of 404 error page for proof artifacts
 
 ### [ ] 3.0 Pet 404 Handling - TDD Implementation
 
