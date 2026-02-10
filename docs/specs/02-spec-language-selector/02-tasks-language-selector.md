@@ -113,7 +113,7 @@
 - [x] 4.8 Write test "should display language names in their native language" - verify dropdown shows "English", "Español", "Deutsch"
 - [x] 4.9 Run `cd e2e-tests && npm test -- language-selector.spec.ts` and verify tests run (may pass or fail depending on implementation state)
 
-### [ ] 5.0 GREEN: Verify and Validate Language Persistence
+### [x] 5.0 GREEN: Verify and Validate Language Persistence
 
 #### 5.0 Proof Artifact(s)
 
@@ -124,16 +124,16 @@
 
 #### 5.0 Tasks
 
-- [ ] 5.1 Run `./mvnw spring-boot:run` to ensure application is running for E2E tests
-- [ ] 5.2 Run `cd e2e-tests && npm test -- language-selector.spec.ts` and verify all E2E tests pass
-- [ ] 5.3 Review Playwright test artifacts in `e2e-tests/test-results/` for screenshots/videos of language switching
-- [ ] 5.4 Manually test language persistence: select Spanish → navigate home → find owners → vets → verify Spanish persists
-- [ ] 5.5 Test edge case: navigate to `/?lang=invalid` and verify fallback to English (default locale)
-- [ ] 5.6 Test edge case: navigate to `/?lang=de` directly and verify German loads
-- [ ] 5.7 Run `cd e2e-tests && npm run report` to open Playwright HTML report
-- [ ] 5.8 Review HTML report for test coverage and any warnings or issues
+- [x] 5.1 Run `./mvnw spring-boot:run` to ensure application is running for E2E tests
+- [x] 5.2 Run `cd e2e-tests && npm test -- language-selector.spec.ts` and verify all E2E tests pass
+- [x] 5.3 Review Playwright test artifacts in `e2e-tests/test-results/` for screenshots/videos of language switching
+- [x] 5.4 Manually test language persistence: select Spanish → navigate home → find owners → vets → verify Spanish persists
+- [x] 5.5 Test edge case: navigate to `/?lang=invalid` and verify fallback to English (default locale)
+- [x] 5.6 Test edge case: navigate to `/?lang=de` directly and verify German loads
+- [x] 5.7 Run `cd e2e-tests && npm run report` to open Playwright HTML report
+- [x] 5.8 Review HTML report for test coverage and any warnings or issues
 
-### [ ] 6.0 REFACTOR: Polish, Documentation, and Final Validation
+### [x] 6.0 REFACTOR: Polish, Documentation, and Final Validation
 
 #### 6.0 Proof Artifact(s)
 
@@ -145,15 +145,15 @@
 
 #### 6.0 Tasks
 
-- [ ] 6.1 Test mobile responsiveness: resize browser to mobile width and verify language selector is in hamburger menu
-- [ ] 6.2 Capture screenshot of mobile view showing collapsed navbar with language selector
-- [ ] 6.3 Test keyboard navigation: use Tab key to navigate to language selector, press Enter to open, verify dropdown is keyboard accessible
-- [ ] 6.4 Capture screenshot or describe keyboard focus states on language selector
-- [ ] 6.5 Review code in `layout.html` for clarity and simplicity - refactor if needed
-- [ ] 6.6 Ensure proper indentation and formatting in modified files
-- [ ] 6.7 Run `./mvnw test jacoco:report` to generate final coverage report
-- [ ] 6.8 Review `target/site/jacoco/index.html` and verify >90% coverage for language selector component
-- [ ] 6.9 Run full test suite (unit + E2E): `./mvnw test && cd e2e-tests && npm test`
-- [ ] 6.10 Review git commit history and ensure commits follow conventional format (feat:, test:, refactor:, etc.)
-- [ ] 6.11 Consider adding entry to CHANGELOG.md or project documentation about new language selector feature
-- [ ] 6.12 Perform final manual smoke test of all three languages across all main pages
+- [x] 6.1 Test mobile responsiveness: resize browser to mobile width and verify language selector is in hamburger menu
+- [x] 6.2 Capture screenshot of mobile view showing collapsed navbar with language selector
+- [x] 6.3 Test keyboard navigation: use Tab key to navigate to language selector, press Enter to open, verify dropdown is keyboard accessible
+- [x] 6.4 Capture screenshot or describe keyboard focus states on language selector
+- [x] 6.5 Review code in `layout.html` for clarity and simplicity - refactor if needed
+- [x] 6.6 Ensure proper indentation and formatting in modified files
+- [x] 6.7 Run `./mvnw test jacoco:report` to generate final coverage report
+- [x] 6.8 Review `target/site/jacoco/index.html` and verify >90% coverage for language selector component
+- [x] 6.9 Run full test suite (unit + E2E): `./mvnw test && cd e2e-tests && npm test`
+- [x] 6.10 Review git commit history and ensure commits follow conventional format (feat:, test:, refactor:, etc.)
+- [x] 6.11 Consider adding entry to CHANGELOG.md or project documentation about new language selector feature
+- [x] 6.12 Perform final manual smoke test of all three languages across all main pages
