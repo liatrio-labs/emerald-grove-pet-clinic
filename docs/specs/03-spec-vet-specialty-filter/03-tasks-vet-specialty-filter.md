@@ -52,7 +52,7 @@
 - [x] 1.8 Capture git diff showing the added message keys using `git diff`
 - [x] 1.9 Verify feature branch is active with `git branch` (should show `* feature/vet-specialty-filter`)
 
-### [~] 2.0 RED: Write Failing Unit Tests for Specialty Filter
+### [x] 2.0 RED: Write Failing Unit Tests for Specialty Filter
 
 #### 2.0 Proof Artifact(s)
 
