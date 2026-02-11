@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.vet;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +46,18 @@ class VetController {
 
 	@GetMapping("/vets.html")
 	public String showVetList(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String filter,
-			Model model) {
+			HttpSession session, Model model) {
+		// Retrieve filter from session if no query parameter provided (session
+		// persistence)
+		if (filter == null) {
+			filter = (String) session.getAttribute("vetFilter");
+		}
+
+		// Store filter in session when present (query parameters override session state)
+		if (filter != null) {
+			session.setAttribute("vetFilter", filter);
+		}
+
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
@@ -57,6 +70,9 @@ class VetController {
 			model.addAttribute("filterActive", true);
 			model.addAttribute("filterText", specialtyName);
 		}
+
+		// Pass current filter to template for dropdown selection state
+		model.addAttribute("currentFilter", filter);
 
 		return addPaginationModel(page, paginated, model);
 	}

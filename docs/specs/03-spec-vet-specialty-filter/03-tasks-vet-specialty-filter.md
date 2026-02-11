@@ -134,7 +134,7 @@
 - [x] 4.15 Test pagination with filter: navigate to `?page=2&filter=specialty:surgery` and capture screenshot showing pagination controls maintain filter
 - [x] 4.16 Stop the application
 
-### [ ] 5.0 GREEN: Implement Session Persistence and Visual Feedback
+### [x] 5.0 GREEN: Implement Session Persistence and Visual Feedback
 
 #### 5.0 Proof Artifact(s)
 
@@ -145,22 +145,22 @@
 
 #### 5.0 Tasks
 
-- [ ] 5.1 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
-- [ ] 5.2 Add `HttpSession session` parameter to `showVetList()` method signature
-- [ ] 5.3 Add logic to store filter in session when filter parameter is present: `if (filter != null) { session.setAttribute("vetFilter", filter); }`
-- [ ] 5.4 Add logic to retrieve filter from session when no query parameter provided: `if (filter == null) { filter = (String) session.getAttribute("vetFilter"); }`
-- [ ] 5.5 Ensure query parameters override session state by checking filter parameter first before falling back to session
-- [ ] 5.6 Pass current filter value to template for dropdown selection state: `model.addAttribute("currentFilter", filter)`
-- [ ] 5.7 Open `src/main/resources/templates/vets/vetList.html` for editing
-- [ ] 5.8 Update dropdown to show selected state: add `th:selected="${specialty == currentFilter}"` to each `<option>` element to highlight currently active filter
-- [ ] 5.9 Ensure visual feedback text updates dynamically based on current filter (already implemented in previous task, verify it uses `${filterText}`)
-- [ ] 5.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify session persistence tests pass
-- [ ] 5.11 Run full unit test suite `./mvnw test` to ensure no regressions in other components
-- [ ] 5.12 Run `./mvnw spring-boot:run` to start application for manual testing
-- [ ] 5.13 Navigate to vet directory, select "Surgery" filter, then navigate to home page using navbar
-- [ ] 5.14 Navigate back to vet directory and capture screenshot showing filter is still active (Surgery is selected)
-- [ ] 5.15 Change filter to "Radiology" and capture screenshot showing visual feedback updates to "Showing vets with specialty: Radiology"
-- [ ] 5.16 Stop the application
+- [x] 5.1 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
+- [x] 5.2 Add `HttpSession session` parameter to `showVetList()` method signature
+- [x] 5.3 Add logic to store filter in session when filter parameter is present: `if (filter != null) { session.setAttribute("vetFilter", filter); }`
+- [x] 5.4 Add logic to retrieve filter from session when no query parameter provided: `if (filter == null) { filter = (String) session.getAttribute("vetFilter"); }`
+- [x] 5.5 Ensure query parameters override session state by checking filter parameter first before falling back to session
+- [x] 5.6 Pass current filter value to template for dropdown selection state: `model.addAttribute("currentFilter", filter)`
+- [x] 5.7 Open `src/main/resources/templates/vets/vetList.html` for editing
+- [x] 5.8 Update dropdown to show selected state: add `th:selected="${specialty == currentFilter}"` to each `<option>` element to highlight currently active filter
+- [x] 5.9 Ensure visual feedback text updates dynamically based on current filter (already implemented in previous task, verify it uses `${filterText}`)
+- [x] 5.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify session persistence tests pass
+- [x] 5.11 Run full unit test suite `./mvnw test` to ensure no regressions in other components
+- [x] 5.12 Run `./mvnw spring-boot:run` to start application for manual testing
+- [x] 5.13 Navigate to vet directory, select "Surgery" filter, then navigate to home page using navbar
+- [x] 5.14 Navigate back to vet directory and capture screenshot showing filter is still active (Surgery is selected)
+- [x] 5.15 Change filter to "Radiology" and capture screenshot showing visual feedback updates to "Showing vets with specialty: Radiology"
+- [x] 5.16 Stop the application
 
 ### [ ] 6.0 RED: Write Failing E2E Tests for Filter Workflow
 

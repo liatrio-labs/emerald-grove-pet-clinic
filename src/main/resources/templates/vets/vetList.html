@@ -15,10 +15,18 @@
       <div class="mb-3" style="padding: 1rem;">
         <label for="specialty-filter" class="form-label" th:text="#{filter.specialty.label}">Specialty Filter</label>
         <select id="specialty-filter" class="form-select" multiple style="max-width: 400px;" onchange="applyFilter()">
-          <option value="" th:text="#{filter.specialty.all}">All</option>
-          <option value="radiology" th:text="#{filter.specialty.radiology}">Radiology</option>
-          <option value="surgery" th:text="#{filter.specialty.surgery}">Surgery</option>
-          <option value="dentistry" th:text="#{filter.specialty.dentistry}">Dentistry</option>
+          <option value=""
+                  th:selected="${currentFilter == null or currentFilter == ''}"
+                  th:text="#{filter.specialty.all}">All</option>
+          <option value="radiology"
+                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'radiology')}"
+                  th:text="#{filter.specialty.radiology}">Radiology</option>
+          <option value="surgery"
+                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'surgery')}"
+                  th:text="#{filter.specialty.surgery}">Surgery</option>
+          <option value="dentistry"
+                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'dentistry')}"
+                  th:text="#{filter.specialty.dentistry}">Dentistry</option>
         </select>
         <p th:if="${filterActive}" class="mt-2 text-muted">
           <span th:text="#{filter.showing}">Showing vets with specialty:</span>
@@ -53,7 +61,7 @@
           <tr th:if="${#lists.isEmpty(listVets)}">
             <td colspan="2" class="text-center text-muted py-4">
               <span th:if="${filterActive}" th:text="#{filter.noResults} + ' ' + ${filterText}">No veterinarians found for the selected specialty</span>
-              <span th:unless="${filterActive}">No veterinarians found</span>
+              <span th:unless="${filterActive}" th:text="#{filter.empty}">No veterinarians found</span>
             </td>
           </tr>
           <tr th:each="vet : ${listVets}">
