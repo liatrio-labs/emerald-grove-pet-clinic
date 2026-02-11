@@ -31,7 +31,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,22 +75,109 @@ class VetControllerTests {
 		return helen;
 	}
 
+	private Vet linda() {
+		Vet linda = new Vet();
+		linda.setFirstName("Linda");
+		linda.setLastName("Douglas");
+		linda.setId(3);
+		Specialty surgery = new Specialty();
+		surgery.setId(2);
+		surgery.setName("surgery");
+		linda.addSpecialty(surgery);
+		Specialty dentistry = new Specialty();
+		dentistry.setId(3);
+		dentistry.setName("dentistry");
+		linda.addSpecialty(dentistry);
+		return linda;
+	}
+
 	@BeforeEach
 	void setup() {
 		given(this.vets.findAll()).willReturn(Lists.newArrayList(james(), helen()));
 		given(this.vets.findAll(any(Pageable.class)))
 			.willReturn(new PageImpl<Vet>(Lists.newArrayList(james(), helen())));
-
+		given(this.vets.findDistinctSpecialtyNames())
+			.willReturn(Lists.newArrayList("dentistry", "radiology", "surgery"));
+		given(this.vets.findBySpecialtiesName(eq("radiology"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(helen())));
+		given(this.vets.findBySpecialtiesName(eq("surgery"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(linda())));
+		given(this.vets.findBySpecialtiesName(eq("dentistry"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(linda())));
+		given(this.vets.findBySpecialtiesName(eq("nonexistent"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList()));
+		given(this.vets.findBySpecialtiesIsEmpty(any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(james())));
 	}
 
 	@Test
 	void testShowVetListHtml() throws Exception {
-
 		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attributeExists("availableSpecialties"))
+			.andExpect(model().attributeExists("specialtyFilter"))
 			.andExpect(view().name("vets/vetList"));
+	}
 
+	@Test
+	void testShowVetListWithSpecialtyFilter() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1").param("specialty", "radiology"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attribute("listVets", hasSize(1)))
+			.andExpect(model().attribute("specialtyFilter", is("radiology")))
+			.andExpect(model().attribute("availableSpecialties", hasItem("radiology")))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListWithAllSpecialties() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1").param("specialty", "all"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attribute("listVets", hasSize(2)))
+			.andExpect(model().attribute("specialtyFilter", is("all")))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListWithEmptySpecialty() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1").param("specialty", ""))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attribute("listVets", hasSize(2)))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListWithNoSpecialty() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1").param("specialty", "none"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attribute("listVets", hasSize(1)))
+			.andExpect(model().attribute("specialtyFilter", is("none")))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testSpecialtyFilterWithPagination() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1").param("specialty", "surgery"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("specialtyFilter", is("surgery")))
+			.andExpect(model().attributeExists("currentPage"))
+			.andExpect(model().attributeExists("totalPages"))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListWithNoSpecialtyParam() throws Exception {
+		mockMvc.perform(get("/vets.html").param("page", "1"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listVets"))
+			.andExpect(model().attribute("listVets", hasSize(2)))
+			.andExpect(model().attribute("specialtyFilter", is("all")))
+			.andExpect(view().name("vets/vetList"));
 	}
 
 	@Test
