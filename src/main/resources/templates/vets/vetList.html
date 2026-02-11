@@ -29,7 +29,7 @@
                     th:selected="${currentFilter != null and #strings.contains(currentFilter, 'dentistry')}"
                     th:text="#{filter.specialty.dentistry}">Dentistry</option>
           </select>
-          <button id="apply-filter-btn" class="btn btn-primary" onclick="applyFilter()">Filter</button>
+          <button id="apply-filter-btn" class="btn btn-primary" onclick="applyFilter()" th:text="#{filter.apply}">Filter</button>
         </div>
         <p th:if="${filterActive}" class="mt-2 text-muted">
           <span th:text="#{filter.showing}">Showing vets with specialty:</span>
