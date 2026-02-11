@@ -74,7 +74,7 @@
 - [x] 2.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify all tests fail (methods and components don't exist yet)
 - [x] 2.11 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods in `target/site/jacoco/index.html`
 
-### [~] 3.0 GREEN: Implement Filter Dropdown UI and Basic Filtering
+### [x] 3.0 GREEN: Implement Filter Dropdown UI and Basic Filtering
 
 #### 3.0 Proof Artifact(s)
 
