@@ -162,7 +162,7 @@
 - [x] 5.15 Change filter to "Radiology" and capture screenshot showing visual feedback updates to "Showing vets with specialty: Radiology"
 - [x] 5.16 Stop the application
 
-### [ ] 6.0 RED: Write Failing E2E Tests for Filter Workflow
+### [x] 6.0 RED: Write Failing E2E Tests for Filter Workflow
 
 #### 6.0 Proof Artifact(s)
 
@@ -172,18 +172,18 @@
 
 #### 6.0 Tasks
 
-- [ ] 6.1 Create `e2e-tests/tests/vet-specialty-filter.spec.ts` following existing Playwright test patterns
-- [ ] 6.2 Import necessary Playwright test utilities: `import { test, expect } from '@playwright/test';`
-- [ ] 6.3 Set up test suite with `test.describe('Vet Specialty Filter', () => { ... })`
-- [ ] 6.4 Write test "should display filter dropdown on vet directory page" - navigate to /vets.html, verify dropdown element is visible using `page.locator()` and `expect().toBeVisible()`
-- [ ] 6.5 Write test "should filter vets when selecting Surgery specialty" - navigate to /vets.html, select "Surgery" from dropdown, verify URL contains `?filter=specialty:surgery`, verify only surgery vets are displayed
-- [ ] 6.6 Write test "should apply AND logic when selecting multiple specialties" - select both Surgery and Dentistry, verify URL contains both, verify only vets with both specialties appear
-- [ ] 6.7 Write test "should persist filter when navigating away and back" - set Surgery filter, navigate to home page, navigate back to vets, verify Surgery filter is still active
-- [ ] 6.8 Write test "should integrate filter with pagination" - set filter with multiple pages of results, verify pagination controls appear, click page 2, verify URL contains both page and filter parameters
-- [ ] 6.9 Write test "should display empty state when no vets match filter" - select specialty combination with no matches (if available), verify "No veterinarians found" message appears
-- [ ] 6.10 Write test "should display visual feedback for active filter" - select Surgery, verify "Showing vets with specialty: Surgery" text appears on page
-- [ ] 6.11 Run `cd e2e-tests && npm test -- vet-specialty-filter.spec.ts` and verify tests run (should fail if application is not running or implementation incomplete)
-- [ ] 6.12 Capture test output showing failures as proof of RED phase completion
+- [x] 6.1 Create `e2e-tests/tests/vet-specialty-filter.spec.ts` following existing Playwright test patterns
+- [x] 6.2 Import necessary Playwright test utilities: `import { test, expect } from '@playwright/test';`
+- [x] 6.3 Set up test suite with `test.describe('Vet Specialty Filter', () => { ... })`
+- [x] 6.4 Write test "should display filter dropdown on vet directory page" - navigate to /vets.html, verify dropdown element is visible using `page.locator()` and `expect().toBeVisible()`
+- [x] 6.5 Write test "should filter vets when selecting Surgery specialty" - navigate to /vets.html, select "Surgery" from dropdown, verify URL contains `?filter=specialty:surgery`, verify only surgery vets are displayed
+- [x] 6.6 Write test "should apply AND logic when selecting multiple specialties" - select both Surgery and Dentistry, verify URL contains both, verify only vets with both specialties appear
+- [x] 6.7 Write test "should persist filter when navigating away and back" - set Surgery filter, navigate to home page, navigate back to vets, verify Surgery filter is still active
+- [x] 6.8 Write test "should integrate filter with pagination" - set filter with multiple pages of results, verify pagination controls appear, click page 2, verify URL contains both page and filter parameters
+- [x] 6.9 Write test "should display empty state when no vets match filter" - select specialty combination with no matches (if available), verify "No veterinarians found" message appears
+- [x] 6.10 Write test "should display visual feedback for active filter" - select Surgery, verify "Showing vets with specialty: Surgery" text appears on page
+- [x] 6.11 Run `cd e2e-tests && npm test -- vet-specialty-filter.spec.ts` and verify tests run (should fail if application is not running or implementation incomplete)
+- [x] 6.12 Capture test output showing failures as proof of RED phase completion
 
 ### [ ] 7.0 GREEN: Verify E2E Tests Pass and Complete Implementation
 
