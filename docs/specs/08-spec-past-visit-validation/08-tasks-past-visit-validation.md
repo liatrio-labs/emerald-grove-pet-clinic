@@ -20,9 +20,9 @@
 
 ### Task 3: i18n Message Key
 
-- [ ] 3.0 Parent: Add internationalized error message for past visit date
-  - [ ] 3.1 Add `visit.date.past` message key to `messages.properties` (base) and all locale files
-  - [ ] 3.2 Run I18nPropertiesSyncTest and verify it passes
+- [x] 3.0 Parent: Add internationalized error message for past visit date
+  - [x] 3.1 Add `visit.date.past` message key to `messages.properties` (base) and all locale files
+  - [x] 3.2 Run I18nPropertiesSyncTest and verify it passes
 
 ### Task 4: VisitController Integration (RED-GREEN)
 
