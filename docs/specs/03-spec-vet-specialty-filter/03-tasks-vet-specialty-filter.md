@@ -52,7 +52,7 @@
 - [x] 1.8 Capture git diff showing the added message keys using `git diff`
 - [x] 1.9 Verify feature branch is active with `git branch` (should show `* feature/vet-specialty-filter`)
 
-### [ ] 2.0 RED: Write Failing Unit Tests for Specialty Filter
+### [~] 2.0 RED: Write Failing Unit Tests for Specialty Filter
 
 #### 2.0 Proof Artifact(s)
 
@@ -62,17 +62,17 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Create `src/test/java/org/springframework/samples/petclinic/vet/VetSpecialtyFilterTests.java` test class
-- [ ] 2.2 Set up test class with `@WebMvcTest(VetController.class)` annotation and MockMvc configuration (inject MockMvc and mock VetRepository with @MockitoBean)
-- [ ] 2.3 Write test `testFilterDropdownIsPresent()` - verify filter dropdown element exists in the HTML response using MockMvc and CSS selectors (check for element with id or class containing "filter")
-- [ ] 2.4 Write test `testFilterBySpecialty()` - verify single specialty filtering by passing `?filter=specialty:surgery` parameter and checking that only surgery vets are returned
-- [ ] 2.5 Write test `testFilterByMultipleSpecialties()` - verify AND logic by passing `?filter=specialty:surgery,dentistry` and checking that only vets with BOTH specialties are returned
-- [ ] 2.6 Write test `testFilterWithPagination()` - verify pagination integration by passing both `?page=2&filter=specialty:radiology` parameters and checking pagination controls are correct
-- [ ] 2.7 Write test `testFilterSessionPersistence()` - verify session storage by setting filter in session, then making request without filter parameter and checking filter is applied from session
-- [ ] 2.8 Write test `testEmptyFilterResults()` - verify empty state by filtering for a specialty combination with no matches and checking for "No veterinarians found" message
-- [ ] 2.9 Write test `testVisualFeedbackText()` - verify "Showing vets with specialty: Surgery" text appears in response when filter is active
-- [ ] 2.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify all tests fail (methods and components don't exist yet)
-- [ ] 2.11 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods in `target/site/jacoco/index.html`
+- [x] 2.1 Create `src/test/java/org/springframework/samples/petclinic/vet/VetSpecialtyFilterTests.java` test class
+- [x] 2.2 Set up test class with `@WebMvcTest(VetController.class)` annotation and MockMvc configuration (inject MockMvc and mock VetRepository with @MockitoBean)
+- [x] 2.3 Write test `testFilterDropdownIsPresent()` - verify filter dropdown element exists in the HTML response using MockMvc and CSS selectors (check for element with id or class containing "filter")
+- [x] 2.4 Write test `testFilterBySpecialty()` - verify single specialty filtering by passing `?filter=specialty:surgery` parameter and checking that only surgery vets are returned
+- [x] 2.5 Write test `testFilterByMultipleSpecialties()` - verify AND logic by passing `?filter=specialty:surgery,dentistry` and checking that only vets with BOTH specialties are returned
+- [x] 2.6 Write test `testFilterWithPagination()` - verify pagination integration by passing both `?page=2&filter=specialty:radiology` parameters and checking pagination controls are correct
+- [x] 2.7 Write test `testFilterSessionPersistence()` - verify session storage by setting filter in session, then making request without filter parameter and checking filter is applied from session
+- [x] 2.8 Write test `testEmptyFilterResults()` - verify empty state by filtering for a specialty combination with no matches and checking for "No veterinarians found" message
+- [x] 2.9 Write test `testVisualFeedbackText()` - verify "Showing vets with specialty: Surgery" text appears in response when filter is active
+- [x] 2.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify all tests fail (methods and components don't exist yet)
+- [x] 2.11 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods in `target/site/jacoco/index.html`
 
 ### [ ] 3.0 GREEN: Implement Filter Dropdown UI and Basic Filtering
 
