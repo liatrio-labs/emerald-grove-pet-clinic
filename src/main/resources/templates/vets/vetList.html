@@ -14,20 +14,23 @@
       <!-- Specialty Filter -->
       <div class="mb-3" style="padding: 1rem;">
         <label for="specialty-filter" class="form-label" th:text="#{filter.specialty.label}">Specialty Filter</label>
-        <select id="specialty-filter" class="form-select" multiple style="max-width: 400px;" onchange="applyFilter()">
-          <option value=""
-                  th:selected="${currentFilter == null or currentFilter == ''}"
-                  th:text="#{filter.specialty.all}">All</option>
-          <option value="radiology"
-                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'radiology')}"
-                  th:text="#{filter.specialty.radiology}">Radiology</option>
-          <option value="surgery"
-                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'surgery')}"
-                  th:text="#{filter.specialty.surgery}">Surgery</option>
-          <option value="dentistry"
-                  th:selected="${currentFilter != null and #strings.contains(currentFilter, 'dentistry')}"
-                  th:text="#{filter.specialty.dentistry}">Dentistry</option>
-        </select>
+        <div class="d-flex gap-2 align-items-start">
+          <select id="specialty-filter" class="form-select" multiple style="max-width: 400px;">
+            <option value=""
+                    th:selected="${currentFilter == null or currentFilter == ''}"
+                    th:text="#{filter.specialty.all}">All</option>
+            <option value="radiology"
+                    th:selected="${currentFilter != null and #strings.contains(currentFilter, 'radiology')}"
+                    th:text="#{filter.specialty.radiology}">Radiology</option>
+            <option value="surgery"
+                    th:selected="${currentFilter != null and #strings.contains(currentFilter, 'surgery')}"
+                    th:text="#{filter.specialty.surgery}">Surgery</option>
+            <option value="dentistry"
+                    th:selected="${currentFilter != null and #strings.contains(currentFilter, 'dentistry')}"
+                    th:text="#{filter.specialty.dentistry}">Dentistry</option>
+          </select>
+          <button id="apply-filter-btn" class="btn btn-primary" onclick="applyFilter()">Filter</button>
+        </div>
         <p th:if="${filterActive}" class="mt-2 text-muted">
           <span th:text="#{filter.showing}">Showing vets with specialty:</span>
           <strong th:text="${filterText}">Surgery</strong>
