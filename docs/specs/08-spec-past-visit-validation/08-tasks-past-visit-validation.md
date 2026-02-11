@@ -40,6 +40,6 @@
 
 ### Task 6: Final Verification and Proof Artifacts
 
-- [ ] 6.0 Parent: Final verification, proof artifacts, and documentation
-  - [ ] 6.1 Run full Java test suite one final time and capture output
-  - [ ] 6.2 Create proof artifacts for all tasks
+- [x] 6.0 Parent: Final verification, proof artifacts, and documentation
+  - [x] 6.1 Run full Java test suite one final time and capture output
+  - [x] 6.2 Create proof artifacts for all tasks
