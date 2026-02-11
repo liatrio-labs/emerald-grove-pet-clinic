@@ -11,6 +11,37 @@
         <p class="liatrio-muted" th:text="#{vets.subtitle}">A snapshot of the care team and specialties.</p>
       </div>
 
+      <!-- Specialty Filter -->
+      <div class="mb-3" style="padding: 1rem;">
+        <label for="specialty-filter" class="form-label" th:text="#{filter.specialty.label}">Specialty Filter</label>
+        <select id="specialty-filter" class="form-select" multiple style="max-width: 400px;" onchange="applyFilter()">
+          <option value="" th:text="#{filter.specialty.all}">All</option>
+          <option value="radiology" th:text="#{filter.specialty.radiology}">Radiology</option>
+          <option value="surgery" th:text="#{filter.specialty.surgery}">Surgery</option>
+          <option value="dentistry" th:text="#{filter.specialty.dentistry}">Dentistry</option>
+        </select>
+        <p th:if="${filterActive}" class="mt-2 text-muted">
+          <span th:text="#{filter.showing}">Showing vets with specialty:</span>
+          <strong th:text="${filterText}">Surgery</strong>
+        </p>
+      </div>
+
+      <script th:inline="javascript">
+        function applyFilter() {
+          const select = document.getElementById('specialty-filter');
+          const selected = Array.from(select.selectedOptions)
+            .map(option => option.value)
+            .filter(value => value !== '');
+
+          if (selected.length === 0) {
+            window.location.href = '/vets.html';
+          } else {
+            const filterValue = 'specialty:' + selected.join(',');
+            window.location.href = '/vets.html?filter=' + encodeURIComponent(filterValue);
+          }
+        }
+      </script>
+
       <table id="vets" class="table table-striped liatrio-table">
         <thead>
           <tr>

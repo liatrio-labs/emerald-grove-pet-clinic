@@ -55,4 +55,30 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	@Cacheable("vets")
 	Page<Vet> findAll(Pageable pageable) throws DataAccessException;
 
+	/**
+	 * Retrieve <code>Vet</code>s with a specific specialty from the data store in Pages
+	 * @param specialtyName the name of the specialty to filter by
+	 * @param pageable pagination information
+	 * @return a <code>Page</code> of <code>Vet</code>s with the specified specialty
+	 * @throws DataAccessException
+	 */
+	@Transactional(readOnly = true)
+	Page<Vet> findBySpecialtiesNameIgnoreCase(String specialtyName, Pageable pageable) throws DataAccessException;
+
+	/**
+	 * Retrieve <code>Vet</code>s with ALL specified specialties from the data store in
+	 * Pages (AND logic - vet must have all specialties in the list)
+	 * @param specialtyNames list of specialty names
+	 * @param count the number of specialties (must match list size for AND logic)
+	 * @param pageable pagination information
+	 * @return a <code>Page</code> of <code>Vet</code>s with all specified specialties
+	 * @throws DataAccessException
+	 */
+	@org.springframework.data.jpa.repository.Query("SELECT v FROM Vet v JOIN v.specialties s WHERE s.name IN :specialtyNames GROUP BY v.id HAVING COUNT(DISTINCT s.id) = :count")
+	@Transactional(readOnly = true)
+	Page<Vet> findByAllSpecialties(
+			@org.springframework.data.repository.query.Param("specialtyNames") java.util.List<String> specialtyNames,
+			@org.springframework.data.repository.query.Param("count") long count, Pageable pageable)
+			throws DataAccessException;
+
 }

@@ -42,12 +42,21 @@ class VetController {
 	}
 
 	@GetMapping("/vets.html")
-	public String showVetList(@RequestParam(defaultValue = "1") int page, Model model) {
+	public String showVetList(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String filter,
+			Model model) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
-		Page<Vet> paginated = findPaginated(page);
+		Page<Vet> paginated = findPaginated(page, filter);
 		vets.getVetList().addAll(paginated.toList());
+
+		// Add filter state to model for visual feedback
+		if (filter != null && filter.startsWith("specialty:")) {
+			String specialtyName = filter.substring("specialty:".length());
+			model.addAttribute("filterActive", true);
+			model.addAttribute("filterText", specialtyName);
+		}
+
 		return addPaginationModel(page, paginated, model);
 	}
 
@@ -60,9 +69,16 @@ class VetController {
 		return "vets/vetList";
 	}
 
-	private Page<Vet> findPaginated(int page) {
+	private Page<Vet> findPaginated(int page, String filter) {
 		int pageSize = 5;
 		Pageable pageable = PageRequest.of(page - 1, pageSize);
+
+		// Parse filter and apply specialty filtering
+		if (filter != null && filter.startsWith("specialty:")) {
+			String specialtyName = filter.substring("specialty:".length());
+			return vetRepository.findBySpecialtiesNameIgnoreCase(specialtyName, pageable);
+		}
+
 		return vetRepository.findAll(pageable);
 	}
 

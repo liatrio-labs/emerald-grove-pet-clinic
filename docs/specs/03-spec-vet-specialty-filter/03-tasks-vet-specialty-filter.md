@@ -74,7 +74,7 @@
 - [x] 2.10 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify all tests fail (methods and components don't exist yet)
 - [x] 2.11 Run `./mvnw test jacoco:report` to generate coverage report showing new test methods in `target/site/jacoco/index.html`
 
-### [ ] 3.0 GREEN: Implement Filter Dropdown UI and Basic Filtering
+### [~] 3.0 GREEN: Implement Filter Dropdown UI and Basic Filtering
 
 #### 3.0 Proof Artifact(s)
 
@@ -86,24 +86,24 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Open `src/main/resources/templates/vets/vetList.html` for editing
-- [ ] 3.2 Add filter dropdown above the vet table (before the `<table>` element) using Bootstrap 5 `<select>` with `multiple` attribute and `form-select` class
-- [ ] 3.3 Populate dropdown with options using Thymeleaf: `<option value="">All</option>`, `<option value="radiology">Radiology</option>`, `<option value="surgery">Surgery</option>`, `<option value="dentistry">Dentistry</option>` (use `th:text="#{filter.specialty.all}"` etc. for i18n)
-- [ ] 3.4 Add JavaScript/form submission to update URL with `?filter=specialty:X` when dropdown selection changes (use `onchange` event to trigger form submission or page navigation)
-- [ ] 3.5 Add visual feedback text above table: `<p th:if="${filterActive}" th:text="#{filter.showing} + ' ' + ${filterText}"></p>` to show "Showing vets with specialty: Surgery"
-- [ ] 3.6 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
-- [ ] 3.7 Modify `showVetList()` method signature to accept `@RequestParam(required = false) String filter` parameter
-- [ ] 3.8 Parse filter parameter to extract specialty name(s): if filter starts with "specialty:", extract the value after the colon (e.g., "surgery" from "specialty:surgery")
-- [ ] 3.9 Open `src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java` for editing
-- [ ] 3.10 Add method `Page<Vet> findBySpecialtiesNameIgnoreCase(String specialtyName, Pageable pageable)` using Spring Data JPA naming conventions for single specialty filtering
-- [ ] 3.11 Update `VetController.showVetList()` to call appropriate repository method: if filter is present, use `findBySpecialtiesNameIgnoreCase()`, otherwise use `findAll()`
-- [ ] 3.12 Pass filter state to model: `model.addAttribute("filterActive", filter != null)` and `model.addAttribute("filterText", specialtyName)`
-- [ ] 3.13 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify basic filter tests now pass
-- [ ] 3.14 Run `./mvnw spring-boot:run` to start application for manual testing
-- [ ] 3.15 Navigate to `http://localhost:8080/vets.html` and capture screenshot of filter dropdown
-- [ ] 3.16 Select "Surgery" from dropdown and capture screenshot of URL `http://localhost:8080/vets.html?filter=specialty:surgery` with filtered results
-- [ ] 3.17 Capture screenshot showing "Showing vets with specialty: Surgery" text above the table
-- [ ] 3.18 Stop the application
+- [x] 3.1 Open `src/main/resources/templates/vets/vetList.html` for editing
+- [x] 3.2 Add filter dropdown above the vet table (before the `<table>` element) using Bootstrap 5 `<select>` with `multiple` attribute and `form-select` class
+- [x] 3.3 Populate dropdown with options using Thymeleaf: `<option value="">All</option>`, `<option value="radiology">Radiology</option>`, `<option value="surgery">Surgery</option>`, `<option value="dentistry">Dentistry</option>` (use `th:text="#{filter.specialty.all}"` etc. for i18n)
+- [x] 3.4 Add JavaScript/form submission to update URL with `?filter=specialty:X` when dropdown selection changes (use `onchange` event to trigger form submission or page navigation)
+- [x] 3.5 Add visual feedback text above table: `<p th:if="${filterActive}" th:text="#{filter.showing} + ' ' + ${filterText}"></p>` to show "Showing vets with specialty: Surgery"
+- [x] 3.6 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
+- [x] 3.7 Modify `showVetList()` method signature to accept `@RequestParam(required = false) String filter` parameter
+- [x] 3.8 Parse filter parameter to extract specialty name(s): if filter starts with "specialty:", extract the value after the colon (e.g., "surgery" from "specialty:surgery")
+- [x] 3.9 Open `src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java` for editing
+- [x] 3.10 Add method `Page<Vet> findBySpecialtiesNameIgnoreCase(String specialtyName, Pageable pageable)` using Spring Data JPA naming conventions for single specialty filtering
+- [x] 3.11 Update `VetController.showVetList()` to call appropriate repository method: if filter is present, use `findBySpecialtiesNameIgnoreCase()`, otherwise use `findAll()`
+- [x] 3.12 Pass filter state to model: `model.addAttribute("filterActive", filter != null)` and `model.addAttribute("filterText", specialtyName)`
+- [x] 3.13 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify basic filter tests now pass
+- [x] 3.14 Run `./mvnw spring-boot:run` to start application for manual testing
+- [x] 3.15 Navigate to `http://localhost:8080/vets.html` and capture screenshot of filter dropdown
+- [x] 3.16 Select "Surgery" from dropdown and capture screenshot of URL `http://localhost:8080/vets.html?filter=specialty:surgery` with filtered results
+- [x] 3.17 Capture screenshot showing "Showing vets with specialty: Surgery" text above the table
+- [x] 3.18 Stop the application
 
 ### [ ] 4.0 GREEN: Implement Multi-Specialty AND Logic and Pagination
 
