@@ -27,7 +27,11 @@ test.describe('Visit Scheduling', () => {
 
     await expect(visitPage.heading()).toBeVisible();
 
-    const visitDate = '2024-02-02';
+    // Use a future date to pass validation
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + 7);
+    const visitDate = futureDate.toISOString().split('T')[0];
     const description = `E2E visit ${Date.now()}`;
     await visitPage.fillVisitDate(visitDate);
     await visitPage.fillDescription(description);
@@ -54,9 +58,41 @@ test.describe('Visit Scheduling', () => {
 
     await page.getByRole('link', { name: /Add Visit/i }).first().click();
 
-    await visitPage.fillVisitDate('2024-03-03');
+    // Use a valid future date for this validation test
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + 7);
+    const visitDate = futureDate.toISOString().split('T')[0];
+    await visitPage.fillVisitDate(visitDate);
     await visitPage.submit();
 
     await expect(page.getByText(/must not be blank/i)).toBeVisible();
+  });
+
+  test('rejects visit with past date', async ({ page }, testInfo) => {
+    const visitPage = new VisitPage(page);
+    await page.goto('/owners/1');
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    await page.getByRole('link', { name: /Add Visit/i }).first().click();
+    await expect(visitPage.heading()).toBeVisible();
+
+    // Use a past date that should be rejected
+    const pastDate = '2020-01-01';
+    const description = 'Past visit attempt';
+    await visitPage.fillVisitDate(pastDate);
+    await visitPage.fillDescription(description);
+
+    await page.screenshot({ path: testInfo.outputPath('visit-past-date-validation.png'), fullPage: true });
+
+    await visitPage.submit();
+
+    // Expect validation error message for past date
+    await expect(page.getByText(/cannot be in the past/i)).toBeVisible();
+
+    // Verify we're still on the form page (not redirected)
+    await expect(visitPage.heading()).toBeVisible();
+
+    await page.screenshot({ path: testInfo.outputPath('visit-past-date-error.png'), fullPage: true });
   });
 });

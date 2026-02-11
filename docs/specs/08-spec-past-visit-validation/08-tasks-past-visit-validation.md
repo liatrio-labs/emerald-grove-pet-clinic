@@ -33,10 +33,10 @@
 
 ### Task 5: Full Test Suite and E2E Tests
 
-- [ ] 5.0 Parent: Run full test suite and add Playwright E2E test for past visit validation
-  - [ ] 5.1 Run full Java test suite (`./mvnw test`) and verify zero regressions
-  - [ ] 5.2 Add Playwright E2E test in `visit-scheduling.spec.ts` for past date rejection
-  - [ ] 5.3 Update existing E2E test to use valid future date instead of past date
+- [x] 5.0 Parent: Run full test suite and add Playwright E2E test for past visit validation
+  - [x] 5.1 Run full Java test suite (`./mvnw test`) and verify zero regressions
+  - [x] 5.2 Add Playwright E2E test in `visit-scheduling.spec.ts` for past date rejection
+  - [x] 5.3 Update existing E2E test to use valid future date instead of past date
 
 ### Task 6: Final Verification and Proof Artifacts
 
