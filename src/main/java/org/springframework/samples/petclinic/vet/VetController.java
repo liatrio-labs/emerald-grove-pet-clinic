@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -75,8 +76,17 @@ class VetController {
 
 		// Parse filter and apply specialty filtering
 		if (filter != null && filter.startsWith("specialty:")) {
-			String specialtyName = filter.substring("specialty:".length());
-			return vetRepository.findBySpecialtiesNameIgnoreCase(specialtyName, pageable);
+			String specialtyNames = filter.substring("specialty:".length());
+
+			// Check if multiple specialties (comma-separated) - requires AND logic
+			if (specialtyNames.contains(",")) {
+				List<String> specialtyList = Arrays.asList(specialtyNames.split(","));
+				return vetRepository.findByAllSpecialties(specialtyList, (long) specialtyList.size(), pageable);
+			}
+			else {
+				// Single specialty filtering
+				return vetRepository.findBySpecialtiesNameIgnoreCase(specialtyNames, pageable);
+			}
 		}
 
 		return vetRepository.findAll(pageable);

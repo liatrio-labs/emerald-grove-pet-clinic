@@ -105,7 +105,7 @@
 - [x] 3.17 Capture screenshot showing "Showing vets with specialty: Surgery" text above the table
 - [x] 3.18 Stop the application
 
-### [ ] 4.0 GREEN: Implement Multi-Specialty AND Logic and Pagination
+### [x] 4.0 GREEN: Implement Multi-Specialty AND Logic and Pagination
 
 #### 4.0 Proof Artifact(s)
 
@@ -117,22 +117,22 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Open `src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java` for editing
-- [ ] 4.2 Add custom `@Query` method for AND logic filtering: `@Query("SELECT v FROM Vet v JOIN v.specialties s WHERE s.name IN :specialtyNames GROUP BY v.id HAVING COUNT(DISTINCT s.id) = :count")` with method signature `Page<Vet> findByAllSpecialties(@Param("specialtyNames") List<String> specialtyNames, @Param("count") long count, Pageable pageable)`
-- [ ] 4.3 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
-- [ ] 4.4 Update filter parsing logic to handle comma-separated specialties: split filter value by comma (e.g., "specialty:surgery,dentistry" → ["surgery", "dentistry"])
-- [ ] 4.5 Update controller logic to call `findByAllSpecialties()` when multiple specialties are present, passing the list and count
-- [ ] 4.6 Add logic to reset to page 1 when filter changes: check if filter parameter differs from session filter, if so, set page to 1
-- [ ] 4.7 Update pagination link generation in template to maintain filter parameter: modify `th:href` in pagination controls to include `${filter}` parameter
-- [ ] 4.8 Open `src/main/resources/templates/vets/vetList.html` for editing
-- [ ] 4.9 Add empty state handling: `<tr th:if="${#lists.isEmpty(listVets)}"><td colspan="2" th:text="#{filter.noResults} + ' ' + ${filterText}">No veterinarians found</td></tr>`
-- [ ] 4.10 Update pagination controls to include filter parameter: `th:href="@{/vets.html(page=${i}, filter=${filter})}"` in page number links
-- [ ] 4.11 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify AND logic and pagination tests pass
-- [ ] 4.12 Run `./mvnw spring-boot:run` to start application for manual testing
-- [ ] 4.13 Navigate to vet directory and select both "Surgery" and "Dentistry", capture screenshot of URL `?filter=specialty:surgery,dentistry` showing only vets with BOTH specialties
-- [ ] 4.14 Test a specialty combination with no results (if available in test data) and capture screenshot of empty state message
-- [ ] 4.15 Test pagination with filter: navigate to `?page=2&filter=specialty:surgery` and capture screenshot showing pagination controls maintain filter
-- [ ] 4.16 Stop the application
+- [x] 4.1 Open `src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java` for editing
+- [x] 4.2 Add custom `@Query` method for AND logic filtering: `@Query("SELECT v FROM Vet v JOIN v.specialties s WHERE s.name IN :specialtyNames GROUP BY v.id HAVING COUNT(DISTINCT s.id) = :count")` with method signature `Page<Vet> findByAllSpecialties(@Param("specialtyNames") List<String> specialtyNames, @Param("count") long count, Pageable pageable)`
+- [x] 4.3 Open `src/main/java/org/springframework/samples/petclinic/vet/VetController.java` for editing
+- [x] 4.4 Update filter parsing logic to handle comma-separated specialties: split filter value by comma (e.g., "specialty:surgery,dentistry" → ["surgery", "dentistry"])
+- [x] 4.5 Update controller logic to call `findByAllSpecialties()` when multiple specialties are present, passing the list and count
+- [x] 4.6 Add logic to reset to page 1 when filter changes: check if filter parameter differs from session filter, if so, set page to 1
+- [x] 4.7 Update pagination link generation in template to maintain filter parameter: modify `th:href` in pagination controls to include `${filter}` parameter
+- [x] 4.8 Open `src/main/resources/templates/vets/vetList.html` for editing
+- [x] 4.9 Add empty state handling: `<tr th:if="${#lists.isEmpty(listVets)}"><td colspan="2" th:text="#{filter.noResults} + ' ' + ${filterText}">No veterinarians found</td></tr>`
+- [x] 4.10 Update pagination controls to include filter parameter: `th:href="@{/vets.html(page=${i}, filter=${filter})}"` in page number links
+- [x] 4.11 Run `./mvnw test -Dtest=VetSpecialtyFilterTests` and verify AND logic and pagination tests pass
+- [x] 4.12 Run `./mvnw spring-boot:run` to start application for manual testing
+- [x] 4.13 Navigate to vet directory and select both "Surgery" and "Dentistry", capture screenshot of URL `?filter=specialty:surgery,dentistry` showing only vets with BOTH specialties
+- [x] 4.14 Test a specialty combination with no results (if available in test data) and capture screenshot of empty state message
+- [x] 4.15 Test pagination with filter: navigate to `?page=2&filter=specialty:surgery` and capture screenshot showing pagination controls maintain filter
+- [x] 4.16 Stop the application
 
 ### [ ] 5.0 GREEN: Implement Session Persistence and Visual Feedback
 
