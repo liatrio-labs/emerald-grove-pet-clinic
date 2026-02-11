@@ -26,10 +26,10 @@
 
 ### Task 4: VisitController Integration (RED-GREEN)
 
-- [ ] 4.0 Parent: Register VisitValidator in VisitController and add controller test
-  - [ ] 4.1 Add failing controller test `testProcessNewVisitFormWithPastDate()` in `VisitControllerTests.java`
-  - [ ] 4.2 Register VisitValidator in VisitController via `@InitBinder("visit")`
-  - [ ] 4.3 Run all controller tests and verify they pass
+- [x] 4.0 Parent: Register VisitValidator in VisitController and add controller test
+  - [x] 4.1 Add failing controller test `testProcessNewVisitFormWithPastDate()` in `VisitControllerTests.java`
+  - [x] 4.2 Register VisitValidator in VisitController via `@InitBinder("visit")`
+  - [x] 4.3 Run all controller tests and verify they pass
 
 ### Task 5: Full Test Suite and E2E Tests
 
