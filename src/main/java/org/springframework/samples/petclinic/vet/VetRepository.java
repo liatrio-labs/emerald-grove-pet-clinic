@@ -62,8 +62,11 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	 * @return a <code>Page</code> of <code>Vet</code>s with the specified specialty
 	 * @throws DataAccessException
 	 */
+	@org.springframework.data.jpa.repository.Query("SELECT DISTINCT v FROM Vet v JOIN v.specialties s WHERE LOWER(s.name) = LOWER(:specialtyName)")
 	@Transactional(readOnly = true)
-	Page<Vet> findBySpecialtiesNameIgnoreCase(String specialtyName, Pageable pageable) throws DataAccessException;
+	Page<Vet> findBySpecialtiesNameIgnoreCase(
+			@org.springframework.data.repository.query.Param("specialtyName") String specialtyName, Pageable pageable)
+			throws DataAccessException;
 
 	/**
 	 * Retrieve <code>Vet</code>s with ALL specified specialties from the data store in

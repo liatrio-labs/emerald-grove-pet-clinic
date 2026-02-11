@@ -49,12 +49,18 @@ class VetController {
 			HttpSession session, Model model) {
 		// Retrieve filter from session if no query parameter provided (session
 		// persistence)
-		if (filter == null) {
+		// Handle filter parameter: empty string clears filter, null loads from session
+		if (filter != null && filter.isEmpty()) {
+			// Empty filter parameter explicitly clears the session filter
+			session.removeAttribute("vetFilter");
+			filter = null;
+		}
+		else if (filter == null) {
+			// No filter parameter, load from session if available
 			filter = (String) session.getAttribute("vetFilter");
 		}
-
-		// Store filter in session when present (query parameters override session state)
-		if (filter != null) {
+		else {
+			// Valid filter parameter, store in session
 			session.setAttribute("vetFilter", filter);
 		}
 

@@ -37,12 +37,33 @@
       <script th:inline="javascript">
         function applyFilter() {
           const select = document.getElementById('specialty-filter');
+          const allOption = select.querySelector('option[value=""]');
           const selected = Array.from(select.selectedOptions)
             .map(option => option.value)
             .filter(value => value !== '');
 
+          // If "All" is selected, deselect all other options and clear filter
+          if (allOption.selected && selected.length > 0) {
+            // Deselect all specialty options
+            Array.from(select.options).forEach(option => {
+              if (option.value !== '') {
+                option.selected = false;
+              }
+            });
+            // Clear filter by passing empty filter parameter to clear session
+            window.location.href = '/vets.html?filter=';
+            return;
+          }
+
+          // If any specialty is selected, deselect "All"
+          if (selected.length > 0) {
+            allOption.selected = false;
+          }
+
+          // Navigate based on selection
           if (selected.length === 0) {
-            window.location.href = '/vets.html';
+            // Clear filter by passing empty filter parameter to clear session
+            window.location.href = '/vets.html?filter=';
           } else {
             const filterValue = 'specialty:' + selected.join(',');
             window.location.href = '/vets.html?filter=' + encodeURIComponent(filterValue);
