@@ -2,7 +2,7 @@
 
 ## Tasks
 
-### [~] 1.0 Implement Repository Query Methods for Specialty Filtering (TDD)
+### [x] 1.0 Implement Repository Query Methods for Specialty Filtering (TDD)
 
 **Purpose**: Create the foundational data access layer methods that enable filtering veterinarians by specialty using Spring Data JPA query derivation. This follows strict TDD by writing failing tests first, then implementing minimal code to pass tests.
 
@@ -17,11 +17,12 @@
 
 #### 1.0 Tasks
 
-TBD
+- [x] 1.1 Write VetRepositoryTests with 8 test methods for all new query methods
+- [x] 1.2 Add findBySpecialtiesName, findBySpecialtiesIsEmpty, findDistinctSpecialtyNames to VetRepository
 
 ---
 
-### [ ] 2.0 Implement Controller Logic for Specialty Filter Parameter Handling (TDD)
+### [x] 2.0 Implement Controller Logic for Specialty Filter Parameter Handling (TDD)
 
 **Purpose**: Enhance `VetController.showVetList()` to accept and process the `specialty` query parameter, routing to appropriate repository methods and populating model attributes for the view. Follows TDD with controller tests written before implementation.
 
@@ -37,11 +38,13 @@ TBD
 
 #### 2.0 Tasks
 
-TBD
+- [x] 2.1 Write VetControllerTests with 7 new test methods for specialty filter behavior
+- [x] 2.2 Enhance VetController to accept specialty query parameter and route to appropriate repository methods
+- [x] 2.3 Update addPaginationModel to include specialtyFilter and availableSpecialties model attributes
 
 ---
 
-### [ ] 3.0 Implement UI Filter Dropdown and Query Parameter Integration
+### [x] 3.0 Implement UI Filter Dropdown and Query Parameter Integration
 
 **Purpose**: Add specialty filter UI to `vetList.html` template with dropdown control, URL query parameter handling, empty state messaging, and pagination integration. This makes the filter feature visible and usable in the browser.
 
@@ -58,11 +61,14 @@ TBD
 
 #### 3.0 Tasks
 
-TBD
+- [x] 3.1 Add specialty filter dropdown form to vetList.html with ARIA accessibility attributes
+- [x] 3.2 Add empty state message div for when no vets match the selected specialty
+- [x] 3.3 Update pagination links to include specialty query parameter
+- [x] 3.4 Add vets.filter.* i18n keys to all 8 locale property files
 
 ---
 
-### [ ] 4.0 Implement End-to-End Playwright Tests for Complete Filter Workflow
+### [x] 4.0 Implement End-to-End Playwright Tests for Complete Filter Workflow
 
 **Purpose**: Create comprehensive E2E tests validating complete user workflows including filter selection, URL updates, pagination integration, empty states, and shareable URL functionality. This provides automated regression protection and validates acceptance criteria.
 
@@ -70,14 +76,14 @@ TBD
 
 #### 4.0 Proof Artifact(s)
 
-- Test: `e2e-tests/tests/vet-specialty-filter.spec.ts` all tests pass, demonstrates complete filter workflow validation
+- Test: `e2e-tests/tests/features/vet-specialty-filter.spec.ts` all tests pass, demonstrates complete filter workflow validation
 - HTML Report: `e2e-tests/test-results/html-report/index.html` demonstrates all E2E tests passing with trace/video artifacts
 - Screenshot: E2E test artifacts showing filter interaction captured by Playwright demonstrate test coverage
 - CLI: `cd e2e-tests && npm test -- vet-specialty-filter` shows all E2E tests passing with detailed execution logs
 
 #### 4.0 Tasks
 
-TBD
+- [x] 4.1 Create vet-specialty-filter.spec.ts with 10 E2E test cases covering all filter scenarios
 
 ---
 
@@ -89,7 +95,7 @@ This task list follows the **Strict TDD** methodology required by CLAUDE.md:
 2. **GREEN Phase**: Write minimal code to make tests pass
 3. **REFACTOR Phase**: Improve code while maintaining test coverage
 
-Each parent task represents a **demoable unit** that delivers tangible value and can be independently verified through proof artifacts. Tasks are ordered by architectural layer dependencies (Repository → Controller → UI → E2E) while maintaining TDD principles within each layer.
+Each parent task represents a **demoable unit** that delivers tangible value and can be independently verified through proof artifacts. Tasks are ordered by architectural layer dependencies (Repository -> Controller -> UI -> E2E) while maintaining TDD principles within each layer.
 
 **Target Coverage**: 90%+ for new code, 100% branch coverage for critical business logic (specialty filtering conditions).
 
