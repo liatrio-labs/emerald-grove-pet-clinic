@@ -268,6 +268,350 @@ class MySqlIntegrationTests {
 - **@ServiceConnection**: Auto-configures database connection
 - **@ActiveProfiles**: Activates MySQL-specific configuration
 
+## Feature Testing Guidelines
+
+This section provides specific guidance for feature development teams to ensure consistent test coverage, proof artifact generation, and documentation standards across all features.
+
+### Test Coverage Expectations
+
+All new features must meet comprehensive test coverage requirements across multiple testing levels following the test pyramid principle.
+
+#### Unit Test Coverage (70-80% of test suite)
+
+**Requirements:**
+
+- **Minimum 90% line coverage** for all new code
+- **100% branch coverage** for critical business logic paths
+- **100% coverage** for validation logic and error handling
+
+**Scope:**
+
+- Controller layer tests using `@WebMvcTest` and `MockMvc`
+- Service layer business logic with mocked dependencies
+- Model validation tests using Bean Validation
+- Custom validators and formatters
+- Utility classes and helper methods
+
+**Example Coverage Targets:**
+
+```text
+New Feature: Owner Email Field
+- OwnerControllerTests: 95% coverage (form display, submission, validation errors)
+- OwnerValidatorTests: 100% coverage (email format, uniqueness, null handling)
+- OwnerRepositoryTests: 85% coverage (findByEmail, uniqueness constraints)
+```
+
+#### Integration Test Coverage (15-20% of test suite)
+
+**Requirements:**
+
+- **Database integration** tests for all repository methods
+- **Service layer integration** tests verifying data access patterns
+- **Transaction boundary** tests ensuring proper rollback behavior
+
+**Scope:**
+
+- Repository tests using `@DataJpaTest` with test database
+- Service tests with real database connections
+- Entity relationship validation (cascades, lazy loading)
+- Database constraint verification (unique keys, foreign keys)
+
+**Example Coverage Targets:**
+
+```text
+New Feature: Pet Visit History
+- VisitRepositoryTests: Test findByPetId, save, delete operations
+- PetServiceTests: Verify visit cascade operations
+- DatabaseConstraintTests: Validate pet-visit relationship integrity
+```
+
+#### End-to-End Test Coverage (5-10% of test suite)
+
+**Requirements:**
+
+- **Happy path scenarios** for all user-facing features
+- **Critical error scenarios** that impact user experience
+- **Cross-feature workflows** that span multiple components
+
+**Scope:**
+
+- Playwright browser tests for complete user journeys
+- Full application stack tests using `@SpringBootTest`
+- Multi-step workflows (e.g., create owner → add pet → schedule visit)
+- Error page behavior and user feedback validation
+
+**Example E2E Scenarios:**
+
+```text
+New Feature: Owner Search Enhancement
+1. Search by email - find exact match
+2. Search by partial name - display results list
+3. Search with no results - show appropriate message
+4. Search with invalid input - display validation errors
+```
+
+### E2E Test Scenario Requirements
+
+Every feature must include Playwright E2E tests that validate the complete user journey from browser to database and back.
+
+#### Required E2E Test Scenarios
+
+1. **Happy Path Test**
+   - Primary user workflow with valid inputs
+   - Verify successful completion and feedback
+   - Validate data persistence across page reloads
+
+2. **Validation Test**
+   - Submit forms with invalid data
+   - Verify error messages display correctly
+   - Confirm no data saved with validation errors
+
+3. **Navigation Test**
+   - Verify feature accessible from navigation
+   - Test breadcrumb and link navigation
+   - Confirm proper page transitions
+
+4. **Data Display Test**
+   - Verify data renders correctly after save
+   - Test pagination/filtering if applicable
+   - Validate responsive design elements
+
+#### E2E Test Structure
+
+E2E tests should be organized in the `e2e-tests/tests/` directory by feature:
+
+```text
+e2e-tests/tests/
+├── owner/
+│   ├── owner-search.spec.ts
+│   └── owner-management.spec.ts
+├── pet/
+│   └── pet-management.spec.ts
+└── vet/
+    └── vet-directory.spec.ts
+```
+
+#### E2E Test Template
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('Feature Name', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:8080');
+    // Setup steps
+  });
+
+  test('should complete happy path workflow', async ({ page }) => {
+    // Arrange - Navigate to feature
+
+    // Act - Perform user actions
+
+    // Assert - Verify expected outcomes
+  });
+
+  test('should display validation errors', async ({ page }) => {
+    // Test validation scenario
+  });
+
+  test('should persist data correctly', async ({ page }) => {
+    // Test data persistence
+  });
+});
+```
+
+### Proof Artifacts Standard
+
+All features must provide comprehensive proof artifacts demonstrating feature completion, test coverage, and quality standards.
+
+#### Required Proof Artifacts
+
+**1. Test Execution Results**
+
+- JUnit XML test results from Maven/Gradle execution
+- Console output showing all tests passing
+- Timestamp and environment information
+
+**Location:** `docs/specs/<spec-name>/proofs/<task-name>-test-results.xml`
+
+**Generation:**
+
+```bash
+# Generate test results
+./mvnw test
+
+# Test results location
+target/surefire-reports/TEST-*.xml
+```
+
+**2. Code Coverage Report**
+
+- JaCoCo HTML coverage report
+- Summary showing line and branch coverage percentages
+- Detailed coverage by class and method
+
+**Location:** `docs/specs/<spec-name>/proofs/<task-name>-coverage-report.html`
+
+**Generation:**
+
+```bash
+# Generate coverage report
+./mvnw clean test jacoco:report
+
+# Coverage report location
+target/site/jacoco/index.html
+```
+
+**3. E2E Test Report**
+
+- Playwright HTML test report with screenshots
+- Test execution timeline and duration
+- Failure traces with debugging information
+
+**Location:** `docs/specs/<spec-name>/proofs/<task-name>-e2e-report.html`
+
+**Generation:**
+
+```bash
+# Run E2E tests
+cd e2e-tests
+npm test
+
+# E2E report location
+e2e-tests/test-results/html-report/index.html
+```
+
+**4. Feature Screenshots**
+
+- Screenshots demonstrating feature functionality
+- Before/after comparisons for modifications
+- Error state screenshots showing validation
+
+**Location:** `docs/specs/<spec-name>/proofs/artifacts/<feature-name>-*.png`
+
+**Naming Convention:**
+
+```text
+<feature-name>-<state>-<timestamp>.png
+
+Examples:
+owner-email-form-filled.png
+owner-email-validation-error.png
+owner-email-success-message.png
+```
+
+#### Proof Artifact Organization
+
+Organize proof artifacts using a consistent directory structure:
+
+```text
+docs/specs/<spec-name>/
+├── proofs/
+│   ├── <task-01>-proofs.md          # Proof summary document
+│   ├── <task-01>-test-results.xml   # JUnit test results
+│   ├── <task-01>-coverage-report.html
+│   ├── <task-01>-e2e-report.html
+│   └── artifacts/                    # Screenshots and traces
+│       ├── <feature>-happy-path.png
+│       ├── <feature>-validation.png
+│       └── <feature>-success.png
+├── specification.md                  # Feature specification
+├── tasks.md                          # Task breakdown
+└── validation-report.md              # Final validation
+```
+
+#### Proof Summary Document Template
+
+Each task should include a proof summary document:
+
+```markdown
+# Task Proofs: <Task Name>
+
+## Overview
+
+Brief description of the task and what was implemented.
+
+## Test Results
+
+### Unit Tests
+- Tests Added: 12
+- Tests Passing: 12
+- Coverage: 94.5% lines, 98% branches
+
+### Integration Tests
+- Tests Added: 4
+- Tests Passing: 4
+- Database: H2, MySQL, PostgreSQL
+
+### E2E Tests
+- Scenarios: 3 (happy path, validation, navigation)
+- Status: All passing
+- Browsers: Chromium, Firefox, WebKit
+
+## Artifacts
+
+### Test Execution
+- [Unit Test Results](./task-01-test-results.xml)
+- [Coverage Report](./task-01-coverage-report.html)
+- [E2E Test Report](./task-01-e2e-report.html)
+
+### Screenshots
+- [Feature Implementation](./artifacts/feature-implemented.png)
+- [Validation Behavior](./artifacts/feature-validation.png)
+- [Success State](./artifacts/feature-success.png)
+
+## Validation
+
+- [x] All tests passing
+- [x] Coverage meets standards (>90%)
+- [x] E2E tests validate user journeys
+- [x] Documentation updated
+- [x] Code review completed
+```
+
+### Feature Testing Checklist
+
+Use this checklist to ensure all testing requirements are met before marking a feature complete:
+
+#### Test Coverage
+
+- [ ] Unit tests written following TDD Red-Green-Refactor cycle
+- [ ] Minimum 90% line coverage achieved for new code
+- [ ] 100% branch coverage for critical business logic
+- [ ] Integration tests cover all repository methods
+- [ ] E2E tests validate complete user workflows
+
+#### Test Quality
+
+- [ ] Tests follow Arrange-Act-Assert pattern
+- [ ] Test names clearly describe expected behavior
+- [ ] Tests are independent and repeatable
+- [ ] Mock objects used appropriately for isolation
+- [ ] Test data factories used for consistency
+
+#### E2E Coverage
+
+- [ ] Happy path scenario implemented and passing
+- [ ] Validation error scenarios tested
+- [ ] Navigation and accessibility verified
+- [ ] Data persistence validated across page reloads
+- [ ] Screenshots captured for all critical paths
+
+#### Proof Artifacts
+
+- [ ] JUnit test results generated and stored
+- [ ] JaCoCo coverage report generated (HTML format)
+- [ ] Playwright E2E report generated (HTML format)
+- [ ] Feature screenshots captured and organized
+- [ ] Proof summary document completed
+
+#### Documentation
+
+- [ ] Test scenarios documented in specification
+- [ ] Edge cases and error conditions documented
+- [ ] Proof artifacts referenced in validation report
+- [ ] README updated if test setup changed
+
 ## TDD Implementation Patterns
 
 ### Red-Green-Refactor Cycle

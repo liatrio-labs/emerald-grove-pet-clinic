@@ -306,6 +306,296 @@ Thymeleaf templates provide server-side rendering:
 - **Form Binding**: Automatic form-data mapping
 - **Validation**: Server-side input validation
 
+## Error Handling Patterns
+
+The application implements comprehensive error handling to provide clear feedback to users while maintaining security best practices. This section addresses common error scenarios and handling strategies.
+
+### HTTP Status Codes
+
+The application uses standard HTTP status codes to communicate different error conditions:
+
+- **404 Not Found**: Resource does not exist (e.g., owner ID, pet ID not found)
+- **400 Bad Request**: Invalid input data or malformed request parameters
+- **500 Internal Server Error**: Unexpected server-side errors
+
+### Error Handling Strategy
+
+#### Resource Not Found (404)
+
+When a requested resource does not exist, controllers should return a 404 status:
+
+```java
+@GetMapping("/{ownerId}")
+public String showOwner(@PathVariable("ownerId") int ownerId, Model model) {
+    Owner owner = ownerRepository.findById(ownerId)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Owner not found with ID: " + ownerId
+        ));
+    model.addAttribute("owner", owner);
+    return "owners/ownerDetails";
+}
+```
+
+#### Invalid Input (400)
+
+For malformed or invalid input, return a 400 status with appropriate error information:
+
+```java
+@GetMapping("/search")
+public String searchOwners(@RequestParam(required = false) String lastName, Model model) {
+    if (lastName != null && !lastName.matches("^[a-zA-Z\\s'-]+$")) {
+        throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Invalid search parameter"
+        );
+    }
+    // Process valid search
+}
+```
+
+#### Global Exception Handler
+
+Implement a global exception handler using `@ControllerAdvice` to centralize error handling logic:
+
+```java
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public String handleResponseStatusException(
+            ResponseStatusException ex,
+            Model model,
+            HttpServletRequest request) {
+
+        logger.warn("Response status exception: {} for request {}",
+            ex.getReason(), request.getRequestURI());
+
+        model.addAttribute("status", ex.getStatusCode().value());
+        model.addAttribute("message", ex.getReason());
+        return "error";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGeneralException(
+            Exception ex,
+            Model model,
+            HttpServletRequest request) {
+
+        logger.error("Unexpected error for request {}", request.getRequestURI(), ex);
+
+        model.addAttribute("status", 500);
+        model.addAttribute("message", "An unexpected error occurred");
+        return "error";
+    }
+}
+```
+
+### Error Messages
+
+#### Security Best Practices
+
+Error messages must balance user experience with security:
+
+**DO:**
+- Provide clear, actionable feedback for user errors
+- Log detailed error information server-side
+- Use generic messages for system errors
+- Internationalize error messages
+
+**DON'T:**
+- Expose internal implementation details
+- Reveal database structure or query information
+- Display stack traces to end users
+- Include sensitive system information
+
+#### Examples
+
+**Good Error Messages:**
+```java
+// User-friendly, no technical details
+"Owner not found"
+"Invalid input provided"
+"Unable to process your request"
+```
+
+**Bad Error Messages:**
+```java
+// Too much technical detail - AVOID
+"SQLException: Table 'owners' doesn't exist"
+"NullPointerException at line 142 in OwnerController.java"
+"Database connection refused on host 192.168.1.100:3306"
+```
+
+### Error Template Usage
+
+The application uses a centralized error template (`error.html`) that displays appropriate messages based on HTTP status codes:
+
+```html
+<p th:switch="${status}">
+  <span th:case="404" th:text="#{error.404}">The requested page was not found.</span>
+  <span th:case="500" th:text="#{error.500}">An internal server error occurred.</span>
+  <span th:case="*" th:text="#{error.general}">An unexpected error occurred.</span>
+</p>
+```
+
+#### Internationalization
+
+Error messages support multiple languages through `messages.properties`:
+
+```properties
+# messages.properties
+error.404=The requested page was not found.
+error.500=An internal server error occurred.
+error.general=An unexpected error occurred.
+
+# messages_es.properties
+error.404=La página solicitada no se encontró.
+error.500=Ocurrió un error interno del servidor.
+error.general=Ocurrió un error inesperado.
+```
+
+### Edge Case Handling
+
+#### Invalid ID Formats
+
+Protect against malformed path variables:
+
+```java
+@GetMapping("/{ownerId}")
+public String showOwner(@PathVariable("ownerId") String ownerIdStr, Model model) {
+    int ownerId;
+    try {
+        ownerId = Integer.parseInt(ownerIdStr);
+        if (ownerId <= 0) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Invalid owner ID"
+            );
+        }
+    } catch (NumberFormatException e) {
+        throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Invalid owner ID format"
+        );
+    }
+
+    Owner owner = ownerRepository.findById(ownerId)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Owner not found"
+        ));
+
+    model.addAttribute("owner", owner);
+    return "owners/ownerDetails";
+}
+```
+
+#### Search Input Sanitization
+
+Validate and sanitize user search input:
+
+```java
+@GetMapping("/search")
+public String searchOwners(@RequestParam(required = false) String lastName, Model model) {
+    // Handle empty or null input
+    if (lastName == null || lastName.trim().isEmpty()) {
+        model.addAttribute("owners", new ArrayList<>());
+        return "owners/ownersList";
+    }
+
+    // Sanitize input - remove potentially dangerous characters
+    String sanitizedLastName = lastName.trim()
+        .replaceAll("[^a-zA-Z\\s'-]", "");
+
+    // Limit input length
+    if (sanitizedLastName.length() > 50) {
+        throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Search term too long"
+        );
+    }
+
+    // Perform search with sanitized input
+    Page<Owner> owners = ownerRepository.findByLastNameStartingWith(
+        sanitizedLastName,
+        PageRequest.of(0, 10)
+    );
+
+    model.addAttribute("owners", owners.getContent());
+    return "owners/ownersList";
+}
+```
+
+#### Concurrent Modification Handling
+
+Handle optimistic locking for concurrent updates:
+
+```java
+@PostMapping("/{ownerId}/edit")
+public String processUpdateOwnerForm(
+        @Valid Owner owner,
+        BindingResult result,
+        @PathVariable("ownerId") int ownerId) {
+
+    if (result.hasErrors()) {
+        return "owners/createOrUpdateOwnerForm";
+    }
+
+    try {
+        owner.setId(ownerId);
+        ownerRepository.save(owner);
+        return "redirect:/owners/{ownerId}";
+    } catch (OptimisticLockException e) {
+        logger.warn("Concurrent modification detected for owner {}", ownerId);
+        result.reject("error.concurrent.modification",
+            "This record was modified by another user. Please refresh and try again.");
+        return "owners/createOrUpdateOwnerForm";
+    }
+}
+```
+
+### Error Handling Flow
+
+The error handling flow ensures consistent error responses:
+
+```mermaid
+flowchart TD
+    A[Request] --> B{Valid Input?}
+    B -->|No| C[400 Bad Request]
+    B -->|Yes| D{Resource Exists?}
+    D -->|No| E[404 Not Found]
+    D -->|Yes| F{Process Request}
+    F -->|Success| G[200 OK Response]
+    F -->|Exception| H{Exception Type?}
+    H -->|Known| I[Appropriate Status Code]
+    H -->|Unknown| J[500 Internal Error]
+
+    C --> K[GlobalExceptionHandler]
+    E --> K
+    I --> K
+    J --> K
+    K --> L[error.html Template]
+    L --> M[User-Friendly Error Page]
+
+    style C fill:#ffcdd2,stroke:#c62828
+    style E fill:#fff3e0,stroke:#ef6c00
+    style J fill:#ffcdd2,stroke:#c62828
+    style G fill:#c8e6c9,stroke:#2e7d32
+    style K fill:#e1f5fe,stroke:#01579b
+```
+
+### Best Practices Summary
+
+1. **Fail Fast**: Validate input early in the request processing pipeline
+2. **Log Appropriately**: Log detailed errors server-side, show generic messages to users
+3. **Use Standard Status Codes**: Follow HTTP conventions for status codes
+4. **Centralize Error Handling**: Use `@ControllerAdvice` for consistent error handling
+5. **Test Error Paths**: Include error scenarios in your test suite
+6. **Monitor Errors**: Track error rates and patterns for system health
+
 ## Configuration Management
 
 ### Spring Profiles
