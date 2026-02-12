@@ -53,7 +53,10 @@ class LanguageSelectorTests {
 	void languageSelectorContainsAllEightLanguagesWithNativeNames() {
 		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).contains("English").contains("Español").contains("Deutsch").contains("فارسی")
+		assertThat(response.getBody()).contains("English")
+			.contains("Español")
+			.contains("Deutsch")
+			.contains("فارسی")
 			.contains("한국어")
 			.contains("Português")
 			.contains("Русский")
