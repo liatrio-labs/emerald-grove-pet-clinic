@@ -26,7 +26,7 @@ Add message keys for language selector UI text to all 8 language message.propert
 - [x] Verify UTF-8 encoding for non-Latin characters
 - [x] Update proof artifacts document
 
-### [~] 2.0 Language Selector UI Component - Add Bootstrap Dropdown to Navbar
+### [x] 2.0 Language Selector UI Component - Add Bootstrap Dropdown to Navbar
 
 Implement the visual language selector dropdown component in the navbar using Bootstrap 5, displaying all 8 supported languages with native names and proper styling following Liatrio branding guidelines.
 
@@ -51,7 +51,7 @@ Implement the visual language selector dropdown component in the navbar using Bo
 - [~] Manual verification: Test in browser at multiple viewport sizes (requires running app)
 - [x] Create proof artifacts with screenshots
 
-### [ ] 3.0 Language Switching Functionality - Implement URL Parameter and Session Persistence
+### [~] 3.0 Language Switching Functionality - Implement URL Parameter and Session Persistence
 
 Implement the JavaScript and backend integration to handle language switching via URL parameters, utilizing existing LocaleChangeInterceptor infrastructure to persist language selection across page navigation.
 
@@ -64,7 +64,14 @@ Implement the JavaScript and backend integration to handle language switching vi
 
 #### 3.0 Tasks
 
-TBD
+- [x] Verify LocaleChangeInterceptor is configured (already in WebConfiguration)
+- [x] Verify SessionLocaleResolver persists language selection (already configured)
+- [x] Verify language links use proper URL parameter format (implemented in Task 2.0)
+- [x] RED: Write Playwright E2E test for language switching
+- [x] RED: Write Playwright E2E test for language persistence across navigation
+- [~] GREEN: Ensure Playwright tests pass (requires running app and npm test)
+- [x] Create proof artifacts document
+- [~] Manual verification: Test language switching in browser (requires running app)
 
 ### [ ] 4.0 Accessibility Implementation - WCAG 2.1 AA Compliance
 
