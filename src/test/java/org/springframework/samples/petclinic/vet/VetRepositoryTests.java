@@ -29,15 +29,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Repository tests for {@link VetRepository} specialty filtering methods.
- * These tests validate the data access layer for filtering vets by specialty.
+ * Repository tests for {@link VetRepository} specialty filtering methods. These tests
+ * validate the data access layer for filtering vets by specialty.
  *
- * Uses the default H2 in-memory database with seed data from data.sql:
- * - Vet 1: James Carter - no specialties
- * - Vet 2: Helen Leary - radiology
- * - Vet 3: Linda Douglas - surgery, dentistry
- * - Vet 4: Rafael Ortega - surgery
- * - Vet 5: Henry Stevens - radiology
+ * Uses the default H2 in-memory database with seed data from data.sql: - Vet 1: James
+ * Carter - no specialties - Vet 2: Helen Leary - radiology - Vet 3: Linda Douglas -
+ * surgery, dentistry - Vet 4: Rafael Ortega - surgery - Vet 5: Henry Stevens - radiology
  * - Vet 6: Sharon Jenkins - no specialties
  */
 @DataJpaTest
@@ -57,8 +54,7 @@ class VetRepositoryTests {
 
 		// Assert - Helen Leary and Henry Stevens have radiology
 		assertThat(radiologyVets.getContent()).hasSize(2);
-		assertThat(radiologyVets.getContent())
-			.extracting(Vet::getLastName)
+		assertThat(radiologyVets.getContent()).extracting(Vet::getLastName)
 			.containsExactlyInAnyOrder("Leary", "Stevens");
 	}
 
@@ -72,8 +68,7 @@ class VetRepositoryTests {
 
 		// Assert - Linda Douglas and Rafael Ortega have surgery
 		assertThat(surgeryVets.getContent()).hasSize(2);
-		assertThat(surgeryVets.getContent())
-			.extracting(Vet::getLastName)
+		assertThat(surgeryVets.getContent()).extracting(Vet::getLastName)
 			.containsExactlyInAnyOrder("Douglas", "Ortega");
 	}
 
@@ -130,8 +125,7 @@ class VetRepositoryTests {
 
 		// Assert - James Carter and Sharon Jenkins have no specialties
 		assertThat(noSpecialtyVets.getContent()).hasSize(2);
-		assertThat(noSpecialtyVets.getContent())
-			.extracting(Vet::getLastName)
+		assertThat(noSpecialtyVets.getContent()).extracting(Vet::getLastName)
 			.containsExactlyInAnyOrder("Carter", "Jenkins");
 	}
 

@@ -82,8 +82,8 @@ class UpcomingVisitsIntegrationTests {
 	@Test
 	void testUpcomingVisitsWithDaysParameter() {
 		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
-		ResponseEntity<String> result = template
-			.exchange(RequestEntity.get("/visits/upcoming?days=14").build(), String.class);
+		ResponseEntity<String> result = template.exchange(RequestEntity.get("/visits/upcoming?days=14").build(),
+				String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(result.getBody()).contains("14");
 	}

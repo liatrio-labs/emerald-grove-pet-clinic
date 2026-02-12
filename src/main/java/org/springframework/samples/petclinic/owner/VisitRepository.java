@@ -38,10 +38,9 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
 	 * information
 	 */
 	@Query(nativeQuery = true,
-			value = "SELECT v.visit_date AS visitDate, "
-					+ "CONCAT(o.first_name, ' ', o.last_name) AS ownerName, " + "p.name AS petName, "
-					+ "v.description AS description " + "FROM visits v " + "JOIN pets p ON v.pet_id = p.id "
-					+ "JOIN owners o ON p.owner_id = o.id "
+			value = "SELECT v.visit_date AS visitDate, " + "CONCAT(o.first_name, ' ', o.last_name) AS ownerName, "
+					+ "p.name AS petName, " + "v.description AS description " + "FROM visits v "
+					+ "JOIN pets p ON v.pet_id = p.id " + "JOIN owners o ON p.owner_id = o.id "
 					+ "WHERE v.visit_date >= :startDate AND v.visit_date <= :endDate " + "ORDER BY v.visit_date ASC")
 	List<UpcomingVisitDTO> findUpcomingVisits(@Param("startDate") LocalDate startDate,
 			@Param("endDate") LocalDate endDate);

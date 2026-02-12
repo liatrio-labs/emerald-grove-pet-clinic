@@ -23,8 +23,8 @@ import java.time.LocalDate;
 /**
  * <code>Validator</code> for <code>Visit</code> forms.
  * <p>
- * Validates that visit dates are not in the past. Visits can only be scheduled for
- * today or future dates.
+ * Validates that visit dates are not in the past. Visits can only be scheduled for today
+ * or future dates.
  * </p>
  *
  * @author Emerald Grove Development Team
