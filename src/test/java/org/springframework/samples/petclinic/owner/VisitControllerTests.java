@@ -91,4 +91,15 @@ class VisitControllerTests {
 			.andExpect(view().name("pets/createOrUpdateVisitForm"));
 	}
 
+	@Test
+	void testProcessNewVisitFormWithPastDate() throws Exception {
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
+				.param("description", "Past visit")
+				.param("date", "2020-01-01"))
+			.andExpect(model().attributeHasFieldErrors("visit", "date"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdateVisitForm"));
+	}
+
 }
