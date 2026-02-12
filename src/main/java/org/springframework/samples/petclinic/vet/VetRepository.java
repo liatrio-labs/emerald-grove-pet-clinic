@@ -19,10 +19,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Repository class for <code>Vet</code> domain objects All method names are compliant
@@ -54,5 +56,30 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	@Transactional(readOnly = true)
 	@Cacheable("vets")
 	Page<Vet> findAll(Pageable pageable) throws DataAccessException;
+
+	/**
+	 * Retrieve <code>Vet</code>s that have the given specialty name, with pagination.
+	 * @param specialtyName the specialty name to filter by
+	 * @param pageable pagination information
+	 * @return a {@link Page} of {@link Vet}s matching the specialty
+	 */
+	@Transactional(readOnly = true)
+	Page<Vet> findBySpecialtiesName(String specialtyName, Pageable pageable);
+
+	/**
+	 * Retrieve <code>Vet</code>s that have no specialties, with pagination.
+	 * @param pageable pagination information
+	 * @return a {@link Page} of {@link Vet}s with no specialties
+	 */
+	@Transactional(readOnly = true)
+	Page<Vet> findBySpecialtiesIsEmpty(Pageable pageable);
+
+	/**
+	 * Retrieve all distinct specialty names, sorted alphabetically.
+	 * @return a sorted {@link List} of distinct specialty names
+	 */
+	@Transactional(readOnly = true)
+	@Query("SELECT DISTINCT s.name FROM Specialty s ORDER BY s.name")
+	List<String> findDistinctSpecialtyNames();
 
 }
