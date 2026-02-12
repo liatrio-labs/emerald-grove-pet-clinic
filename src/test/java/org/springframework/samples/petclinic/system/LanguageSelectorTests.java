@@ -19,10 +19,11 @@ package org.springframework.samples.petclinic.system;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,14 +35,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Tests verify that the language selector dropdown is present, contains all 8 supported
  * languages with native names, and properly highlights the current language selection.
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisabledInNativeImage
 @DisabledInAotMode
 class LanguageSelectorTests {
 
 	@Autowired
+	private WebApplicationContext context;
+
 	private MockMvc mockMvc;
+
+	@org.junit.jupiter.api.BeforeEach
+	void setup() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+	}
 
 	@Test
 	void languageSelectorIsVisibleOnHomePage() throws Exception {
