@@ -65,6 +65,83 @@
             <span th:text="#{error}">Error</span>
           </li>
 
+          <!-- Language Selector -->
+          <li class="nav-item dropdown" id="language-selector">
+            <a class="nav-link dropdown-toggle" href="#" id="language-selector-toggle" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false"
+              th:aria-label="#{language.selector.label}"
+              th:title="#{language.selector.label}">
+              <span class="fa fa-globe" aria-hidden="true"></span>
+              <span th:text="${#strings.toUpperCase(#locale.language)}">EN</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="language-selector-toggle">
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'en'} ? 'active' : ''"
+                   th:href="@{''(lang='en')}"
+                   th:attr="aria-current=${#locale.language == 'en'} ? 'true' : null">
+                  <span th:text="#{language.en}">English</span> (EN)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'es'} ? 'active' : ''"
+                   th:href="@{''(lang='es')}"
+                   th:attr="aria-current=${#locale.language == 'es'} ? 'true' : null">
+                  <span th:text="#{language.es}">Español</span> (ES)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'de'} ? 'active' : ''"
+                   th:href="@{''(lang='de')}"
+                   th:attr="aria-current=${#locale.language == 'de'} ? 'true' : null">
+                  <span th:text="#{language.de}">Deutsch</span> (DE)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'fa'} ? 'active' : ''"
+                   th:href="@{''(lang='fa')}"
+                   th:attr="aria-current=${#locale.language == 'fa'} ? 'true' : null">
+                  <span th:text="#{language.fa}">فارسی</span> (FA)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'ko'} ? 'active' : ''"
+                   th:href="@{''(lang='ko')}"
+                   th:attr="aria-current=${#locale.language == 'ko'} ? 'true' : null">
+                  <span th:text="#{language.ko}">한국어</span> (KO)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'pt'} ? 'active' : ''"
+                   th:href="@{''(lang='pt')}"
+                   th:attr="aria-current=${#locale.language == 'pt'} ? 'true' : null">
+                  <span th:text="#{language.pt}">Português</span> (PT)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'ru'} ? 'active' : ''"
+                   th:href="@{''(lang='ru')}"
+                   th:attr="aria-current=${#locale.language == 'ru'} ? 'true' : null">
+                  <span th:text="#{language.ru}">Русский</span> (RU)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   th:classappend="${#locale.language == 'tr'} ? 'active' : ''"
+                   th:href="@{''(lang='tr')}"
+                   th:attr="aria-current=${#locale.language == 'tr'} ? 'true' : null">
+                  <span th:text="#{language.tr}">Türkçe</span> (TR)
+                </a>
+              </li>
+            </ul>
+          </li>
+
         </ul>
       </div>
     </div>
