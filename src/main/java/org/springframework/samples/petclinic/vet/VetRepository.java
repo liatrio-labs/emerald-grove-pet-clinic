@@ -64,7 +64,6 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	 * @return a {@link Page} of {@link Vet}s matching the specialty
 	 */
 	@Transactional(readOnly = true)
-	@Cacheable("vets")
 	Page<Vet> findBySpecialtiesName(String specialtyName, Pageable pageable);
 
 	/**
@@ -73,7 +72,6 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	 * @return a {@link Page} of {@link Vet}s with no specialties
 	 */
 	@Transactional(readOnly = true)
-	@Cacheable("vets")
 	Page<Vet> findBySpecialtiesIsEmpty(Pageable pageable);
 
 	/**
