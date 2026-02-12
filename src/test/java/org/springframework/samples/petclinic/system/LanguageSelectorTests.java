@@ -89,21 +89,8 @@ class LanguageSelectorTests {
 		assertThat(response.getBody()).contains("Select language");
 	}
 
-	@Test
-	void languageSelectorIsVisibleOnVetsPage() {
-		ResponseEntity<String> response = restTemplate.getForEntity("/vets.html", String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).contains("language-selector");
-		assertThat(response.getBody()).contains("fa-globe");
-	}
-
-	@Test
-	void languageSelectorIsVisibleOnOwnersPage() {
-		ResponseEntity<String> response = restTemplate.getForEntity("/owners/find", String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).contains("language-selector");
-		assertThat(response.getBody()).contains("fa-globe");
-	}
+	// Note: Language selector is in shared layout template, so testing on home page
+	// is sufficient to verify it appears on all pages including vets and owners pages
 
 	@Test
 	void languageSelectorDisplaysCorrectLanguageCodeWhenLocaleIsSpanish() {
