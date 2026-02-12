@@ -53,8 +53,7 @@ class MessageKeysTests {
 	void localeFileContainsAllLanguageSelectorKeys(String filename) throws IOException {
 		Properties props = loadPropertiesUtf8(Paths.get(MESSAGES_DIR, filename));
 		for (String key : REQUIRED_LANGUAGE_KEYS) {
-			assertThat(props.getProperty(key))
-				.as("File '%s' should contain key '%s'", filename, key)
+			assertThat(props.getProperty(key)).as("File '%s' should contain key '%s'", filename, key)
 				.isNotNull()
 				.isNotBlank();
 		}
@@ -70,14 +69,11 @@ class MessageKeysTests {
 
 		for (String filename : ALL_LOCALE_FILES) {
 			Properties props = loadPropertiesUtf8(Paths.get(MESSAGES_DIR, filename));
-			assertThat(props.getProperty("language.fa"))
-				.as("Persian name in '%s' should be in native script", filename)
+			assertThat(props.getProperty("language.fa")).as("Persian name in '%s' should be in native script", filename)
 				.isEqualTo(expectedPersian);
-			assertThat(props.getProperty("language.ko"))
-				.as("Korean name in '%s' should be in native script", filename)
+			assertThat(props.getProperty("language.ko")).as("Korean name in '%s' should be in native script", filename)
 				.isEqualTo(expectedKorean);
-			assertThat(props.getProperty("language.ru"))
-				.as("Russian name in '%s' should be in native script", filename)
+			assertThat(props.getProperty("language.ru")).as("Russian name in '%s' should be in native script", filename)
 				.isEqualTo(expectedRussian);
 		}
 	}
