@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'visits')}">
+
+<body>
+
+  <section class="liatrio-section">
+    <div class="liatrio-table-card">
+      <div class="liatrio-card-header">
+        <h2 th:text="#{upcomingVisits}">Upcoming Visits</h2>
+        <p class="liatrio-muted" th:text="#{upcomingVisits.subtitle(${days})}">Scheduled visits for the next 7 days.</p>
+      </div>
+
+      <nav aria-label="Time window filter">
+        <div class="liatrio-form-actions" role="group" th:aria-label="#{upcomingVisits.filter.days}">
+          <a th:href="@{/visits/upcoming(days=3)}"
+             th:class="${days == 3} ? 'btn btn-primary' : 'btn liatrio-btn-secondary'"
+             th:attr="aria-current=${days == 3} ? 'true' : null">3 <span th:text="#{upcomingVisits.filter.days}">days</span></a>
+          <a th:href="@{/visits/upcoming(days=7)}"
+             th:class="${days == 7} ? 'btn btn-primary' : 'btn liatrio-btn-secondary'"
+             th:attr="aria-current=${days == 7} ? 'true' : null">7 <span th:text="#{upcomingVisits.filter.days}">days</span></a>
+          <a th:href="@{/visits/upcoming(days=14)}"
+             th:class="${days == 14} ? 'btn btn-primary' : 'btn liatrio-btn-secondary'"
+             th:attr="aria-current=${days == 14} ? 'true' : null">14 <span th:text="#{upcomingVisits.filter.days}">days</span></a>
+          <a th:href="@{/visits/upcoming(days=30)}"
+             th:class="${days == 30} ? 'btn btn-primary' : 'btn liatrio-btn-secondary'"
+             th:attr="aria-current=${days == 30} ? 'true' : null">30 <span th:text="#{upcomingVisits.filter.days}">days</span></a>
+        </div>
+      </nav>
+
+      <div th:if="${#lists.isEmpty(visits)}">
+        <p class="liatrio-muted" th:text="#{upcomingVisits.empty}">No upcoming visits scheduled.</p>
+      </div>
+
+      <div th:unless="${#lists.isEmpty(visits)}" class="table-responsive">
+        <table id="upcoming-visits" class="table table-striped liatrio-table" role="table">
+          <thead>
+            <tr>
+              <th scope="col" th:text="#{visitDate}">Visit Date</th>
+              <th scope="col" th:text="#{upcomingVisits.ownerName}">Owner Name</th>
+              <th scope="col" th:text="#{upcomingVisits.petName}">Pet Name</th>
+              <th scope="col" th:text="#{description}">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="visit : ${visits}">
+              <td th:text="${#temporals.format(visit.visitDate, 'yyyy-MM-dd')}"></td>
+              <td th:text="${visit.ownerName}"></td>
+              <td th:text="${visit.petName}"></td>
+              <td th:text="${visit.description}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>

@@ -1,0 +1,2 @@
+Empty state screenshot not captured - sample data contains visits within 1-day window.
+The empty state functionality is tested via E2E tests and exists in the template.
