@@ -18,13 +18,13 @@
                       aria-label="Filter veterinarians by specialty"
                       aria-describedby="specialty-help">
                 <option value="all" th:text="#{vets.filter.all}"
-                        th:selected="${specialtyFilter == null or specialtyFilter == 'all'}">All Specialties</option>
+                        th:selected="${specialtyFilter == null or specialtyFilter == 'all'}"></option>
                 <option value="none" th:text="#{vets.filter.none}"
-                        th:selected="${specialtyFilter == 'none'}">None (General Practice)</option>
+                        th:selected="${specialtyFilter == 'none'}"></option>
                 <option th:each="spec : ${availableSpecialties}"
                         th:value="${spec}"
                         th:text="${spec}"
-                        th:selected="${specialtyFilter == spec}">specialty</option>
+                        th:selected="${specialtyFilter == spec}"></option>
               </select>
               <small id="specialty-help" class="liatrio-muted" th:text="#{vets.filter.help}">Select a specialty to filter the list, or choose 'All Specialties' to view all veterinarians.</small>
             </div>

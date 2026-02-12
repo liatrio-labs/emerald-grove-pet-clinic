@@ -19,15 +19,13 @@ package org.springframework.samples.petclinic.system;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.aot.DisabledInAotMode;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration tests for the language selector component in the navbar.
@@ -41,82 +39,72 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LanguageSelectorTests {
 
 	@Autowired
-	private WebApplicationContext context;
+	private TestRestTemplate restTemplate;
 
-	private MockMvc mockMvc;
-
-	@org.junit.jupiter.api.BeforeEach
-	void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+	@Test
+	void languageSelectorIsVisibleOnHomePage() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("language-selector");
+		assertThat(response.getBody()).contains("fa-globe");
 	}
 
 	@Test
-	void languageSelectorIsVisibleOnHomePage() throws Exception {
-		mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("language-selector")))
-			.andExpect(content().string(containsString("fa-globe")));
+	void languageSelectorContainsAllEightLanguagesWithNativeNames() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("English").contains("Español").contains("Deutsch").contains("فارسی")
+			.contains("한국어")
+			.contains("Português")
+			.contains("Русский")
+			.contains("Türkçe");
 	}
 
 	@Test
-	void languageSelectorContainsAllEightLanguagesWithNativeNames() throws Exception {
-		mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("English")))
-			.andExpect(content().string(containsString("Español")))
-			.andExpect(content().string(containsString("Deutsch")))
-			.andExpect(content().string(containsString("فارسی")))
-			.andExpect(content().string(containsString("한국어")))
-			.andExpect(content().string(containsString("Português")))
-			.andExpect(content().string(containsString("Русский")))
-			.andExpect(content().string(containsString("Türkçe")));
-	}
-
-	@Test
-	void languageSelectorShowsCurrentLanguageInButton() throws Exception {
+	void languageSelectorShowsCurrentLanguageInButton() {
 		// Default language is English
-		mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("language-selector-toggle")));
+		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("language-selector-toggle");
 	}
 
 	@Test
-	void languageSelectorHighlightsCurrentLanguageInDropdown() throws Exception {
+	void languageSelectorHighlightsCurrentLanguageInDropdown() {
 		// Default language should have active class
-		mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("dropdown-item active")));
+		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("dropdown-item active");
 	}
 
 	@Test
-	void languageSelectorHasProperAriaLabel() throws Exception {
-		mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("aria-label")))
-			.andExpect(content().string(containsString("Select language")));
+	void languageSelectorHasProperAriaLabel() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("aria-label");
+		assertThat(response.getBody()).contains("Select language");
 	}
 
 	@Test
-	void languageSelectorIsVisibleOnVetsPage() throws Exception {
-		mockMvc.perform(get("/vets.html"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("language-selector")))
-			.andExpect(content().string(containsString("fa-globe")));
+	void languageSelectorIsVisibleOnVetsPage() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/vets.html", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("language-selector");
+		assertThat(response.getBody()).contains("fa-globe");
 	}
 
 	@Test
-	void languageSelectorIsVisibleOnOwnersPage() throws Exception {
-		mockMvc.perform(get("/owners/find"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("language-selector")))
-			.andExpect(content().string(containsString("fa-globe")));
+	void languageSelectorIsVisibleOnOwnersPage() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/owners/find", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("language-selector");
+		assertThat(response.getBody()).contains("fa-globe");
 	}
 
 	@Test
-	void languageSelectorDisplaysCorrectLanguageCodeWhenLocaleIsSpanish() throws Exception {
-		mockMvc.perform(get("/?lang=es"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("language-selector")));
+	void languageSelectorDisplaysCorrectLanguageCodeWhenLocaleIsSpanish() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/?lang=es", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).contains("language-selector");
 	}
 
 }
