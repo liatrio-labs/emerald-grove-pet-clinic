@@ -18,6 +18,9 @@ package org.springframework.samples.petclinic.owner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.restclient.RestTemplateBuilder;
@@ -41,6 +44,25 @@ class UpcomingVisitsIntegrationTests {
 
 	@Autowired
 	private RestTemplateBuilder builder;
+
+	@Autowired
+	private OwnerRepository owners;
+
+	@BeforeEach
+	void setUp() {
+		// Create a future visit for testing
+		// Use existing owner (ID 6 = Jean Coleman) and pet (ID 7 = Samantha)
+		owners.findById(6).ifPresent(owner -> {
+			if (!owner.getPets().isEmpty()) {
+				Pet pet = owner.getPets().iterator().next();
+				Visit visit = new Visit();
+				visit.setDate(LocalDate.now().plusDays(5));
+				visit.setDescription("Integration test visit");
+				pet.addVisit(visit);
+				owners.save(owner);
+			}
+		});
+	}
 
 	@Test
 	void testUpcomingVisitsPageReturnsOk() {
