@@ -26,7 +26,7 @@ Add message keys for language selector UI text to all 8 language message.propert
 - [x] Verify UTF-8 encoding for non-Latin characters
 - [x] Update proof artifacts document
 
-### [ ] 2.0 Language Selector UI Component - Add Bootstrap Dropdown to Navbar
+### [~] 2.0 Language Selector UI Component - Add Bootstrap Dropdown to Navbar
 
 Implement the visual language selector dropdown component in the navbar using Bootstrap 5, displaying all 8 supported languages with native names and proper styling following Liatrio branding guidelines.
 
@@ -39,7 +39,17 @@ Implement the visual language selector dropdown component in the navbar using Bo
 
 #### 2.0 Tasks
 
-TBD
+- [x] RED: Write failing template test verifying language selector is present in navbar
+- [x] RED: Write test verifying dropdown contains all 8 language options with native names
+- [x] RED: Write test verifying current language is highlighted with active class
+- [x] GREEN: Add language selector dropdown markup to layout.html navbar
+- [x] GREEN: Implement Thymeleaf logic to determine current locale
+- [x] GREEN: Add all 8 language options with native names from message keys
+- [x] GREEN: Add active class highlighting for current language
+- [x] REFACTOR: Ensure proper Bootstrap 5 dropdown classes and structure
+- [x] REFACTOR: Add proper ARIA attributes for accessibility
+- [~] Manual verification: Test in browser at multiple viewport sizes (requires running app)
+- [x] Create proof artifacts with screenshots
 
 ### [ ] 3.0 Language Switching Functionality - Implement URL Parameter and Session Persistence
 
