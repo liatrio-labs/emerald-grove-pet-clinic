@@ -67,7 +67,7 @@ via `./mvnw verify -Pperformance`, with thresholds enforced by a post-processing
 
 ---
 
-### [~] 2.0 Create GitHub Actions Performance Workflow
+### [x] 2.0 Create GitHub Actions Performance Workflow
 
 Add `.github/workflows/performance-tests.yml` that starts the application, runs the load test,
 prints the threshold summary to the job log, uploads the HTML report as an artifact, and fails
@@ -109,6 +109,6 @@ the PR check on any threshold violation.
   - `name: jmeter-html-report`
   - `path: target/jmeter/reports/`
   - `if: always()` so the report is preserved on both pass and failure
-- [ ] 2.8 Open a pull request with these changes and confirm the "Performance Tests" check
+- [x] 2.8 Open a pull request with these changes and confirm the "Performance Tests" check
   appears in the PR checks list and passes. Capture the screenshots required by the proof
   artifacts above.
