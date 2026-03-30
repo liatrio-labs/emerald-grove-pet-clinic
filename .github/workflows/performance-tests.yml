@@ -3,6 +3,9 @@ name: Performance Tests
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   jmeter:
     runs-on: ubuntu-latest
