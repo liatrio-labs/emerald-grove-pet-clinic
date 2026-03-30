@@ -67,7 +67,7 @@ via `./mvnw verify -Pperformance`, with thresholds enforced by a post-processing
 
 ---
 
-### [ ] 2.0 Create GitHub Actions Performance Workflow
+### [~] 2.0 Create GitHub Actions Performance Workflow
 
 Add `.github/workflows/performance-tests.yml` that starts the application, runs the load test,
 prints the threshold summary to the job log, uploads the HTML report as an artifact, and fails
@@ -87,25 +87,25 @@ the PR check on any threshold violation.
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Create `.github/workflows/performance-tests.yml` with:
+- [x] 2.1 Create `.github/workflows/performance-tests.yml` with:
   - `name: Performance Tests`
   - `on: pull_request`
   - a single job named `jmeter` running on `ubuntu-latest` with `timeout-minutes: 15`
-- [ ] 2.2 Add the following steps to the job, following the pattern in `e2e-tests.yml`:
+- [x] 2.2 Add the following steps to the job, following the pattern in `e2e-tests.yml`:
   - `actions/checkout@v4`
   - `actions/setup-java@v4` with `distribution: temurin` and `java-version: '17'`
-- [ ] 2.3 Add a step that builds the application without running tests:
+- [x] 2.3 Add a step that builds the application without running tests:
   `./mvnw package -DskipTests` (produces the runnable JAR before starting the app).
-- [ ] 2.4 Add a step that starts the Spring Boot application in the background using the default
+- [x] 2.4 Add a step that starts the Spring Boot application in the background using the default
   H2 profile: `./mvnw spring-boot:run &`
-- [ ] 2.5 Add a health-check step that polls `http://localhost:8080/` using a `curl` retry loop
+- [x] 2.5 Add a health-check step that polls `http://localhost:8080/` using a `curl` retry loop
   and waits until the app responds with HTTP 200 before continuing. Use `--retry 30`,
   `--retry-delay 5`, and `--retry-connrefused` so the step fails fast if the app never starts
   rather than hanging.
-- [ ] 2.6 Add a step that runs `./mvnw verify -Pperformance`. Because `check-thresholds.sh`
+- [x] 2.6 Add a step that runs `./mvnw verify -Pperformance`. Because `check-thresholds.sh`
   prints the summary table to stdout and exits non-zero on violation, the job log will show the
   summary inline and the workflow step will fail automatically on a threshold breach.
-- [ ] 2.7 Add an artifact upload step using `actions/upload-artifact@v4` with:
+- [x] 2.7 Add an artifact upload step using `actions/upload-artifact@v4` with:
   - `name: jmeter-html-report`
   - `path: target/jmeter/reports/`
   - `if: always()` so the report is preserved on both pass and failure
