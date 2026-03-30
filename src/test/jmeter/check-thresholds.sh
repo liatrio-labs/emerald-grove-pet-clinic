@@ -19,7 +19,9 @@ readonly THROUGHPUT_THRESHOLD_RPS=10
 
 # ── Locate JTL CSV file ────────────────────────────────────────────────────────
 RESULTS_DIR="${1:?Usage: check-thresholds.sh <results-directory>}"
-JTL_FILE=$(find "$RESULTS_DIR" -maxdepth 2 -name "*.csv" | head -1)
+JTL_FILE=$(find "$RESULTS_DIR" -maxdepth 2 -name "*.csv" -print0 \
+  | xargs -0 ls -t 2>/dev/null \
+  | head -1)
 
 if [[ -z "$JTL_FILE" ]]; then
   echo "ERROR: No JTL CSV file found in ${RESULTS_DIR}"
