@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
+
+<body>
+
+  <h2>Payment Checkout</h2>
+
+  <!-- Visit Summary -->
+  <table class="table table-striped liatrio-table">
+    <thead>
+      <tr>
+        <th colspan="2">Visit Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Pet</th>
+        <td th:text="${petName}">Buddy</td>
+      </tr>
+      <tr>
+        <th>Veterinarian</th>
+        <td th:text="${vetName}">Dr. Carter</td>
+      </tr>
+      <tr>
+        <th>Visit Date</th>
+        <td th:text="${visitDate}">2026-06-05</td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td th:text="${visitDescription}">Annual checkup and vaccinations</td>
+      </tr>
+      <tr>
+        <th>Total</th>
+        <td><strong>$<span th:text="${amount}">90.00</span></strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Payment Form -->
+  <form id="paymentForm" method="post" th:action="@{/owners/__${owner.id}__/visits/__${visitId}__/pay}">
+    <input type="hidden" name="idempotencyKey" th:value="${idempotencyKey}" />
+    <input type="hidden" name="amount" th:value="${amount}" />
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="cardNumber">Card Number</label>
+      <input type="text" id="cardNumber" name="cardNumber" class="form-control"
+             placeholder="4242 4242 4242 4242" maxlength="19"
+             autocomplete="cc-number" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="payButton">
+      Pay $<span th:text="${amount}">90.00</span>
+    </button>
+  </form>
+
+  <!-- Processing State Indicator -->
+  <div id="processingIndicator" style="display: none; margin-top: 1rem;" aria-live="polite" role="status">
+    <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+    Processing payment...
+  </div>
+
+  <!-- Prototype Status Indicators -->
+  <div style="margin-top: 2rem;">
+    <h3>Prototype Status Indicators</h3>
+    <table class="table table-striped liatrio-table">
+      <tbody>
+        <tr>
+          <th>Idempotency Key</th>
+          <td>
+            <span class="fa fa-check-circle" style="color: green;" aria-hidden="true"></span>
+            Generated: <code th:text="${idempotencyKey}">uuid-placeholder</code>
+          </td>
+        </tr>
+        <tr>
+          <th>Audit Log</th>
+          <td>
+            <span class="fa fa-times-circle" style="color: red;" aria-hidden="true"></span>
+            Not implemented
+          </td>
+        </tr>
+        <tr>
+          <th>Circuit Breaker</th>
+          <td>
+            <span class="fa fa-times-circle" style="color: red;" aria-hidden="true"></span>
+            Not implemented
+          </td>
+        </tr>
+        <tr>
+          <th>WCAG Compliance</th>
+          <td>
+            <span class="fa fa-times-circle" style="color: red;" aria-hidden="true"></span>
+            Not implemented
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-warning" style="margin-top: 2rem;" role="alert">
+    <strong>Prototype v1</strong> - No retry logic, no accessibility, no audit trail
+  </div>
+
+  <script>
+    document.getElementById('paymentForm').addEventListener('submit', function() {
+      document.getElementById('payButton').disabled = true;
+      document.getElementById('processingIndicator').style.display = 'block';
+    });
+  </script>
+
+</body>
+
+</html>
