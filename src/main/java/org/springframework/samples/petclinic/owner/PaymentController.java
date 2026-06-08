@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * Controller for the payment checkout prototype.
  *
- * NOTE: This is a spike/prototype (EGPC-2). Not production-ready.
- * Missing: POST handler, CSRF, input validation, error handling.
+ * NOTE: This is a spike/prototype (EGPC-2). Not production-ready. Missing: POST handler,
+ * CSRF, input validation, error handling.
  */
 @Controller
 class PaymentController {

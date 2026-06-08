@@ -23,8 +23,8 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 /**
  * Prototype payment model for visit checkout.
  *
- * NOTE: This is a spike/prototype (EGPC-2). Not production-ready.
- * Missing: JPA annotations, validation, PCI-DSS field encryption.
+ * NOTE: This is a spike/prototype (EGPC-2). Not production-ready. Missing: JPA
+ * annotations, validation, PCI-DSS field encryption.
  */
 public class Payment extends BaseEntity {
 

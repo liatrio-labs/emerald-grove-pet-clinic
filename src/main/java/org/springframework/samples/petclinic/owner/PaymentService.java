@@ -26,8 +26,8 @@ import org.springframework.stereotype.Service;
 /**
  * Stub payment service for the checkout prototype.
  *
- * NOTE: This is a spike/prototype (EGPC-2). Not production-ready.
- * Missing: real payment gateway, retry logic, circuit breaker, audit trail.
+ * NOTE: This is a spike/prototype (EGPC-2). Not production-ready. Missing: real payment
+ * gateway, retry logic, circuit breaker, audit trail.
  */
 @Service
 public class PaymentService {
