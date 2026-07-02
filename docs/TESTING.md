@@ -719,6 +719,32 @@ Different test environments:
 3. **Test Independence**: Tests should not depend on each other
 4. **Test Data**: Use factories for consistent test data
 
+### Meaningful Assertions
+
+A test's assertions must **prove** the behavior its name claims — not imply it through a
+magic number plus an explanatory comment. A hard-coded count backed only by a comment can
+stay green after seed or configuration data changes while no longer demonstrating anything.
+Derive expected values from the mechanism under test rather than from brittle literals.
+
+```java
+// Weak: the name claims "without pagination" but only a magic count is asserted
+@Test
+void shouldFindAllOwnersWithoutPagination() {
+    // 10 > the 5-per-page limit
+    assertThat(this.owners.findByLastName("Smith")).hasSize(10);
+}
+
+// Strong: contrast the paginated page against the full result to prove the behavior,
+// and couple the expectation to the data via getTotalElements()
+@Test
+void shouldReturnAllMatchesRegardlessOfPageSize() {
+    Page<Owner> firstPage = this.owners.findByLastName("Smith", PageRequest.of(0, 5));
+    assertThat(firstPage.getContent()).hasSize(5);
+    assertThat(firstPage.getTotalElements()).isGreaterThan(5);
+    assertThat(this.owners.findByLastName("Smith")).hasSize((int) firstPage.getTotalElements());
+}
+```
+
 ### Performance Considerations
 
 1. **Test Speed**: Use in-memory databases for unit tests
