@@ -4,7 +4,7 @@
 repos:
   # Basic file and text processing hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # v6.0.0
     hooks:
       - id: trailing-whitespace
         description: Removes trailing whitespace
@@ -36,7 +36,7 @@ repos:
 
   # Documentation hooks
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.39.0
+    rev: a4d5d37e66ebcd6b3705204a1d6dbb56dea66338  # v0.49.0
     hooks:
       - id: markdownlint
         description: Lints Markdown files
@@ -44,7 +44,7 @@ repos:
 
   # Security and dependency checks
   - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.2
+    rev: 5824be5a3fde4f524ef7412f55b284584946bf81  # v1.4.2
     hooks:
       - id: python-safety-dependencies-check
         description: Checks Python dependencies for security vulnerabilities
@@ -52,14 +52,14 @@ repos:
 
   # Shell script hooks
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.6
+    rev: 745eface02aef23e168a8afb6b5737818efbea95  # v0.11.0.1
     hooks:
       - id: shellcheck
         description: Lints shell scripts for common issues
 
   # Git hooks
   - repo: https://github.com/jorisroovers/gitlint
-    rev: v0.19.0
+    rev: acc9d9de6369b76d22cb4167029d2035e8730b98  # v0.19.1
     hooks:
       - id: gitlint
         description: Lints commit messages
