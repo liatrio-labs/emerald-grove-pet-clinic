@@ -43,12 +43,11 @@ repos:
         args: ["--config", ".markdownlint.yaml", "--fix"]
 
   # Security and dependency checks
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: 5824be5a3fde4f524ef7412f55b284584946bf81  # v1.4.2
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e  # v8.30.1
     hooks:
-      - id: python-safety-dependencies-check
-        description: Checks Python dependencies for security vulnerabilities
-        files: requirements.*\.txt$
+      - id: gitleaks
+        description: Detects hardcoded secrets (keys, tokens, credentials) in staged changes
 
   # Shell script hooks
   - repo: https://github.com/shellcheck-py/shellcheck-py

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SpotBugs exclude filter for Emerald Grove Veterinary Clinic.
+
+  Only idiomatic Spring / JPA patterns that SpotBugs reports as bugs but are
+  non-issues for a reference CRUD application belong here. Each <Match> carries
+  a comment explaining why it is safe to suppress. Genuine bugs (and all
+  FindSecBugs security findings that are NOT already mitigated) must be fixed in
+  code, not suppressed. Matches are scoped narrowly (bug pattern + package/class)
+  so unrelated new findings still fail the build.
+-->
+<FindBugsFilter>
+
+  <!--
+    EI_EXPOSE_REP / EI_EXPOSE_REP2: JPA entities and view beans intentionally
+    share references to their persistent collections and associations. Returning
+    or storing defensive copies would break Hibernate dirty-checking and lazy
+    loading (and the JAXB-bound vet list view). Idiomatic and safe for a
+    reference domain model. Scoped to the domain packages only.
+  -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    <Package name="~org\.springframework\.samples\.petclinic\.(owner|vet|model)"/>
+  </Match>
+
+  <!--
+    ENTITY_MASS_ASSIGNMENT: the Spring MVC form controllers bind request
+    parameters onto JPA entities by design (server-rendered CRUD forms).
+    Over-posting of the primary key is already mitigated: every affected
+    controller declares an @InitBinder that calls setDisallowedFields("id").
+    FindSecBugs flags the data-binding pattern regardless of that binder
+    mitigation, so it is a false positive here. Scoped to the owner-package
+    controllers only.
+  -->
+  <Match>
+    <Bug pattern="ENTITY_MASS_ASSIGNMENT"/>
+    <Class name="~org\.springframework\.samples\.petclinic\.owner\..*Controller"/>
+  </Match>
+
+</FindBugsFilter>
