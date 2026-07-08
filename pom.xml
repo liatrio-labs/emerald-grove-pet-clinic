@@ -213,6 +213,11 @@
             <artifactId>nohttp-checkstyle</artifactId>
             <version>${nohttp-checkstyle.version}</version>
           </dependency>
+          <dependency>
+            <groupId>io.spring.javaformat</groupId>
+            <artifactId>spring-javaformat-checkstyle</artifactId>
+            <version>${spring-format.version}</version>
+          </dependency>
         </dependencies>
         <executions>
           <execution>
@@ -226,6 +231,20 @@
               <sourceDirectories>${basedir}</sourceDirectories>
               <includes>**/*</includes>
               <excludes>**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>
+              <propertyExpansion>config_loc=${basedir}/src/checkstyle/</propertyExpansion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>spring-checkstyle-validation</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>src/checkstyle/spring-checkstyle.xml</configLocation>
+              <sourceDirectories>${basedir}/src/main/java</sourceDirectories>
+              <testSourceDirectories>${basedir}/src/test/java</testSourceDirectories>
+              <includeTestSourceDirectory>true</includeTestSourceDirectory>
               <propertyExpansion>config_loc=${basedir}/src/checkstyle/</propertyExpansion>
             </configuration>
           </execution>

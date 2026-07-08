@@ -1,9 +1,25 @@
+/*
+ * Copyright 2012-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.springframework.samples.petclinic.system;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +29,9 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * This test ensures that there are no hard-coded strings without internationalization in
@@ -22,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author Anuj Ashok Potdar
  */
-public class I18nPropertiesSyncTest {
+public class I18nPropertiesSyncTests {
 
 	private static final String I18N_DIR = "src/main/resources";
 
@@ -42,9 +60,9 @@ public class I18nPropertiesSyncTest {
 		List<Path> files;
 
 		try (Stream<Path> stream = Files.walk(root)) {
-			files = stream.filter(p -> p.toString().endsWith(".java") || p.toString().endsWith(".html"))
-				.filter(p -> !p.toString().contains("/test/"))
-				.filter(p -> !p.getFileName().toString().endsWith("Test.java"))
+			files = stream.filter((p) -> p.toString().endsWith(".java") || p.toString().endsWith(".html"))
+				.filter((p) -> !p.toString().contains("/test/"))
+				.filter((p) -> !p.getFileName().toString().endsWith("Test.java"))
 				.toList();
 		}
 
@@ -56,8 +74,9 @@ public class I18nPropertiesSyncTest {
 				String line = lines.get(i).trim();
 
 				if (line.startsWith("//") || line.startsWith("@") || line.contains("log.")
-						|| line.contains("System.out"))
+						|| line.contains("System.out")) {
 					continue;
+				}
 
 				if (file.toString().endsWith(".html")) {
 					boolean hasLiteralText = HTML_TEXT_LITERAL.matcher(line).find();
@@ -86,8 +105,8 @@ public class I18nPropertiesSyncTest {
 	public void checkI18nPropertyFilesAreInSync() throws IOException {
 		List<Path> propertyFiles;
 		try (Stream<Path> stream = Files.walk(Paths.get(I18N_DIR))) {
-			propertyFiles = stream.filter(p -> p.getFileName().toString().startsWith(BASE_NAME))
-				.filter(p -> p.getFileName().toString().endsWith(PROPERTIES))
+			propertyFiles = stream.filter((p) -> p.getFileName().toString().startsWith(BASE_NAME))
+				.filter((p) -> p.getFileName().toString().endsWith(PROPERTIES))
 				.toList();
 		}
 
@@ -115,8 +134,9 @@ public class I18nPropertiesSyncTest {
 			String fileName = entry.getKey();
 			// We use fallback logic to include english strings, hence messages_en is not
 			// populated.
-			if (fileName.equals(baseFile) || fileName.equals("messages_en.properties"))
+			if (fileName.equals(baseFile) || fileName.equals("messages_en.properties")) {
 				continue;
+			}
 
 			Properties props = entry.getValue();
 			Set<String> missingKeys = new TreeSet<>(baseKeys);
@@ -124,7 +144,7 @@ public class I18nPropertiesSyncTest {
 
 			if (!missingKeys.isEmpty()) {
 				report.append("Missing keys in ").append(fileName).append(":\n");
-				missingKeys.forEach(k -> report.append("  ").append(k).append("\n"));
+				missingKeys.forEach((k) -> report.append("  ").append(k).append("\n"));
 			}
 		}
 

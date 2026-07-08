@@ -16,9 +16,14 @@
 
 package org.springframework.samples.petclinic.owner;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.domain.Page;
@@ -28,10 +33,6 @@ import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
@@ -44,10 +45,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Test class for {@link OwnerController}
@@ -103,7 +107,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/owners/new"))
+		this.mockMvc.perform(get("/owners/new"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
 			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
@@ -111,7 +115,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		mockMvc
+		this.mockMvc
 			.perform(post("/owners/new").param("firstName", "Joe")
 				.param("lastName", "Bloggs")
 				.param("address", "123 Caramel Street")
@@ -122,7 +126,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		mockMvc
+		this.mockMvc
 			.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs").param("city", "London"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasErrors("owner"))
@@ -133,7 +137,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testInitFindForm() throws Exception {
-		mockMvc.perform(get("/owners/find"))
+		this.mockMvc.perform(get("/owners/find"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
 			.andExpect(view().name("owners/findOwners"));
@@ -142,15 +146,17 @@ class OwnerControllerTests {
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));
-		when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
+		given(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).willReturn(tasks);
+		this.mockMvc.perform(get("/owners?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
 	void testProcessFindFormByLastName() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george()));
-		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
+		given(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).willReturn(tasks);
+		this.mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
 	}
@@ -158,8 +164,8 @@ class OwnerControllerTests {
 	@Test
 	void testProcessFindFormNoOwnersFound() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of());
-		when(this.owners.findByLastNameStartingWith(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
-		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
+		given(this.owners.findByLastNameStartingWith(eq("Unknown Surname"), any(Pageable.class))).willReturn(tasks);
+		this.mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("owner", "lastName"))
 			.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
@@ -169,7 +175,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testInitUpdateOwnerForm() throws Exception {
-		mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID))
+		this.mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
@@ -182,7 +188,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessUpdateOwnerFormSuccess() throws Exception {
-		mockMvc
+		this.mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
 				.param("address", "123 Caramel Street")
@@ -194,14 +200,14 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessUpdateOwnerFormUnchangedSuccess() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID))
+		this.mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
 	void testProcessUpdateOwnerFormHasErrors() throws Exception {
-		mockMvc
+		this.mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
 				.param("address", "")
@@ -215,7 +221,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testShowOwner() throws Exception {
-		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
+		this.mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
 			.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
@@ -229,7 +235,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	public void testProcessUpdateOwnerFormWithIdMismatch() throws Exception {
+	void testProcessUpdateOwnerFormWithIdMismatch() throws Exception {
 		int pathOwnerId = 1;
 
 		Owner owner = new Owner();
@@ -240,9 +246,10 @@ class OwnerControllerTests {
 		owner.setCity("New York");
 		owner.setTelephone("0123456789");
 
-		when(owners.findById(pathOwnerId)).thenReturn(Optional.of(owner));
+		given(this.owners.findById(pathOwnerId)).willReturn(Optional.of(owner));
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/owners/{ownerId}/edit", pathOwnerId).flashAttr("owner", owner))
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/owners/{ownerId}/edit", pathOwnerId).flashAttr("owner", owner))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/owners/" + pathOwnerId + "/edit"))
 			.andExpect(flash().attributeExists("error"));

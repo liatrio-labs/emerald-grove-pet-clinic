@@ -64,42 +64,6 @@ This guide covers development setup, testing, and contribution guidelines for th
 - [ ] Documentation updated
 - [ ] Performance impact assessed
 
-## Development Setup
-
-### Clone and Build
-
-```bash
-git clone <repository-url>
-cd spring-petclinic
-
-# Maven
-./mvnw spring-boot:run
-
-# Gradle
-./gradlew bootRun
-```
-
-### IDE Configuration
-
-#### IntelliJ IDEA
-
-1. Open the project via `File -> Open` and select the `pom.xml`
-2. Run configuration `PetClinicApplication` should be created automatically
-3. Alternatively, right-click `PetClinicApplication` main class and select `Run`
-
-#### Eclipse/STS
-
-1. Import via `File -> Import -> Maven -> Existing Maven project`
-2. Select the root directory of the cloned repo
-3. Right-click project and `Run As -> Maven install` to generate resources
-4. Run the application's main method by right-clicking and choosing `Run As -> Java Application`
-
-#### VS Code
-
-1. Install the Extension Pack for Java
-2. Open the project folder
-3. Use the integrated terminal to run `./mvnw spring-boot:run`
-
 ## Database Configuration
 
 ### Default (H2)

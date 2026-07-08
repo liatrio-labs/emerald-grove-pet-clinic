@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.vet;
 
 import java.util.Comparator;
@@ -21,9 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.samples.petclinic.model.NamedEntity;
-import org.springframework.samples.petclinic.model.Person;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -31,6 +29,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.XmlElement;
+
+import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.model.Person;
 
 /**
  * Simple JavaBean domain object representing a veterinarian.

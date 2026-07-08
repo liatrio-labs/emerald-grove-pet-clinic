@@ -16,9 +16,6 @@
 
 package org.springframework.samples.petclinic;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -27,6 +24,12 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
+import org.testcontainers.DockerClientFactory;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -34,11 +37,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.DockerClientFactory;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @SpringBootTest(properties = "spring.docker.compose.enabled=false")
 @ActiveProfiles("postgres")
@@ -70,27 +71,27 @@ class PostgresSequenceResetIntegrationTests {
 
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
 				new ClassPathResource("db/postgres/data.sql"));
-		populator.execute(dataSource);
+		populator.execute(this.dataSource);
 
 		// Act + Assert
-		assertThatCode(() -> jdbcTemplate.update(
+		assertThatCode(() -> this.jdbcTemplate.update(
 				"INSERT INTO owners (first_name, last_name, address, city, telephone) VALUES (?, ?, ?, ?, ?)", "Casey",
 				"Harper", "42 Juniper Way", "Madison", "6085554444"))
 			.doesNotThrowAnyException();
 
-		assertThatCode(
-				() -> jdbcTemplate.update("INSERT INTO pets (name, birth_date, type_id, owner_id) VALUES (?, ?, ?, ?)",
-						"Comet", Date.valueOf(LocalDate.of(2018, 5, 20)), 2, 1))
+		assertThatCode(() -> this.jdbcTemplate.update(
+				"INSERT INTO pets (name, birth_date, type_id, owner_id) VALUES (?, ?, ?, ?)", "Comet",
+				Date.valueOf(LocalDate.of(2018, 5, 20)), 2, 1))
 			.doesNotThrowAnyException();
 
 		assertThatCode(
-				() -> jdbcTemplate.update("INSERT INTO visits (pet_id, visit_date, description) VALUES (?, ?, ?)", 1,
-						Date.valueOf(LocalDate.of(2026, 1, 26)), "Routine checkup"))
+				() -> this.jdbcTemplate.update("INSERT INTO visits (pet_id, visit_date, description) VALUES (?, ?, ?)",
+						1, Date.valueOf(LocalDate.of(2026, 1, 26)), "Routine checkup"))
 			.doesNotThrowAnyException();
 	}
 
 	private void resetSequence(String tableName) {
-		jdbcTemplate.execute("SELECT setval(pg_get_serial_sequence('" + tableName + "', 'id'), 1, true)");
+		this.jdbcTemplate.execute("SELECT setval(pg_get_serial_sequence('" + tableName + "', 'id'), 1, true)");
 	}
 
 }

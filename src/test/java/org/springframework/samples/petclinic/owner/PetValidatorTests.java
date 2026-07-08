@@ -16,20 +16,20 @@
 
 package org.springframework.samples.petclinic.owner;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test class for {@link PetValidator}
@@ -56,22 +56,22 @@ public class PetValidatorTests {
 
 	@BeforeEach
 	void setUp() {
-		petValidator = new PetValidator();
-		pet = new Pet();
-		petType = new PetType();
-		errors = new MapBindingResult(new HashMap<>(), "pet");
+		this.petValidator = new PetValidator();
+		this.pet = new Pet();
+		this.petType = new PetType();
+		this.errors = new MapBindingResult(new HashMap<>(), "pet");
 	}
 
 	@Test
 	void testValidate() {
-		petType.setName(petTypeName);
-		pet.setName(petName);
-		pet.setType(petType);
-		pet.setBirthDate(petBirthDate);
+		this.petType.setName(petTypeName);
+		this.pet.setName(petName);
+		this.pet.setType(this.petType);
+		this.pet.setBirthDate(petBirthDate);
 
-		petValidator.validate(pet, errors);
+		this.petValidator.validate(this.pet, this.errors);
 
-		assertFalse(errors.hasErrors());
+		assertThat(this.errors.hasErrors()).isFalse();
 	}
 
 	@Nested
@@ -79,37 +79,37 @@ public class PetValidatorTests {
 
 		@Test
 		void testValidateWithInvalidPetName() {
-			petType.setName(petTypeName);
-			pet.setName("");
-			pet.setType(petType);
-			pet.setBirthDate(petBirthDate);
+			PetValidatorTests.this.petType.setName(petTypeName);
+			PetValidatorTests.this.pet.setName("");
+			PetValidatorTests.this.pet.setType(PetValidatorTests.this.petType);
+			PetValidatorTests.this.pet.setBirthDate(petBirthDate);
 
-			petValidator.validate(pet, errors);
+			PetValidatorTests.this.petValidator.validate(PetValidatorTests.this.pet, PetValidatorTests.this.errors);
 
-			assertTrue(errors.hasFieldErrors("name"));
+			assertThat(PetValidatorTests.this.errors.hasFieldErrors("name")).isTrue();
 		}
 
 		@Test
 		void testValidateWithInvalidPetType() {
-			pet.setName(petName);
-			pet.setType(null);
-			pet.setBirthDate(petBirthDate);
+			PetValidatorTests.this.pet.setName(petName);
+			PetValidatorTests.this.pet.setType(null);
+			PetValidatorTests.this.pet.setBirthDate(petBirthDate);
 
-			petValidator.validate(pet, errors);
+			PetValidatorTests.this.petValidator.validate(PetValidatorTests.this.pet, PetValidatorTests.this.errors);
 
-			assertTrue(errors.hasFieldErrors("type"));
+			assertThat(PetValidatorTests.this.errors.hasFieldErrors("type")).isTrue();
 		}
 
 		@Test
 		void testValidateWithInvalidBirthDate() {
-			petType.setName(petTypeName);
-			pet.setName(petName);
-			pet.setType(petType);
-			pet.setBirthDate(null);
+			PetValidatorTests.this.petType.setName(petTypeName);
+			PetValidatorTests.this.pet.setName(petName);
+			PetValidatorTests.this.pet.setType(PetValidatorTests.this.petType);
+			PetValidatorTests.this.pet.setBirthDate(null);
 
-			petValidator.validate(pet, errors);
+			PetValidatorTests.this.petValidator.validate(PetValidatorTests.this.pet, PetValidatorTests.this.errors);
 
-			assertTrue(errors.hasFieldErrors("birthDate"));
+			assertThat(PetValidatorTests.this.errors.hasFieldErrors("birthDate")).isTrue();
 		}
 
 	}
