@@ -35,7 +35,6 @@ Emerald Grove Veterinary Clinic is a classic three-tier web application demonstr
 ### Build and Deployment
 
 - **Maven** - Build tool and dependency management
-- **Gradle** - Alternative build system
 - **Spring Boot Build Plugin** - Application packaging
 - **Docker** - Containerization support
 

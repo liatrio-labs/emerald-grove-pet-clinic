@@ -5,7 +5,7 @@ This guide covers development setup, testing, and contribution guidelines for th
 ## Prerequisites
 
 - **Java 17** or later
-- **Maven 3.6+** or **Gradle 7+**
+- **Maven 3.6+**
 - **Git** for version control
 - **Docker** (optional, for containerized databases)
 
