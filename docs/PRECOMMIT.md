@@ -21,11 +21,9 @@ Pre-commit hooks are automated checks that run before each commit to ensure code
 # Install pre-commit (if not already installed)
 pipx install pre-commit
 
-# Install the hooks
+# Install the hooks (config's default_install_hook_types wires up both
+# the pre-commit and commit-msg stages, so a single install is enough)
 pre-commit install
-
-# Install commit-msg hook
-pre-commit install --hook-type commit-msg
 ```
 
 ## Available Hooks
