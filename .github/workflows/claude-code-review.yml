@@ -9,16 +9,25 @@ on:
     types: [created]
 
 # track_progress has every run update the same PR comment, so overlapping runs
-# would race and produce conflicting summaries. Serialize per PR, keeping only
-# the newest run - an in-flight review is stale once a new push or @claude lands.
+# would race and produce conflicting summaries. Serialize per PR.
+# Only a new push supersedes a running review; a comment-triggered run waits its
+# turn instead, so an @claude request never cancels a review already underway.
 concurrency:
   group: claude-review-${{ github.event.pull_request.number || github.event.issue.number }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   claude-review:
-    # issue_comment fires on plain issues too, not just PRs - skip those
-    if: github.event_name != 'issue_comment' || github.event.issue.pull_request != null
+    # Comment triggers are narrowed to human @claude mentions on a pull request.
+    # Bot comments (CodeRabbit, Bugbot) would otherwise start a run that the action
+    # rejects outright with "Workflow initiated by non-human actor", and that run
+    # would also contend with the review it just interrupted.
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event.comment.user.type != 'Bot' &&
+       contains(github.event.comment.body, '@claude') &&
+       (github.event_name == 'pull_request_review_comment' ||
+        github.event.issue.pull_request != null))
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
