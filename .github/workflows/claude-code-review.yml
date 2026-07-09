@@ -8,6 +8,13 @@ on:
   pull_request_review_comment:
     types: [created]
 
+# track_progress has every run update the same PR comment, so overlapping runs
+# would race and produce conflicting summaries. Serialize per PR, keeping only
+# the newest run - an in-flight review is stale once a new push or @claude lands.
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
 jobs:
   claude-review:
     # issue_comment fires on plain issues too, not just PRs - skip those
