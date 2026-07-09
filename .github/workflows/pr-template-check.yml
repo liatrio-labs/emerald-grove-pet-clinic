@@ -51,10 +51,19 @@ jobs:
               .replace(/<!--[\s\S]*?-->/g, '')
               .replace(/<!--[\s\S]*$/, '');
 
+            // Match a heading only as its own line. A substring match would let
+            // "...instead of a ## Why? heading..." satisfy the presence check without the
+            // section ever existing. Headers contain regex metacharacters ("?"), so escape
+            // them; trailing whitespace after a heading is tolerated.
+            function headingPattern(header) {
+              const escaped = header.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              return new RegExp('^' + escaped + '[ \\t]*$', 'm');
+            }
+
             const errors = [];
 
             for (const header of REQUIRED_HEADERS) {
-              if (!visible.includes(header)) {
+              if (!headingPattern(header).test(visible)) {
                 errors.push(`Missing required section: "${header}"`);
               }
             }
@@ -68,13 +77,14 @@ jobs:
               }
             }
 
-            // Extract a section: everything between its header and the next "## " header.
-            // Operates on comment-stripped markdown so commented-out "## " lines cannot
-            // truncate a section early.
+            // Extract a section: everything between its heading line and the next "## "
+            // heading. Operates on comment-stripped markdown so commented-out "## " lines
+            // cannot truncate a section early, and anchors the start on the same pattern
+            // used for the presence check so the two cannot disagree.
             function sectionBody(markdown, header) {
-              const startIdx = markdown.indexOf(header);
-              if (startIdx === -1) return '';
-              const afterHeader = markdown.slice(startIdx + header.length);
+              const match = markdown.match(headingPattern(header));
+              if (!match) return '';
+              const afterHeader = markdown.slice(match.index + match[0].length);
               const nextHeaderIdx = afterHeader.search(/\n##\s/);
               return (nextHeaderIdx === -1 ? afterHeader : afterHeader.slice(0, nextHeaderIdx)).trim();
             }
