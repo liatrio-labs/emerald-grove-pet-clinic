@@ -41,6 +41,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # Keep the token out of .git/config: the review step grants Read, so a
+          # persisted credential would be readable by the model. claude-code-action
+          # authenticates git itself from github_token and never uses this one.
+          persist-credentials: false
 
       - name: Skip review (no API key configured)
         if: env.CLAUDE_REVIEW_API_KEY == ''
@@ -51,7 +56,7 @@ jobs:
 
       - name: Claude Code Review
         if: env.CLAUDE_REVIEW_API_KEY != ''
-        uses: anthropics/claude-code-action@ba0aafd4308cbba7165f9f2cdb0cfbed5a3c99ce # v1
+        uses: anthropics/claude-code-action@37b464ce72700f7b2c5ff8d2db7fa7b15df792f5 # v1
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_REVIEW }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
