@@ -49,7 +49,7 @@ class PostgresSequenceResetIntegrationTests {
 
 	@ServiceConnection
 	@Container
-	static PostgreSQLContainer container = new PostgreSQLContainer(DockerImageName.parse("postgres:18.1"));
+	static PostgreSQLContainer container = new PostgreSQLContainer(DockerImageName.parse("postgres:18.4"));
 
 	@Autowired
 	private DataSource dataSource;
