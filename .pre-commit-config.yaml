@@ -67,6 +67,14 @@ repos:
   # Spring Boot specific hooks
   - repo: local
     hooks:
+      - id: spring-javaformat-apply
+        name: Spring Java Format (auto-apply)
+        entry: ./mvnw -q spring-javaformat:apply
+        language: system
+        files: '\.java$'
+        pass_filenames: false
+        stages: [pre-commit]
+        description: Auto-formats Java sources to Spring conventions; re-stage if files change
       - id: maven-test-check
         name: Maven test check
         entry: ./mvnw test

@@ -45,6 +45,7 @@ pre-commit install --hook-type commit-msg
 
 ### Java Specific
 
+- **spring-javaformat-apply**: Auto-formats Java sources to Spring conventions (`./mvnw spring-javaformat:apply`); if it reformats files, re-stage them and commit again
 - **Maven-test-check**: Runs the full test suite and ensures all tests pass before committing
 
 ### Documentation
