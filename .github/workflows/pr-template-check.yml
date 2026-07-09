@@ -51,6 +51,20 @@ jobs:
               .replace(/<!--[\s\S]*?-->/g, '')
               .replace(/<!--[\s\S]*$/, '');
 
+            // Blank out fenced code blocks for structural scanning. A "## " line inside a
+            // fence is example text, not a heading: without this, pasting the whole template
+            // into one fence passes every rule with no real sections, and a fence inside a
+            // real section ends it early.
+            //
+            // Every masked character is replaced with a space and newlines are kept, so
+            // offsets into `structure` map exactly onto `visible`. Headings and boundaries
+            // are located in `structure`; the text at those offsets is then read back out of
+            // `visible`, so a section whose content is a legitimate code block still counts.
+            const structure = visible.replace(
+              /^([ \t]*)(```|~~~)[\s\S]*?^\1?\2[ \t]*$/gm,
+              (block) => block.replace(/[^\n]/g, ' ')
+            );
+
             // Match a heading only as its own line. A substring match would let
             // "...instead of a ## Why? heading..." satisfy the presence check without the
             // section ever existing. Headers contain regex metacharacters ("?"), so escape
@@ -63,7 +77,7 @@ jobs:
             const errors = [];
 
             for (const header of REQUIRED_HEADERS) {
-              if (!headingPattern(header).test(visible)) {
+              if (!headingPattern(header).test(structure)) {
                 errors.push(`Missing required section: "${header}"`);
               }
             }
@@ -78,20 +92,22 @@ jobs:
             }
 
             // Extract a section: everything between its heading line and the next "## "
-            // heading. Operates on comment-stripped markdown so commented-out "## " lines
-            // cannot truncate a section early, and anchors the start on the same pattern
-            // used for the presence check so the two cannot disagree.
-            function sectionBody(markdown, header) {
-              const match = markdown.match(headingPattern(header));
+            // heading. Boundaries are found in `structure` (comments and fences masked) and
+            // the content is sliced from `visible` at those same offsets. The presence check
+            // above shares `headingPattern`, so the two cannot disagree on where a section
+            // begins.
+            function sectionBody(header) {
+              const match = structure.match(headingPattern(header));
               if (!match) return '';
-              const afterHeader = markdown.slice(match.index + match[0].length);
-              const nextHeaderIdx = afterHeader.search(/\n##\s/);
-              return (nextHeaderIdx === -1 ? afterHeader : afterHeader.slice(0, nextHeaderIdx)).trim();
+              const start = match.index + match[0].length;
+              const nextHeaderIdx = structure.slice(start).search(/\n##\s/);
+              const end = nextHeaderIdx === -1 ? visible.length : start + nextHeaderIdx;
+              return visible.slice(start, end).trim();
             }
 
             const MIN_SECTION_LENGTH = 10;
             for (const header of ['## Why?', '## What Changed?']) {
-              const text = sectionBody(visible, header);
+              const text = sectionBody(header);
               if (text.length < MIN_SECTION_LENGTH) {
                 errors.push(`Section "${header}" needs real content (currently empty or too short).`);
               }
