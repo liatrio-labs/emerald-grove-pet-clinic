@@ -4,7 +4,7 @@ This guide covers development setup, testing, and contribution guidelines for th
 
 ## Prerequisites
 
-- **Java 17** or later
+- **Java 26** or later
 - **Maven 3.6+**
 - **Git** for version control
 - **Docker** (optional, for containerized databases)
@@ -249,7 +249,7 @@ Build a Docker image using Spring Boot build plugin:
 
 #### Build fails with Java version error
 
-- Ensure Java 17+ is installed and active
+- Ensure Java 26+ is installed and active
 - Check `JAVA_HOME` environment variable
 
 #### Database connection errors
