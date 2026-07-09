@@ -41,10 +41,20 @@ jobs:
               '<!-- TEMPLATE:WHAT-CHANGED',
             ];
 
+            // Strip HTML comments up front. A "## " line inside a comment must not be
+            // mistaken for a real section heading, and a heading commented out must not
+            // count as present. Placeholder detection deliberately runs on the raw body,
+            // because the markers themselves are comments.
+            // Unterminated comments are dropped through end-of-body so a stray "<!--"
+            // cannot leak into a section and be counted as content.
+            const visible = body
+              .replace(/<!--[\s\S]*?-->/g, '')
+              .replace(/<!--[\s\S]*$/, '');
+
             const errors = [];
 
             for (const header of REQUIRED_HEADERS) {
-              if (!body.includes(header)) {
+              if (!visible.includes(header)) {
                 errors.push(`Missing required section: "${header}"`);
               }
             }
@@ -58,19 +68,20 @@ jobs:
               }
             }
 
-            // Extract the text of a section: everything between its header and the next "## " header.
+            // Extract a section: everything between its header and the next "## " header.
+            // Operates on comment-stripped markdown so commented-out "## " lines cannot
+            // truncate a section early.
             function sectionBody(markdown, header) {
               const startIdx = markdown.indexOf(header);
               if (startIdx === -1) return '';
               const afterHeader = markdown.slice(startIdx + header.length);
               const nextHeaderIdx = afterHeader.search(/\n##\s/);
-              const raw = nextHeaderIdx === -1 ? afterHeader : afterHeader.slice(0, nextHeaderIdx);
-              return raw.replace(/<!--[\s\S]*?-->/g, '').trim();
+              return (nextHeaderIdx === -1 ? afterHeader : afterHeader.slice(0, nextHeaderIdx)).trim();
             }
 
             const MIN_SECTION_LENGTH = 10;
             for (const header of ['## Why?', '## What Changed?']) {
-              const text = sectionBody(body, header);
+              const text = sectionBody(visible, header);
               if (text.length < MIN_SECTION_LENGTH) {
                 errors.push(`Section "${header}" needs real content (currently empty or too short).`);
               }
