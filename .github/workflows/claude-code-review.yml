@@ -65,6 +65,10 @@ jobs:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_REVIEW }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           trigger_phrase: "@claude"
+          # Every run posts its own tracking comment, so a PR collects one per push.
+          # use_sticky_comment does not help while we authenticate with GITHUB_TOKEN:
+          # it only reuses a comment authored by claude[bot] (id 209825114), and ours
+          # come from github-actions[bot]. Collapsing them needs the Claude GitHub App.
           track_progress: true
           claude_args: |
             --model claude-sonnet-5
