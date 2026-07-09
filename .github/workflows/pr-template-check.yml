@@ -1,0 +1,91 @@
+# Validates PR descriptions against .github/PULL_REQUEST_TEMPLATE.md.
+#
+# The template structure is adapted from the `create-pull-request` skill in
+# liatrio-labs/ai-prompts:
+# https://github.com/liatrio-labs/ai-prompts/tree/main/skills/create-pull-request
+#
+# A template file on its own enforces nothing — GitHub pre-fills the description
+# box, but any author (human or AI agent) can delete it or bypass it entirely
+# with `gh pr create --body`. This workflow is the part that actually checks the
+# description was filled in. To make it binding, add "check-template" as a
+# required status check in the branch protection rules for `main`.
+#
+# Treat the required sections below as a starting point and tune them to taste.
+name: PR Template Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-template:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate PR description against template
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+
+            const REQUIRED_HEADERS = [
+              '## Why?',
+              '## What Changed?',
+              '## Additional Notes',
+              '## Review Checklist',
+            ];
+
+            const PLACEHOLDER_MARKERS = [
+              '<!-- TEMPLATE:WHY',
+              '<!-- TEMPLATE:WHAT-CHANGED',
+            ];
+
+            const errors = [];
+
+            for (const header of REQUIRED_HEADERS) {
+              if (!body.includes(header)) {
+                errors.push(`Missing required section: "${header}"`);
+              }
+            }
+
+            for (const marker of PLACEHOLDER_MARKERS) {
+              if (body.includes(marker)) {
+                errors.push(
+                  `Placeholder guidance text was not replaced (found "${marker}"). ` +
+                  `Fill in that section with real content.`
+                );
+              }
+            }
+
+            // Extract the text of a section: everything between its header and the next "## " header.
+            function sectionBody(markdown, header) {
+              const startIdx = markdown.indexOf(header);
+              if (startIdx === -1) return '';
+              const afterHeader = markdown.slice(startIdx + header.length);
+              const nextHeaderIdx = afterHeader.search(/\n##\s/);
+              const raw = nextHeaderIdx === -1 ? afterHeader : afterHeader.slice(0, nextHeaderIdx);
+              return raw.replace(/<!--[\s\S]*?-->/g, '').trim();
+            }
+
+            const MIN_SECTION_LENGTH = 10;
+            for (const header of ['## Why?', '## What Changed?']) {
+              const text = sectionBody(body, header);
+              if (text.length < MIN_SECTION_LENGTH) {
+                errors.push(`Section "${header}" needs real content (currently empty or too short).`);
+              }
+            }
+
+            if (errors.length > 0) {
+              core.setFailed(
+                'PR description does not satisfy PULL_REQUEST_TEMPLATE.md:\n' +
+                errors.map((e) => `  - ${e}`).join('\n') +
+                '\n\nEdit the PR description to fill in the template sections, then re-run this check.'
+              );
+            } else {
+              core.info('PR description satisfies the required template sections.');
+            }
+
+    permissions:
+      contents: read
+      pull-requests: read
