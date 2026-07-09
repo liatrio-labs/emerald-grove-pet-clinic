@@ -10,8 +10,10 @@ on:
 
 # track_progress has every run update the same PR comment, so overlapping runs
 # would race and produce conflicting summaries. Serialize per PR.
-# Only a new push supersedes a running review; a comment-triggered run waits its
-# turn instead, so an @claude request never cancels a review already underway.
+# A pull_request event supersedes a running review, since any of its action types
+# (opened, synchronize, ready_for_review, reopened) leaves an in-flight review
+# stale. A comment-triggered run waits its turn instead, so an @claude request
+# never cancels a review already underway.
 concurrency:
   group: claude-review-${{ github.event.pull_request.number || github.event.issue.number }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
