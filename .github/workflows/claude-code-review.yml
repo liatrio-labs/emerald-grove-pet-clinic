@@ -40,12 +40,12 @@ jobs:
 
     steps:
       - name: Checkout code
+        # persist-credentials must stay on. Before reviewing, claude-code-action
+        # runs its own shallow `git fetch origin --depth=20 <branch>`, which relies
+        # on the credential actions/checkout leaves in .git/config. Disabling it
+        # fails with "could not read Username for https://github.com" on any repo
+        # that needs auth to fetch - which is every internal or private fork.
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-        with:
-          # Keep the token out of .git/config: the review step grants Read, so a
-          # persisted credential would be readable by the model. claude-code-action
-          # authenticates git itself from github_token and never uses this one.
-          persist-credentials: false
 
       - name: Skip review (no API key configured)
         if: env.CLAUDE_REVIEW_API_KEY == ''
