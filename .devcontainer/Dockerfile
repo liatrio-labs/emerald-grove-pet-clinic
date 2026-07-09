@@ -9,5 +9,5 @@ ARG USER=vscode
 VOLUME /home/$USER/.m2
 # Matches pom.xml java.version (26) and the Temurin 26 used by CI.
 ARG JAVA_VERSION=26.0.1-tem
-RUN sudo mkdir /home/$USER/.m2 && sudo chown $USER:$USER /home/$USER/.m2
+RUN mkdir /home/$USER/.m2 && chown $USER:$USER /home/$USER/.m2
 RUN bash -lc '. /usr/local/sdkman/bin/sdkman-init.sh && sdk install java $JAVA_VERSION && sdk default java $JAVA_VERSION'

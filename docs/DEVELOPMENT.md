@@ -5,7 +5,7 @@ This guide covers development setup, testing, and contribution guidelines for th
 ## Prerequisites
 
 - **Java 26** or later
-- **Maven 3.6+**
+- **Maven 3.9+** (or use the bundled `./mvnw` wrapper)
 - **Git** for version control
 - **Docker** (optional, for containerized databases)
 
