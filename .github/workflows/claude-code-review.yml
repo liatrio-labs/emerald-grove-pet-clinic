@@ -45,6 +45,10 @@ jobs:
         # on the credential actions/checkout leaves in .git/config. Disabling it
         # fails with "could not read Username for https://github.com" on any repo
         # that needs auth to fetch - which is every internal or private fork.
+        #
+        # Disabling it would not harden anything either: configureGitAuth then
+        # writes the token straight back via `git remote set-url origin
+        # https://x-access-token:$TOKEN@...` before the model ever runs.
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Skip review (no API key configured)
