@@ -26,11 +26,12 @@
   <!--
     ENTITY_MASS_ASSIGNMENT: the Spring MVC form controllers bind request
     parameters onto JPA entities by design (server-rendered CRUD forms).
-    Over-posting of the primary key is already mitigated: every affected
-    controller declares an @InitBinder that calls setDisallowedFields("id").
-    FindSecBugs flags the data-binding pattern regardless of that binder
-    mitigation, so it is a false positive here. Scoped to the owner-package
-    controllers only.
+    Over-posting of the primary key is already mitigated: every binder that
+    populates an entity calls setDisallowedFields("id") — OwnerController and
+    VisitController via a default @InitBinder, and PetController via both its
+    named @InitBinder("owner") and @InitBinder("pet"). FindSecBugs flags the
+    data-binding pattern regardless of that binder mitigation, so it is a false
+    positive here. Scoped to the owner-package controllers only.
   -->
   <Match>
     <Bug pattern="ENTITY_MASS_ASSIGNMENT"/>
