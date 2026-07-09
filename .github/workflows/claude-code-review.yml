@@ -15,11 +15,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # Bound to a job-level env var so the review step can be gated on it below.
+    # The `secrets` context is unavailable in job-level `if`, but `env` works at step level.
+    env:
+      CLAUDE_REVIEW_API_KEY: ${{ secrets.CLAUDE_CODE_REVIEW }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
+      - name: Skip review (no API key configured)
+        if: env.CLAUDE_REVIEW_API_KEY == ''
+        run: |
+          echo "::notice::CLAUDE_CODE_REVIEW secret is not available - skipping Claude review."
+          echo "This is expected on repositories that have not configured the secret, and on"
+          echo "pull requests from forks (GitHub withholds secrets from fork-triggered runs)."
+
       - name: Claude Code Review
+        if: env.CLAUDE_REVIEW_API_KEY != ''
         uses: anthropics/claude-code-action@ba0aafd4308cbba7165f9f2cdb0cfbed5a3c99ce # v1
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_REVIEW }}
