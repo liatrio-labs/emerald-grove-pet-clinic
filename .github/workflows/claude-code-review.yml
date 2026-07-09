@@ -65,10 +65,10 @@ jobs:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_REVIEW }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           trigger_phrase: "@claude"
-          # Every run posts its own tracking comment, so a PR collects one per push.
-          # use_sticky_comment does not help while we authenticate with GITHUB_TOKEN:
-          # it only reuses a comment authored by claude[bot] (id 209825114), and ours
-          # come from github-actions[bot]. Collapsing them needs the Claude GitHub App.
+          # Each run posts its own tracking comment. use_sticky_comment cannot collapse
+          # them while we authenticate with GITHUB_TOKEN: it only reuses a comment whose
+          # author is claude[bot] (id 209825114), and ours come from github-actions[bot].
+          # The "Collapse superseded review comments" step below handles it instead.
           track_progress: true
           claude_args: |
             --model claude-sonnet-5
@@ -90,6 +90,77 @@ jobs:
             - A brief overview of the changes reviewed
             - Any issues found (or state that no issues were found)
             - A final verdict: LGTM or Changes Requested
+
+      # Runs after the review so a cancelled or failed run never destroys the only
+      # summary on the PR. Collapses rather than deletes: permalinks, reactions and
+      # the record of what Claude said about an earlier push all survive.
+      #
+      # Only push-triggered reviews supersede one another. A comment-triggered run is
+      # answering a question, so its comment is a conversation turn and is left alone -
+      # identified by looking up the event of the run that produced each comment.
+      #
+      # A run cancelled by cancel-in-progress can leave an orphaned "Claude Code is
+      # working..." comment behind. That body is matched too, so the next push sweeps it.
+      - name: Collapse superseded review comments
+        if: always() && env.CLAUDE_REVIEW_API_KEY != '' && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          NAME: ${{ github.event.repository.name }}
+          PR: ${{ github.event.pull_request.number }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          # github-actions[bot] authors the tracking comment. Its body always starts with
+          # one of the three headers claude-code-action emits, and always embeds a link to
+          # the run that produced it.
+          gh api graphql --paginate \
+            -F owner="$OWNER" -F name="$NAME" -F pr="$PR" \
+            -f query='
+              query($owner: String!, $name: String!, $pr: Int!, $endCursor: String) {
+                repository(owner: $owner, name: $name) {
+                  pullRequest(number: $pr) {
+                    comments(first: 100, after: $endCursor) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes { id isMinimized body author { login } }
+                    }
+                  }
+                }
+              }' \
+            --jq '
+              .data.repository.pullRequest.comments.nodes[]
+              | select(.author.login == "github-actions")
+              | select(.isMinimized | not)
+              | select(.body | test("^\\*\\*Claude (finished|encountered)|^Claude Code is working"))
+              | [ .id, ((.body | [scan("/actions/runs/([0-9]+)")] | flatten | first) // "0") ]
+              | @tsv
+            ' > /tmp/claude-comments.tsv
+
+          while IFS=$'\t' read -r node run; do
+            [ -n "$node" ] || continue
+
+            # Never touch the comment this run just posted.
+            if [ "$run" = "$RUN_ID" ]; then
+              continue
+            fi
+
+            # Preserve answers to @claude questions; only collapse prior push reviews.
+            event=$(gh api "repos/$REPO/actions/runs/$run" --jq '.event' 2>/dev/null || echo "unknown")
+            if [ "$event" != "pull_request" ]; then
+              echo "Keeping comment from run $run (event: $event)"
+              continue
+            fi
+
+            gh api graphql -f query='
+              mutation($id: ID!) {
+                minimizeComment(input: {subjectId: $id, classifier: OUTDATED}) {
+                  minimizedComment { isMinimized }
+                }
+              }' -f id="$node" > /dev/null
+            echo "Collapsed superseded review comment from run $run"
+          done < /tmp/claude-comments.tsv
 
     permissions:
       contents: read
