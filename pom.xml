@@ -13,7 +13,7 @@
 
   <properties>
     <!-- Generic properties -->
-    <java.version>26</java.version>
+    <java.version>25</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Important for reproducible builds. Update using e.g. ./mvnw versions:set -DnewVersion=... -->
@@ -24,7 +24,7 @@
     <webjars-bootstrap.version>5.3.8</webjars-bootstrap.version>
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
-    <!-- Pinned ahead of the Checkstyle 9.3 that spring-javaformat 0.0.47 targets because Java 26 sources require a modern Checkstyle parser; the full `verify` gate guards the SpringChecks compatibility. -->
+    <!-- Pinned ahead of the Checkstyle 9.3 that spring-javaformat 0.0.47 targets because modern Java sources require a recent Checkstyle parser; the full `verify` gate guards the SpringChecks compatibility. Build targets Java 25; developers/CI may run a newer JDK (e.g. 26). -->
     <checkstyle.version>13.7.0</checkstyle.version>
     <findsecbugs.version>1.14.0</findsecbugs.version>
     <jacoco.version>0.8.15</jacoco.version>

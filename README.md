@@ -16,7 +16,7 @@ The Emerald Grove Veterinary Clinic application manages the core operations of a
 
 ### Prerequisites
 
-- **Java 26** or later
+- **Java 25** or later
 - **Maven 3.9+** (or use the bundled `./mvnw` wrapper)
 
 ### Run Application

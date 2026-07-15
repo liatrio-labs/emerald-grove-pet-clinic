@@ -4,7 +4,7 @@ This guide covers development setup, testing, and contribution guidelines for th
 
 ## Prerequisites
 
-- **Java 26** or later
+- **Java 25** or later
 - **Maven 3.9+** (or use the bundled `./mvnw` wrapper)
 - **Git** for version control
 - **Docker** (optional, for containerized databases)
@@ -255,7 +255,7 @@ formats on save to the same rules.
 
 #### Build fails with Java version error
 
-- Ensure Java 26+ is installed and active
+- Ensure Java 25+ is installed and active
 - Check `JAVA_HOME` environment variable
 
 #### Database connection errors

@@ -682,10 +682,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 26
+    - name: Set up JDK 25
       uses: actions/setup-java@v3
       with:
-        java-version: '26'
+        java-version: '25'
     - name: Run tests
       run: ./mvnw test
     - name: Generate coverage report
@@ -808,7 +808,7 @@ This repository includes a standalone Playwright + TypeScript E2E suite under `e
 
 ### Prerequisites
 
-- Java 26+
+- Java 25+
 - Node.js + npm
 - (Recommended) Docker if you run DB profiles, though default H2 works fine
 
