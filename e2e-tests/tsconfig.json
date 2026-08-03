@@ -9,11 +9,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
-      "@pages/*": ["tests/pages/*"],
-      "@utils/*": ["tests/utils/*"],
-      "@fixtures/*": ["tests/fixtures/*"]
+      "@pages/*": ["./tests/pages/*"],
+      "@utils/*": ["./tests/utils/*"],
+      "@fixtures/*": ["./tests/fixtures/*"]
     }
   },
   "include": ["tests/**/*.ts", "playwright.config.ts"],
