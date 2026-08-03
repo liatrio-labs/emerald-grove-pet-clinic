@@ -34,7 +34,7 @@ src/test/java/org/springframework/samples/petclinic/
 ├── system/                            # System-level tests
 │   ├── CrashControllerIntegrationTests.java
 │   ├── CrashControllerTests.java
-│   └── I18nPropertiesSyncTest.java
+│   └── I18nPropertiesSyncTests.java
 └── vet/                              # Vet module tests
     ├── VetControllerTests.java       # Vet controller tests
     └── VetTests.java                 # Vet entity tests
