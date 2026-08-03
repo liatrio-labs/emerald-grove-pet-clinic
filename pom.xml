@@ -24,7 +24,12 @@
     <webjars-bootstrap.version>5.3.8</webjars-bootstrap.version>
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
-    <checkstyle.version>12.1.2</checkstyle.version>
+    <!-- Pinned ahead of the Checkstyle 9.3 that spring-javaformat 0.0.47 targets because modern Java
+      sources require a recent Checkstyle parser; the full `verify` gate guards the SpringChecks
+      compatibility. NOTE: Checkstyle 13.x ships Java 21 bytecode and is loaded into the Maven JVM by
+      maven-checkstyle-plugin, so the build (and CI) must run on JDK 21+ or every checkstyle execution
+      dies with UnsupportedClassVersionError. The java.version 25 floor above covers this. -->
+    <checkstyle.version>13.7.0</checkstyle.version>
     <jacoco.version>0.8.15</jacoco.version>
     <libsass.version>0.3.4</libsass.version>
     <lifecycle-mapping>1.0.0</lifecycle-mapping>
@@ -213,6 +218,11 @@
             <artifactId>nohttp-checkstyle</artifactId>
             <version>${nohttp-checkstyle.version}</version>
           </dependency>
+          <dependency>
+            <groupId>io.spring.javaformat</groupId>
+            <artifactId>spring-javaformat-checkstyle</artifactId>
+            <version>${spring-format.version}</version>
+          </dependency>
         </dependencies>
         <executions>
           <execution>
@@ -226,6 +236,20 @@
               <sourceDirectories>${basedir}</sourceDirectories>
               <includes>**/*</includes>
               <excludes>**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>
+              <propertyExpansion>config_loc=${basedir}/src/checkstyle/</propertyExpansion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>spring-checkstyle-validation</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>src/checkstyle/spring-checkstyle.xml</configLocation>
+              <sourceDirectories>${basedir}/src/main/java</sourceDirectories>
+              <testSourceDirectories>${basedir}/src/test/java</testSourceDirectories>
+              <includeTestSourceDirectory>true</includeTestSourceDirectory>
               <propertyExpansion>config_loc=${basedir}/src/checkstyle/</propertyExpansion>
             </configuration>
           </execution>

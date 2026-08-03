@@ -75,9 +75,17 @@ Configuration for Markdown linting rules:
 - HTML elements allowed
 - No arbitrary line length limits
 
-### `checkstyle.xml`
+### `src/checkstyle/spring-checkstyle.xml`
 
-Java code style configuration for Checkstyle integration.
+Java code style configuration for Checkstyle. It applies Spring's official
+ruleset (`io.spring.javaformat.checkstyle.SpringChecks`) via the
+`spring-javaformat-checkstyle` plugin dependency and wires in a
+`SuppressionFilter` that reads `src/checkstyle/spring-checkstyle-suppressions.xml`.
+
+The Maven `maven-checkstyle-plugin` runs this as the `spring-checkstyle-validation`
+execution (goal `check`, phase `validate`) over both `src/main/java` and
+`src/test/java`, gating the build on zero violations. A separate
+`nohttp-checkstyle-validation` execution uses `src/checkstyle/nohttp-checkstyle.xml`.
 
 ## Usage
 
