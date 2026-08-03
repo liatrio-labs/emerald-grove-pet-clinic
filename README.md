@@ -17,7 +17,7 @@ The Emerald Grove Veterinary Clinic application manages the core operations of a
 ### Prerequisites
 
 - **Java 17** or later
-- **Maven 3.6+** or **Gradle 7+**
+- **Maven 3.6+** (or use the bundled `./mvnw` wrapper)
 
 ### Run Application
 
@@ -28,9 +28,6 @@ cd spring-petclinic-enhanced
 
 # Run with Maven
 ./mvnw spring-boot:run
-
-# Or run with Gradle
-./gradlew bootRun
 ```
 
 Access the application at `http://localhost:8080`

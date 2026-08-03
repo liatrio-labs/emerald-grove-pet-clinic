@@ -94,7 +94,6 @@ MD044:
     - Kubernetes
     - Spring Boot
     - Maven
-    - Gradle
     - JUnit
     - Mockito
     - JaCoCo

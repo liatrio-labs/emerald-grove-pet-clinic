@@ -547,9 +547,6 @@ flowchart TD
 ```bash
 # Maven
 ./mvnw test
-
-# Gradle
-./gradlew test
 ```
 
 ### Run Specific Test Classes
@@ -558,10 +555,6 @@ flowchart TD
 # Maven
 ./mvnw test -Dtest=OwnerControllerTests
 ./mvnw test -Dtest="*ControllerTests"
-
-# Gradle
-./gradlew test --tests OwnerControllerTests
-./gradlew test --tests "*ControllerTests"
 ```
 
 ### Run Integration Tests Only
@@ -569,9 +562,6 @@ flowchart TD
 ```bash
 # Maven
 ./mvnw test -Dtest="*IntegrationTests"
-
-# Gradle
-./gradlew test --tests "*IntegrationTests"
 ```
 
 ### Database-Specific Tests
