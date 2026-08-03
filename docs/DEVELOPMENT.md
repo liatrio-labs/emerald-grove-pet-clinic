@@ -271,7 +271,8 @@ Build a Docker image using Spring Boot build plugin:
 
 Formatting is enforced by [spring-javaformat](https://github.com/spring-io/spring-javaformat)
 (validated at the Maven `validate` phase). Run `./mvnw spring-javaformat:apply` to
-auto-fix any formatting violations before committing. Installing the
+auto-fix any formatting violations before committing — the pre-commit hook also
+runs this automatically. Installing the
 spring-javaformat IDE plugin (Eclipse/IntelliJ/VS Code) formats on save to the
 same rules.
 

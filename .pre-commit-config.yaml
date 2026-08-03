@@ -4,7 +4,7 @@
 repos:
   # Basic file and text processing hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # v6.0.0
     hooks:
       - id: trailing-whitespace
         description: Removes trailing whitespace
@@ -33,33 +33,41 @@ repos:
       - id: mixed-line-ending
         description: Ensures consistent line endings
         args: ["--fix=lf"]
+        # .gitattributes deliberately checks *.cmd/*.bat out as CRLF, so --fix=lf
+        # rewrites them on every run and the hook can never pass. Leave those to
+        # git's own eol normalization.
+        exclude: \.(cmd|bat)$
 
   # Documentation hooks
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.39.0
+    rev: a4d5d37e66ebcd6b3705204a1d6dbb56dea66338  # v0.49.0
     hooks:
       - id: markdownlint
         description: Lints Markdown files
         args: ["--config", ".markdownlint.yaml", "--fix"]
+        # SDD spec/proof artifacts under docs/specs are point-in-time generated
+        # records, not maintained prose. They are already excluded from review in
+        # .coderabbit.yaml; hold them to the same standard here so a regenerated
+        # spec cannot block an unrelated commit.
+        exclude: ^docs/specs/
 
   # Security and dependency checks
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.2
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e  # v8.30.1
     hooks:
-      - id: python-safety-dependencies-check
-        description: Checks Python dependencies for security vulnerabilities
-        files: requirements.*\.txt$
+      - id: gitleaks
+        description: Detects hardcoded secrets (keys, tokens, credentials) in staged changes
 
   # Shell script hooks
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.6
+    rev: 745eface02aef23e168a8afb6b5737818efbea95  # v0.11.0.1
     hooks:
       - id: shellcheck
         description: Lints shell scripts for common issues
 
   # Git hooks
   - repo: https://github.com/jorisroovers/gitlint
-    rev: v0.19.0
+    rev: acc9d9de6369b76d22cb4167029d2035e8730b98  # v0.19.1
     hooks:
       - id: gitlint
         description: Lints commit messages
@@ -68,6 +76,14 @@ repos:
   # Spring Boot specific hooks
   - repo: local
     hooks:
+      - id: spring-javaformat-apply
+        name: Spring Java Format (auto-apply)
+        entry: ./mvnw -q spring-javaformat:apply
+        language: system
+        files: '\.java$'
+        pass_filenames: false
+        stages: [pre-commit]
+        description: Auto-formats Java sources to Spring conventions; if files are modified, re-stage them and retry the commit
       - id: maven-test-check
         name: Maven test check
         entry: ./mvnw test
@@ -92,6 +108,10 @@ repos:
         description: Prevents direct commits to the main branch, enforcing a PR-based workflow
 
 # Configuration options
+# Install both hook types so a bare `pre-commit install` also wires up the
+# commit-msg hooks (gitlint, no-direct-commits-to-main); otherwise they only
+# run after `pre-commit install --hook-type commit-msg`.
+default_install_hook_types: [pre-commit, commit-msg]
 default_stages: [pre-commit]
 fail_fast: false
 

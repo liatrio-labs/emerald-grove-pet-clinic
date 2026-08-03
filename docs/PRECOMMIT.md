@@ -21,11 +21,9 @@ Pre-commit hooks are automated checks that run before each commit to ensure code
 # Install pre-commit (if not already installed)
 pipx install pre-commit
 
-# Install the hooks
+# Install the hooks (config's default_install_hook_types wires up both
+# the pre-commit and commit-msg stages, so a single install is enough)
 pre-commit install
-
-# Install commit-msg hook
-pre-commit install --hook-type commit-msg
 ```
 
 ## Available Hooks
@@ -45,6 +43,7 @@ pre-commit install --hook-type commit-msg
 
 ### Java Specific
 
+- **spring-javaformat-apply**: Auto-formats Java sources to Spring conventions (`./mvnw spring-javaformat:apply`); if it reformats files, re-stage them and commit again
 - **Maven-test-check**: Runs the full test suite and ensures all tests pass before committing
 
 ### Documentation
@@ -53,6 +52,7 @@ pre-commit install --hook-type commit-msg
 
 ### Security & Quality
 
+- **gitleaks**: Detects hardcoded secrets (keys, tokens, credentials) in staged changes
 - **shellcheck**: Lints shell scripts
 - **gitlint**: Validates commit messages
 
