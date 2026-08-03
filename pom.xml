@@ -30,11 +30,13 @@
       maven-checkstyle-plugin, so the build (and CI) must run on JDK 21+ or every checkstyle execution
       dies with UnsupportedClassVersionError. The java.version 25 floor above covers this. -->
     <checkstyle.version>13.7.0</checkstyle.version>
+    <findsecbugs.version>1.14.0</findsecbugs.version>
     <jacoco.version>0.8.15</jacoco.version>
     <libsass.version>0.3.4</libsass.version>
     <lifecycle-mapping>1.0.0</lifecycle-mapping>
     <maven-checkstyle.version>3.6.0</maven-checkstyle.version>
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
+    <spotbugs-maven-plugin.version>4.10.2.0</spotbugs-maven-plugin.version>
     <spring-format.version>0.0.47</spring-format.version>
   </properties>
 
@@ -185,6 +187,13 @@
                   <message>This build requires at least Java ${java.version}, update your JVM, and run the build again</message>
                   <version>${java.version}</version>
                 </requireJavaVersion>
+                <requireMavenVersion>
+                  <message>This build requires at least Maven 3.9 (the project ships Maven 3.9.11 via the wrapper)</message>
+                  <version>[3.9,)</version>
+                </requireMavenVersion>
+                <banDuplicatePomDependencyVersions/>
+                <requireUpperBoundDeps/>
+                <dependencyConvergence/>
               </rules>
             </configuration>
           </execution>
@@ -296,6 +305,60 @@
               <goal>report</goal>
             </goals>
             <phase>prepare-package</phase>
+          </execution>
+          <execution>
+            <id>check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>verify</phase>
+            <configuration>
+              <!-- Baseline-ratchet floor. Current line coverage is ~94%; the floor is set to
+                the 90% documented in AGENTS.md, leaving headroom. Ratchet upward over time. -->
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.90</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- SpotBugs static bytecode analysis + FindSecBugs security detectors.
+        Complements Checkstyle (style-only). Gates the build at the verify phase. -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Medium</threshold>
+          <failOnError>true</failOnError>
+          <includeTests>false</includeTests>
+          <excludeFilterFile>${basedir}/src/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+          <plugins>
+            <plugin>
+              <groupId>com.h3xstream.findsecbugs</groupId>
+              <artifactId>findsecbugs-plugin</artifactId>
+              <version>${findsecbugs.version}</version>
+            </plugin>
+          </plugins>
+        </configuration>
+        <executions>
+          <execution>
+            <id>spotbugs-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>verify</phase>
           </execution>
         </executions>
       </plugin>
