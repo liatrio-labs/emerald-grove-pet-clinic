@@ -33,6 +33,7 @@ import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -65,6 +66,10 @@ class PetControllerTests {
 	@MockitoBean
 	private PetTypeRepository types;
 
+	// The pet loaded for TEST_PET_ID; kept as a field so tests can assert the
+	// controller never lets a request rebind its persistent primary key.
+	private Pet petty;
+
 	@BeforeEach
 	void setup() {
 		PetType cat = new PetType();
@@ -81,6 +86,7 @@ class PetControllerTests {
 		dog.setId(TEST_PET_ID + 1);
 		pet.setName("petty");
 		dog.setName("doggy");
+		this.petty = pet;
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(owner));
 	}
 
@@ -110,6 +116,23 @@ class PetControllerTests {
 				.param("birthDate", "2015-02-12"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
+
+	@Test
+	void testProcessUpdateFormIgnoresOverPostedId() throws Exception {
+		// The pet id is derived from the path via findPet, never the request body.
+		// Over-posting a different "id" must be dropped by the pet binder's
+		// setDisallowedFields("id"), leaving the loaded pet's primary key intact.
+		this.mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
+				.param("id", String.valueOf(TEST_PET_ID + 1))
+				.param("name", "Betty")
+				.param("type", "hamster")
+				.param("birthDate", "2015-02-12"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/{ownerId}"));
+
+		assertThat(this.petty.getId()).isEqualTo(TEST_PET_ID);
 	}
 
 	@Nested
