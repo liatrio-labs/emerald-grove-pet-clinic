@@ -4,8 +4,8 @@ This guide covers development setup, testing, and contribution guidelines for th
 
 ## Prerequisites
 
-- **Java 17** or later
-- **Maven 3.6+** or **Gradle 7+**
+- **Java 25** or later
+- **Maven 3.9+** (or use the bundled `./mvnw` wrapper)
 - **Git** for version control
 - **Docker** (optional, for containerized databases)
 
@@ -74,9 +74,6 @@ cd spring-petclinic
 
 # Maven
 ./mvnw spring-boot:run
-
-# Gradle
-./gradlew bootRun
 ```
 
 ### IDE Configuration
@@ -285,7 +282,7 @@ Build a Docker image using Spring Boot build plugin:
 
 #### Build fails with Java version error
 
-- Ensure Java 17+ is installed and active
+- Ensure Java 25+ is installed and active
 - Check `JAVA_HOME` environment variable
 
 #### Database connection errors

@@ -34,7 +34,7 @@ src/test/java/org/springframework/samples/petclinic/
 ├── system/                            # System-level tests
 │   ├── CrashControllerIntegrationTests.java
 │   ├── CrashControllerTests.java
-│   └── I18nPropertiesSyncTest.java
+│   └── I18nPropertiesSyncTests.java
 └── vet/                              # Vet module tests
     ├── VetControllerTests.java       # Vet controller tests
     └── VetTests.java                 # Vet entity tests
@@ -547,9 +547,6 @@ flowchart TD
 ```bash
 # Maven
 ./mvnw test
-
-# Gradle
-./gradlew test
 ```
 
 ### Run Specific Test Classes
@@ -558,10 +555,6 @@ flowchart TD
 # Maven
 ./mvnw test -Dtest=OwnerControllerTests
 ./mvnw test -Dtest="*ControllerTests"
-
-# Gradle
-./gradlew test --tests OwnerControllerTests
-./gradlew test --tests "*ControllerTests"
 ```
 
 ### Run Integration Tests Only
@@ -569,9 +562,6 @@ flowchart TD
 ```bash
 # Maven
 ./mvnw test -Dtest="*IntegrationTests"
-
-# Gradle
-./gradlew test --tests "*IntegrationTests"
 ```
 
 ### Database-Specific Tests
@@ -692,10 +682,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 17
+    - name: Set up JDK 25
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '25'
     - name: Run tests
       run: ./mvnw test
     - name: Generate coverage report
@@ -818,7 +808,7 @@ This repository includes a standalone Playwright + TypeScript E2E suite under `e
 
 ### Prerequisites
 
-- Java 17+
+- Java 25+
 - Node.js + npm
 - (Recommended) Docker if you run DB profiles, though default H2 works fine
 

@@ -16,13 +16,12 @@
 
 package org.springframework.samples.petclinic.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
@@ -38,6 +37,8 @@ import org.springframework.samples.petclinic.owner.Visit;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -86,10 +87,10 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindOwnersByLastName() {
-		Page<Owner> owners = this.owners.findByLastNameStartingWith("Davis", pageable);
+		Page<Owner> owners = this.owners.findByLastNameStartingWith("Davis", this.pageable);
 		assertThat(owners).hasSize(2);
 
-		owners = this.owners.findByLastNameStartingWith("Daviss", pageable);
+		owners = this.owners.findByLastNameStartingWith("Daviss", this.pageable);
 		assertThat(owners).isEmpty();
 	}
 
@@ -107,7 +108,7 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldInsertOwner() {
-		Page<Owner> owners = this.owners.findByLastNameStartingWith("Schultz", pageable);
+		Page<Owner> owners = this.owners.findByLastNameStartingWith("Schultz", this.pageable);
 		int found = (int) owners.getTotalElements();
 
 		Owner owner = new Owner();
@@ -119,7 +120,7 @@ class ClinicServiceTests {
 		this.owners.save(owner);
 		assertThat(owner.getId()).isNotZero();
 
-		owners = this.owners.findByLastNameStartingWith("Schultz", pageable);
+		owners = this.owners.findByLastNameStartingWith("Schultz", this.pageable);
 		assertThat(owners.getTotalElements()).isEqualTo(found + 1);
 	}
 
@@ -229,7 +230,7 @@ class ClinicServiceTests {
 
 		assertThat(pet7.getVisits()) //
 			.hasSize(found + 1) //
-			.allMatch(value -> value.getId() != null);
+			.allMatch((value) -> value.getId() != null);
 	}
 
 	@Test

@@ -16,10 +16,10 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.BaseEntity;
-
-import java.util.Collection;
 
 /**
  * Utility methods for handling entities. Separate from the BaseEntity class mainly
@@ -27,8 +27,8 @@ import java.util.Collection;
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
- * @see org.springframework.samples.petclinic.model.BaseEntity
  * @since 29.10.2003
+ * @see org.springframework.samples.petclinic.model.BaseEntity
  */
 public abstract class EntityUtils {
 

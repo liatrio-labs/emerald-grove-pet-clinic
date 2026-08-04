@@ -16,10 +16,6 @@
 
 package org.springframework.samples.petclinic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +25,12 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
+import org.testcontainers.DockerClientFactory;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
@@ -47,11 +49,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.DockerClientFactory;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.docker.compose.enabled=false")
 @ActiveProfiles("postgres")
@@ -62,7 +62,7 @@ public class PostgresIntegrationTests {
 	@ServiceConnection
 	@Container
 	private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>(
-			DockerImageName.parse("postgres:18.1"));
+			DockerImageName.parse("postgres:18.4"));
 
 	@LocalServerPort
 	int port;
@@ -90,13 +90,13 @@ public class PostgresIntegrationTests {
 
 	@Test
 	void testFindAll() throws Exception {
-		vets.findAll();
-		vets.findAll(); // served from cache
+		this.vets.findAll();
+		this.vets.findAll(); // served from cache
 	}
 
 	@Test
 	void testOwnerDetails() {
-		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
+		RestTemplate template = this.builder.rootUri("http://localhost:" + this.port).build();
 		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
@@ -111,28 +111,28 @@ public class PostgresIntegrationTests {
 
 		@Override
 		public void onApplicationEvent(ApplicationPreparedEvent event) {
-			if (isFirstRun) {
-				environment = event.getApplicationContext().getEnvironment();
+			if (this.isFirstRun) {
+				this.environment = event.getApplicationContext().getEnvironment();
 				printProperties();
 			}
-			isFirstRun = false;
+			this.isFirstRun = false;
 		}
 
-		public void printProperties() {
+		void printProperties() {
 			for (EnumerablePropertySource<?> source : findPropertiesPropertySources()) {
 				log.info("PropertySource: " + source.getName());
 				String[] names = source.getPropertyNames();
 				Arrays.sort(names);
 				for (String name : names) {
-					String resolved = environment.getProperty(name);
+					String resolved = this.environment.getProperty(name);
 
-					assertNotNull(resolved, "resolved environment property: " + name + " is null.");
+					assertThat(resolved).as("resolved environment property: " + name + " is null.").isNotNull();
 
 					Object sourceProperty = source.getProperty(name);
 
-					assertNotNull(sourceProperty, "source property was expecting an object but is null.");
+					assertThat(sourceProperty).as("source property was expecting an object but is null.").isNotNull();
 
-					assertNotNull(sourceProperty.toString(), "source property toString() returned null.");
+					assertThat(sourceProperty.toString()).as("source property toString() returned null.").isNotNull();
 
 					String value = sourceProperty.toString();
 					if (resolved.equals(value)) {
@@ -147,7 +147,7 @@ public class PostgresIntegrationTests {
 
 		private List<EnumerablePropertySource<?>> findPropertiesPropertySources() {
 			List<EnumerablePropertySource<?>> sources = new LinkedList<>();
-			for (PropertySource<?> source : environment.getPropertySources()) {
+			for (PropertySource<?> source : this.environment.getPropertySources()) {
 				if (source instanceof EnumerablePropertySource enumerable) {
 					sources.add(enumerable);
 				}

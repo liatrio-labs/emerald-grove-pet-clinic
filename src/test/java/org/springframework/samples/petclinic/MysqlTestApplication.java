@@ -16,13 +16,14 @@
 
 package org.springframework.samples.petclinic;
 
+import org.testcontainers.mysql.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.testcontainers.mysql.MySQLContainer;
-import org.testcontainers.utility.DockerImageName;
 
 /**
  * PetClinic Spring Boot Application.
@@ -36,7 +37,7 @@ public class MysqlTestApplication {
 	@Profile("mysql")
 	@Bean
 	static MySQLContainer container() {
-		return new MySQLContainer(DockerImageName.parse("mysql:9.5"));
+		return new MySQLContainer(DockerImageName.parse("mysql:9.7"));
 	}
 
 	public static void main(String[] args) {

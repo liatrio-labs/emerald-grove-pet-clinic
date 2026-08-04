@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+		"-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+		"https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+	<!-- Test packages do not require a package-info.java (Spring Boot's own build does the same). -->
+	<suppress checks="JavadocPackage" files="[\\/]src[\\/]test[\\/]"/>
+</suppressions>

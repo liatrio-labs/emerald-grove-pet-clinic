@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.owner;
 
 import org.springframework.util.StringUtils;
@@ -54,7 +55,7 @@ public class PetValidator implements Validator {
 	}
 
 	/**
-	 * This Validator validates *just* Pet instances
+	 * This Validator validates *just* Pet instances.
 	 */
 	@Override
 	public boolean supports(Class<?> clazz) {

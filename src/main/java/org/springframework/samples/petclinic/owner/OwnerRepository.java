@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Optional;
@@ -38,7 +39,8 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	/**
 	 * Retrieve {@link Owner}s from the data store by last name, returning all owners
 	 * whose last name <i>starts</i> with the given name.
-	 * @param lastName Value to search for
+	 * @param lastName value to search for
+	 * @param pageable the pagination information to use when retrieving results
 	 * @return a Collection of matching {@link Owner}s (or an empty Collection if none
 	 * found)
 	 */

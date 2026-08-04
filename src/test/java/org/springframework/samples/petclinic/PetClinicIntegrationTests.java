@@ -16,9 +16,8 @@
 
 package org.springframework.samples.petclinic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.restclient.RestTemplateBuilder;
@@ -30,6 +29,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.web.client.RestTemplate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class PetClinicIntegrationTests {
@@ -45,13 +46,13 @@ public class PetClinicIntegrationTests {
 
 	@Test
 	void testFindAll() {
-		vets.findAll();
-		vets.findAll(); // served from cache
+		this.vets.findAll();
+		this.vets.findAll(); // served from cache
 	}
 
 	@Test
 	void testOwnerDetails() {
-		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
+		RestTemplate template = this.builder.rootUri("http://localhost:" + this.port).build();
 		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
