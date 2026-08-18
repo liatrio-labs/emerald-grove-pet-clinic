@@ -16,7 +16,6 @@
 
 package org.springframework.samples.petclinic.owner;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -94,7 +93,7 @@ class PetController {
 	@InitBinder("pet")
 	void initPetBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-		dataBinder.setValidator(new PetValidator());
+		dataBinder.addValidators(new PetValidator());
 	}
 
 	@GetMapping("/pets/new")
@@ -110,11 +109,6 @@ class PetController {
 
 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
 			result.rejectValue("name", "duplicate", "already exists");
-		}
-
-		LocalDate currentDate = LocalDate.now();
-		if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {
-			result.rejectValue("birthDate", "typeMismatch.birthDate");
 		}
 
 		if (result.hasErrors()) {
@@ -143,11 +137,6 @@ class PetController {
 			if (existingPet != null && !Objects.equals(existingPet.getId(), pet.getId())) {
 				result.rejectValue("name", "duplicate", "already exists");
 			}
-		}
-
-		LocalDate currentDate = LocalDate.now();
-		if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {
-			result.rejectValue("birthDate", "typeMismatch.birthDate");
 		}
 
 		if (result.hasErrors()) {

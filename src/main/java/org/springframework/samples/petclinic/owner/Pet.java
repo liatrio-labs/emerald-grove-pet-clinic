@@ -30,6 +30,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
@@ -48,6 +50,8 @@ public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@NotNull(message = "{required}")
+	@PastOrPresent(message = "{birthDate.invalid}")
 	private LocalDate birthDate;
 
 	@ManyToOne

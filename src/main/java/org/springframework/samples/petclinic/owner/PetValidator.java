@@ -16,15 +16,16 @@
 
 package org.springframework.samples.petclinic.owner;
 
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 /**
  * <code>Validator</code> for <code>Pet</code> forms.
  * <p>
- * We're not using Bean Validation annotations here because it is easier to define such
- * validation rule in Java.
+ * Most field-level rules are expressed as Bean Validation annotations on {@link Pet} and
+ * run automatically via {@code @Valid}. This validator is reserved for the one rule that
+ * can't be: {@code type} is required on creation but not on edit, which Bean Validation
+ * can't express without validation groups.
  * </p>
  *
  * @author Ken Krebs
@@ -37,20 +38,11 @@ public class PetValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		Pet pet = (Pet) obj;
-		String name = pet.getName();
-		// name validation
-		if (!StringUtils.hasText(name)) {
-			errors.rejectValue("name", REQUIRED, REQUIRED);
-		}
 
-		// type validation
+		// type validation: only enforced on creation, so it can't be expressed as a
+		// Bean Validation annotation without introducing validation groups.
 		if (pet.isNew() && pet.getType() == null) {
 			errors.rejectValue("type", REQUIRED, REQUIRED);
-		}
-
-		// birth date validation
-		if (pet.getBirthDate() == null) {
-			errors.rejectValue("birthDate", REQUIRED, REQUIRED);
 		}
 	}
 

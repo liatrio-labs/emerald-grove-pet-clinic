@@ -78,18 +78,6 @@ public class PetValidatorTests {
 	class ValidateHasErrors {
 
 		@Test
-		void testValidateWithInvalidPetName() {
-			PetValidatorTests.this.petType.setName(petTypeName);
-			PetValidatorTests.this.pet.setName("");
-			PetValidatorTests.this.pet.setType(PetValidatorTests.this.petType);
-			PetValidatorTests.this.pet.setBirthDate(petBirthDate);
-
-			PetValidatorTests.this.petValidator.validate(PetValidatorTests.this.pet, PetValidatorTests.this.errors);
-
-			assertThat(PetValidatorTests.this.errors.hasFieldErrors("name")).isTrue();
-		}
-
-		@Test
 		void testValidateWithInvalidPetType() {
 			PetValidatorTests.this.pet.setName(petName);
 			PetValidatorTests.this.pet.setType(null);
@@ -101,7 +89,9 @@ public class PetValidatorTests {
 		}
 
 		@Test
-		void testValidateWithInvalidBirthDate() {
+		void testValidateAllowsMissingBirthDate() {
+			// Required-ness for birthDate is now enforced by @NotNull on Pet, not by
+			// this validator - see PetTests for that coverage.
 			PetValidatorTests.this.petType.setName(petTypeName);
 			PetValidatorTests.this.pet.setName(petName);
 			PetValidatorTests.this.pet.setType(PetValidatorTests.this.petType);
@@ -109,7 +99,7 @@ public class PetValidatorTests {
 
 			PetValidatorTests.this.petValidator.validate(PetValidatorTests.this.pet, PetValidatorTests.this.errors);
 
-			assertThat(PetValidatorTests.this.errors.hasFieldErrors("birthDate")).isTrue();
+			assertThat(PetValidatorTests.this.errors.hasFieldErrors("birthDate")).isFalse();
 		}
 
 	}
