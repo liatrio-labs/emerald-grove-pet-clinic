@@ -16,6 +16,8 @@
 
 package org.springframework.samples.petclinic.owner;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 
@@ -46,6 +48,9 @@ class PetCountControllerTests {
 	@MockitoBean
 	private PetRepository pets;
 
+	@MockitoBean
+	private PetService petService;
+
 	@Test
 	void shouldReturnTheNumberOfPetsAsJson() throws Exception {
 		given(this.pets.count()).willReturn(13L);
@@ -61,6 +66,27 @@ class PetCountControllerTests {
 		given(this.pets.count()).willReturn(0L);
 
 		this.mockMvc.perform(get("/pets/count")).andExpect(status().isOk()).andExpect(jsonPath("$.count").value(0));
+	}
+
+	@Test
+	void shouldReturnThePetAsJsonWhenIdExists() throws Exception {
+		Pet pet = new Pet();
+		pet.setId(1);
+		pet.setName("Leo");
+		given(this.petService.findById(1)).willReturn(Optional.of(pet));
+
+		this.mockMvc.perform(get("/pets/1"))
+			.andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.id").value(1))
+			.andExpect(jsonPath("$.name").value("Leo"));
+	}
+
+	@Test
+	void shouldReturn404WhenPetIdDoesNotExist() throws Exception {
+		given(this.petService.findById(999)).willReturn(Optional.empty());
+
+		this.mockMvc.perform(get("/pets/999")).andExpect(status().isNotFound());
 	}
 
 }

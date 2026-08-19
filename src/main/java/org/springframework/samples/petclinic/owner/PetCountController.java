@@ -18,8 +18,10 @@ package org.springframework.samples.petclinic.owner;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -32,14 +34,23 @@ class PetCountController {
 
 	private final PetRepository pets;
 
-	PetCountController(PetRepository pets) {
+	private final PetService petService;
+
+	PetCountController(PetRepository pets, PetService petService) {
 		this.pets = pets;
+		this.petService = petService;
 	}
 
 	@GetMapping("/pets/count")
 	@ResponseBody
 	Map<String, Long> getPetCount() {
 		return Map.of("count", this.pets.count());
+	}
+
+	@GetMapping("/pets/{id}")
+	@ResponseBody
+	ResponseEntity<Pet> getPet(@PathVariable Integer id) {
+		return this.petService.findById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 }
