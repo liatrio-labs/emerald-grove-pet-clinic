@@ -7,10 +7,9 @@ A comprehensive veterinary clinic management system built with Spring Boot. This
 The Emerald Grove Veterinary Clinic application manages the core operations of a veterinary clinic, including:
 
 - **Owner Management**: Register and manage pet owners with contact information
-- **Pet Management**: Track pets, their types, and medical records
+- **Pet Management**: Track pets and their types
 - **Veterinarian Management**: Manage veterinary staff and their specialties
 - **Appointment System**: Schedule and track veterinary visits
-- **Medical Records**: Maintain comprehensive health records for pets
 
 ## Quick Start
 
@@ -23,8 +22,8 @@ The Emerald Grove Veterinary Clinic application manages the core operations of a
 
 ```bash
 # Clone the repository
-git clone https://github.com/liatrio-labs/spring-petclinic-enhanced
-cd spring-petclinic-enhanced
+git clone https://github.com/liatrio-labs/emerald-grove-pet-clinic
+cd emerald-grove-pet-clinic
 
 # Run with Maven
 ./mvnw spring-boot:run
@@ -57,7 +56,7 @@ See the [Development Guide](docs/DEVELOPMENT.md) for detailed TDD requirements a
 
 ## Technology Stack
 
-- **Spring Boot (3.x)** - Modern Java application framework
+- **Spring Boot 4.1.0** - Modern Java application framework
 - **Spring MVC** - Web layer with Thymeleaf templating
 - **Spring Data JPA** - Data persistence layer
 - **Hibernate** - ORM implementation
@@ -77,7 +76,7 @@ Build a Docker container image:
 ### Core Entities
 
 - **Owners**: Pet owners with contact details and address information
-- **Pets**: Individual pets with type, birth date, and medical history
+- **Pets**: Individual pets with type and birth date
 - **Vets**: Veterinary staff with specialties and contact information
 - **Visits**: Appointment records with examination details
 - **Specialties**: Medical specialties (Radiology, Surgery, Dentistry)
@@ -85,17 +84,16 @@ Build a Docker container image:
 ### Key Functionality
 
 - **Owner Registration**: Add and edit pet owner information
-- **Pet Management**: Register pets, track medical history
+- **Pet Management**: Register pets
 - **Veterinarian Directory**: Browse vet profiles and specialties
 - **Visit Scheduling**: Book and manage veterinary appointments
-- **Medical Records**: Track treatments, diagnoses, and medications
 
 ### User Interface
 
 - **Responsive Design**: Mobile-friendly interface using Bootstrap 5
 - **Intuitive Navigation**: Easy access to all major functions
 - **Search & Filter**: Find owners, pets, and vets quickly
-- **Form Validation**: Client-side and server-side input validation
+- **Form Validation**: Server-side input validation
 
 ## Configuration
 
