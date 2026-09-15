@@ -19,7 +19,7 @@ Pre-commit hooks are automated checks that run before each commit to ensure code
 
 ```bash
 # Install pre-commit (if not already installed)
-pipx install pre-commit
+pip install --user pre-commit
 
 # Install the hooks (config's default_install_hook_types wires up both
 # the pre-commit and commit-msg stages, so a single install is enough)
@@ -123,20 +123,11 @@ SKIP=markdownlint git commit -m "message"
 
 ## Hook Details
 
-### TDD Compliance Check
-
-This custom hook enforces the project's strict TDD methodology:
-
-```bash
-# Checks if production code changes have corresponding test changes
-# Fails if src/main/java/ files are modified without src/test/java/ changes
-```
-
 ### Markdown Linting
 
 Enforces consistent Markdown formatting:
 
-- Line length: 120 characters
+- No enforced line-length limit (MD013 disabled)
 - Fenced code blocks with language specifiers
 - Proper heading structure
 - No trailing spaces
@@ -181,7 +172,7 @@ bypassing.
 
 ```bash
 # Update pre-commit
-pipx upgrade pre-commit
+pip install --user --upgrade pre-commit
 
 # Clean and reinstall
 pre-commit clean
@@ -197,20 +188,6 @@ pre-commit run <hook-name> --verbose
 # Update hook versions
 pre-commit autoupdate
 ```
-
-#### TDD Compliance False Positives
-
-The TDD compliance hook may trigger false positives when:
-
-- Refactoring existing code without test changes
-- Moving files between directories
-- Working with generated code
-
-Solutions:
-
-- Use `--no-verify` for legitimate refactoring (document reason)
-- Update test files alongside production code
-- Use feature branches for complex refactoring
 
 ### Performance
 
