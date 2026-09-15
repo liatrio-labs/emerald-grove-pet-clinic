@@ -16,28 +16,32 @@ The test suite ensures code quality, prevents regressions, and validates applica
 
 ```text
 src/test/java/org/springframework/samples/petclinic/
-├── PetClinicIntegrationTests.java     # Main integration tests
-├── MySqlIntegrationTests.java         # MySQL-specific integration tests
-├── PostgresIntegrationTests.java      # PostgreSQL-specific integration tests
-├── MysqlTestApplication.java          # MySQL test application
-├── model/                             # Model layer tests
-│   └── ValidatorTests.java           # Bean validation tests
-├── owner/                             # Owner module tests
-│   ├── OwnerControllerTests.java     # Web layer tests
-│   ├── PetControllerTests.java       # Pet controller tests
-│   ├── PetTypeFormatterTests.java    # Formatter tests
-│   ├── PetValidatorTests.java        # Custom validator tests
-│   └── VisitControllerTests.java     # Visit controller tests
-├── service/                           # Service layer tests
-│   ├── ClinicServiceTests.java       # Data access tests
-│   └── EntityUtils.java              # Test utilities
-├── system/                            # System-level tests
+├── PetClinicIntegrationTests.java              # Main integration tests
+├── MySqlIntegrationTests.java                  # MySQL integration tests
+├── MysqlTestApplication.java                   # MySQL test application
+├── PostgresIntegrationTests.java               # PostgreSQL integration tests
+├── PostgresSequenceResetIntegrationTests.java  # Postgres sequence-reset test
+├── model/                                       # Model layer tests
+│   └── ValidatorTests.java                      # Bean validation tests
+├── owner/                                       # Owner module tests
+│   ├── OwnerControllerTests.java                # Owner web layer tests
+│   ├── PetControllerTests.java                  # Pet controller tests
+│   ├── PetCountControllerTests.java             # /pets/count and /pets/{id} tests
+│   ├── PetServiceTests.java                     # PetService tests
+│   ├── PetTests.java                            # Pet entity tests
+│   ├── PetTypeFormatterTests.java               # Formatter tests
+│   ├── PetValidatorTests.java                   # Custom validator tests
+│   └── VisitControllerTests.java                # Visit controller tests
+├── service/                                     # Service layer tests
+│   ├── ClinicServiceTests.java                  # Data access tests
+│   └── EntityUtils.java                         # Test utilities
+├── system/                                      # System-level tests
 │   ├── CrashControllerIntegrationTests.java
 │   ├── CrashControllerTests.java
 │   └── I18nPropertiesSyncTests.java
-└── vet/                              # Vet module tests
-    ├── VetControllerTests.java       # Vet controller tests
-    └── VetTests.java                 # Vet entity tests
+└── vet/                                         # Vet module tests
+    ├── VetControllerTests.java                  # Vet controller tests
+    └── VetTests.java                            # Vet entity tests
 ```
 
 ## Testing Types
@@ -252,7 +256,7 @@ class MySqlIntegrationTests {
 
     @ServiceConnection
     @Container
-    static MySQLContainer container = new MySQLContainer(DockerImageName.parse("mysql:9.5"));
+    static MySQLContainer container = new MySQLContainer(DockerImageName.parse("mysql:9.7"));
 
     @Test
     void testFindAll() {
@@ -582,28 +586,28 @@ Different configurations for testing scenarios:
 
 - **default**: H2 in-memory database
 - **mysql**: MySQL with TestContainers
-- **postgres**: PostgreSQL with Docker Compose
-
-### Test Properties
-
-Override properties for testing:
-
-```properties
-# application-test.properties
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.test.database.replace=none
-```
+- **postgres**: PostgreSQL with Testcontainers
 
 ### Test Dependencies
 
-Key testing dependencies in `pom.xml`:
+Key testing dependencies in `pom.xml` (sliced starters plus Testcontainers; there
+is no `spring-boot-starter-test` dependency):
 
 ```xml
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
+        <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-restclient-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-webmvc-test</artifactId>
         <scope>test</scope>
     </dependency>
     <dependency>
@@ -612,8 +616,23 @@ Key testing dependencies in `pom.xml`:
         <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-docker-compose</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
         <groupId>org.testcontainers</groupId>
-        <artifactId>mysql</artifactId>
+        <artifactId>testcontainers-junit-jupiter</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-mysql</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-postgresql</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -650,7 +669,7 @@ JaCoCo configuration in `pom.xml`:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.14</version>
+    <version>0.8.15</version>
     <executions>
         <execution>
             <goals>
@@ -659,10 +678,31 @@ JaCoCo configuration in `pom.xml`:
         </execution>
         <execution>
             <id>report</id>
-            <phase>test</phase>
+            <phase>prepare-package</phase>
             <goals>
                 <goal>report</goal>
             </goals>
+        </execution>
+        <execution>
+            <id>check</id>
+            <phase>verify</phase>
+            <goals>
+                <goal>check</goal>
+            </goals>
+            <configuration>
+                <rules>
+                    <rule>
+                        <element>BUNDLE</element>
+                        <limits>
+                            <limit>
+                                <counter>LINE</counter>
+                                <value>COVEREDRATIO</value>
+                                <minimum>0.90</minimum>
+                            </limit>
+                        </limits>
+                    </rule>
+                </rules>
+            </configuration>
         </execution>
     </executions>
 </plugin>
@@ -672,25 +712,17 @@ JaCoCo configuration in `pom.xml`:
 
 ### GitHub Actions
 
-Test automation in CI/CD pipeline:
+The repository has two GitHub Actions workflows:
 
-```yaml
-name: Tests
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 25
-      uses: actions/setup-java@v3
-      with:
-        java-version: '25'
-    - name: Run tests
-      run: ./mvnw test
-    - name: Generate coverage report
-      run: ./mvnw jacoco:report
-```
+- `.github/workflows/e2e-tests.yml` (**E2E Tests**) - runs the Playwright E2E suite
+- `.github/workflows/performance-tests.yml` (**Performance Tests**) - starts the
+  app and runs JMeter load tests via `./mvnw verify -Pperformance`
+
+Because `verify` runs the full Maven lifecycle, the Performance Tests workflow
+also executes the Java test suite and the JaCoCo coverage `check` (the
+`performance` profile only adds JMeter; it does not skip tests). Docker-backed
+integration tests are skipped when Docker is unavailable. Locally, the
+`maven-test-check` pre-commit hook runs `./mvnw test` on every commit.
 
 ### Test Environments
 
