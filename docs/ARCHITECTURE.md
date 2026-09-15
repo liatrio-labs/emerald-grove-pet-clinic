@@ -10,7 +10,7 @@ Emerald Grove Veterinary Clinic is a classic three-tier web application demonstr
 
 ### Core Framework
 
-- **Spring Boot 4.0.0** - Application framework and auto-configuration
+- **Spring Boot 4.1.0** - Application framework and auto-configuration
 - **Spring MVC** - Web layer with RESTful controllers
 - **Spring Data JPA** - Data access layer with repository pattern
 - **Hibernate** - Object-Relational Mapping (ORM)
@@ -30,7 +30,6 @@ Emerald Grove Veterinary Clinic is a classic three-tier web application demonstr
 - **Bootstrap 5** - Responsive CSS framework
 - **WebJars** - Client-side dependency management
 - **Font Awesome** - Icon library
-- **jQuery** - JavaScript utilities
 
 ### Build and Deployment
 
@@ -105,7 +104,11 @@ public class Owner extends Person {
     private String address;
     private String city;
     private String telephone;
-    private Set<Pet> pets = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
+    @OrderBy("name")
+    private final List<Pet> pets = new ArrayList<>();
 }
 ```
 
@@ -126,7 +129,15 @@ public class Pet extends NamedEntity {
 ```java
 @Entity
 public class Vet extends Person {
-    private Set<Specialty> specialties = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "vet_specialties",
+            joinColumns = @JoinColumn(name = "vet_id"),
+            inverseJoinColumns = @JoinColumn(name = "specialty_id"))
+    private Set<Specialty> specialties; // uninitialized; lazily created internally
+
+    // Public accessor returns a name-sorted List (not the raw Set)
+    @XmlElement
+    public List<Specialty> getSpecialties() { /* sorted by name */ }
 }
 ```
 
@@ -134,10 +145,14 @@ public class Vet extends Person {
 
 ```java
 @Entity
+@Table(name = "visits")
 public class Visit extends BaseEntity {
+    @Column(name = "visit_date")
     private LocalDate date;
+
+    @NotBlank
     private String description;
-    private Pet pet;
+    // Note: Visit has no `pet` field; the Pet-Visit link is owned by Pet.
 }
 ```
 
@@ -208,10 +223,9 @@ This entity relationship diagram shows the core domain model where Owners own mu
 Spring Data JPA repositories provide clean data access abstractions:
 
 ```java
-public interface OwnerRepository extends Repository<Owner, Integer> {
-    Owner findById(int id);
-    Collection<Owner> findByLastName(String lastName);
-    Owner save(Owner owner);
+public interface OwnerRepository extends JpaRepository<Owner, Integer> {
+    Page<Owner> findByLastNameStartingWith(String lastName, Pageable pageable);
+    Optional<Owner> findById(Integer id);
 }
 ```
 
@@ -251,7 +265,7 @@ sequenceDiagram
 - **Entity Scanning**: Automatic entity discovery
 - **Transaction Management**: Declarative transactions
 - **Lazy Loading**: Optimized data fetching
-- **Caching**: Second-level cache support
+- **Caching**: Spring Cache abstraction over JCache (the `"vets"` cache); not a Hibernate second-level cache
 
 ## Web Layer
 
@@ -343,7 +357,7 @@ Hierarchical property loading:
 ### Caching Strategy
 
 - **Application-level Caching** - Spring Cache abstraction
-- **Database Query Caching** - Hibernate second-level cache
+- **Query Caching** - the JCache `vets` cache (not a Hibernate second-level cache)
 - **Static Resource Caching** - Browser cache headers
 
 ### Database Optimization
