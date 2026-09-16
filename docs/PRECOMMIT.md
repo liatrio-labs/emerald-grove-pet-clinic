@@ -19,7 +19,7 @@ Pre-commit hooks are automated checks that run before each commit to ensure code
 
 ```bash
 # Install pre-commit (if not already installed)
-pip install --user pre-commit
+pipx install pre-commit
 
 # Install the hooks (config's default_install_hook_types wires up both
 # the pre-commit and commit-msg stages, so a single install is enough)
@@ -172,7 +172,7 @@ bypassing.
 
 ```bash
 # Update pre-commit
-pip install --user --upgrade pre-commit
+pipx upgrade pre-commit
 
 # Clean and reinstall
 pre-commit clean

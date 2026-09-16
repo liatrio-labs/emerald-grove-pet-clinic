@@ -69,8 +69,8 @@ This guide covers development setup, testing, and contribution guidelines for th
 ### Clone and Build
 
 ```bash
-git clone <repository-url>
-cd spring-petclinic
+git clone https://github.com/liatrio-labs/emerald-grove-pet-clinic
+cd emerald-grove-pet-clinic
 
 # Maven
 ./mvnw spring-boot:run

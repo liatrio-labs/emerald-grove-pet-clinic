@@ -264,7 +264,7 @@ sequenceDiagram
 
 - **Entity Scanning**: Automatic entity discovery
 - **Transaction Management**: Declarative transactions
-- **Lazy Loading**: Optimized data fetching
+- **Eager Fetching**: Related collections (owner pets, pet visits, vet specialties) use `FetchType.EAGER`
 - **Caching**: Spring Cache abstraction over JCache (the `"vets"` cache); not a Hibernate second-level cache
 
 ## Web Layer
