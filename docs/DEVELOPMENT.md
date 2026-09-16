@@ -69,8 +69,8 @@ This guide covers development setup, testing, and contribution guidelines for th
 ### Clone and Build
 
 ```bash
-git clone <repository-url>
-cd spring-petclinic
+git clone https://github.com/liatrio-labs/emerald-grove-pet-clinic
+cd emerald-grove-pet-clinic
 
 # Maven
 ./mvnw spring-boot:run
@@ -103,8 +103,8 @@ cd spring-petclinic
 
 The application uses an in-memory H2 database by default with sample data.
 
-- **Console:** `http://localhost:8080/h2-console`
-- **JDBC URL:** `jdbc:h2:mem:<uuid>` (UUID shown in console)
+- **Console:** disabled by default (`spring.h2.console.enabled` is not set, so `/h2-console` returns 404)
+- **JDBC URL:** `jdbc:h2:mem:<uuid>`
 
 ### Persistent Databases
 
@@ -112,7 +112,7 @@ The application uses an in-memory H2 database by default with sample data.
 
 ```bash
 # Start MySQL
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:8.4
+docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:9.7
 
 # Run with MySQL profile
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
@@ -122,7 +122,7 @@ docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PAS
 
 ```bash
 # Start PostgreSQL
-docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:17
+docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:18.4
 
 # Run with PostgreSQL profile
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
@@ -176,7 +176,7 @@ Integration tests are available for different database configurations:
 
 - H2 (default)
 - MySQL (using Testcontainers)
-- PostgreSQL (using Docker Compose)
+- PostgreSQL (using Testcontainers)
 
 ```bash
 # Run specific test types
@@ -190,34 +190,46 @@ Integration tests are available for different database configurations:
 ```text
 src/main/java/org/springframework/samples/petclinic/
 ├── PetClinicApplication.java     # Main application class
-├── model/                        # Domain entities
-│   ├── BaseEntity.java          # Base entity with ID
-│   ├── NamedEntity.java         # Named entity base class
-│   └── Person.java              # Person base class
-├── owner/                        # Owner-related components
-│   ├── Owner.java               # Owner entity
-│   ├── OwnerController.java     # Web controller
-│   ├── OwnerRepository.java     # Data repository
-│   ├── Pet.java                 # Pet entity
-│   ├── PetController.java       # Pet web controller
-│   └── PetType.java             # Pet type entity
+├── PetClinicRuntimeHints.java    # AOT/native runtime hints (root package)
+├── model/                        # Domain entity base classes
+│   ├── BaseEntity.java           # Base entity with ID
+│   ├── NamedEntity.java          # Named entity base class
+│   └── Person.java               # Person base class
+├── owner/                        # Owner/Pet/Visit components
+│   ├── Owner.java                # Owner entity
+│   ├── OwnerController.java      # Owner web controller
+│   ├── OwnerRepository.java      # Owner repository
+│   ├── Pet.java                  # Pet entity
+│   ├── PetController.java        # Pet web controller
+│   ├── PetCountController.java   # JSON endpoints: /pets/count, /pets/{id}
+│   ├── PetRepository.java        # Pet repository
+│   ├── PetService.java           # Pet service (only service class)
+│   ├── PetType.java              # Pet type entity
+│   ├── PetTypeFormatter.java     # PetType form formatter
+│   ├── PetTypeRepository.java    # PetType repository
+│   ├── PetValidator.java         # Custom Pet validator
+│   ├── Visit.java                # Visit entity
+│   └── VisitController.java      # Visit web controller
 ├── vet/                          # Veterinarian components
-│   ├── Vet.java                 # Vet entity
-│   ├── VetController.java       # Vet web controller
-│   ├── VetRepository.java       # Vet repository
-│   └── Specialty.java           # Medical specialty entity
-└── system/                       # System utilities
-    ├── CacheConfiguration.java  # Caching setup
-    └── PetClinicRuntimeHints.java # Runtime hints
+│   ├── Specialty.java            # Veterinary specialty entity
+│   ├── Vet.java                  # Vet entity
+│   ├── VetController.java        # Vet web controller (HTML + JSON/XML)
+│   ├── VetRepository.java        # Vet repository (@Cacheable "vets")
+│   └── Vets.java                 # JSON/XML wrapper for a list of Vet
+└── system/                       # System components
+    ├── CacheConfiguration.java   # JCache "vets" cache setup
+    ├── CrashController.java       # Error-triggering controller (demo)
+    ├── WebConfiguration.java      # Web/MVC configuration
+    └── WelcomeController.java     # Home page controller
 ```
 
 ## Customization
 
 ### Profiles
 
-Switch between configurations using Spring profiles:
+Switch between configurations using Spring profiles. H2 is the default, selected by
+the `database=h2` property rather than an `h2` profile:
 
-- `h2` (default) - In-memory database
 - `mysql` - MySQL database
 - `postgres` - PostgreSQL database
 

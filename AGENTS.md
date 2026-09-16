@@ -61,7 +61,7 @@ Refer to these comprehensive guides for detailed information:
 
 - **Spring Data JPA** for data access
 - **Proper entity relationships** with appropriate cascade settings
-- **DTOs** for data transfer between layers
+- **JPA entities** used directly across layers (no separate DTO layer)
 
 ## Development Workflow
 
@@ -75,7 +75,7 @@ Refer to these comprehensive guides for detailed information:
 
 - **Testing**: JUnit 5, Mockito, TestContainers, JaCoCo, JMeter
 - **Build**: Maven
-- **Quality**: Checkstyle, SpotBugs, SonarQube
+- **Quality**: Checkstyle, SpotBugs
 - **Version Control**: Git with conventional commits
 
 ## Review Checklist
